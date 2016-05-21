@@ -19,7 +19,7 @@ def pace(c, start_ack, mss, ack, window):
     while True:
         try:
             (r_seq, length) = c.read_packet()
-            if r_seq == last_received_seq:
+            if r_seq == last_received_seq:   # retransmission, so use slow start
                 ack.value = r_seq + length
                 window.value /= 2
                 if window.value < mss:
@@ -27,16 +27,13 @@ def pace(c, start_ack, mss, ack, window):
             elif r_seq > last_received_seq:
                 last_received_seq = r_seq
                 #ack.value += window.value
-            else:
-                ack.value = last_received_seq
         except Connection.Closed:
             window.value = -1
             break
 
-
 next_seq = c.initiate_connection()
 start = time.time()
-maxwindow = 30000
+maxwindow = 53270
 mss = 1460
 window = Value('i', mss)
 (start_ack, _) = c.read_packet()
