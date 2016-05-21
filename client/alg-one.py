@@ -1,11 +1,9 @@
-#!/usr/bin/env python2
-
 import sys
 import time
 from raw_packet import Connection
 
 if len(sys.argv) < 2:
-    print "Usage : connect dest_ip "
+    print "Usage: ./alg-one dest_ip"
     sys.exit()
 
 print """We will try to establish a connection to a remote web server
@@ -25,11 +23,11 @@ c = Connection(sys.argv[1], 8080)
 
 for _ in range(10):
     next_seq = c.initiate_connection()
+    ack = next_seq
     while True:
-        (seq, length) = c.read_packet()
         # cont is True if we just ACKed a FIN packet on this connection
         cont = c.send_raw(seq_nbr = next_seq, ack_nbr=seq+length)
-        if not cont:
+        if cont:
             print "Over!"
             c.tear_down(next_seq)
             break

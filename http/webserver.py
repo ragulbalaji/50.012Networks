@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 import SimpleHTTPServer
 import SocketServer
 
@@ -8,7 +10,7 @@ class CS144Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         return str(self.client_address[0])
 
 
-PORT = 80
+PORT = 8080
 
 Handler = CS144Handler
 httpd = SocketServer.TCPServer(("", PORT), Handler)
