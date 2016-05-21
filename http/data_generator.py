@@ -13,6 +13,10 @@ parser.add_argument('--port', '-p',
                     type=int,
                     help="Local port to listen to",
                     default=80)
+parser.add_argument('--ipaddr', '-i',
+					type=str,
+					help="Local ip address to bind to",
+					default="localhost")
 parser.add_argument('--duration', '-d',
 				 	type=int,
 				 	help="Duration after which the stream stops",
@@ -30,7 +34,7 @@ def serve(port):
 	while True:
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-		s.bind(("localhost", port))
+		s.bind((args.ipaddr, port))
 		s.listen(1)
 		(conn, _) = s.accept()
 		start = time.time()
@@ -49,7 +53,7 @@ def serve(port):
 			save_file.write("%f, %d\n" % (now-start, data_sent))
 
 		# Could do something cleaner. Have to wait for all the data to get sent
-		time.sleep(2)
+		time.sleep(1)
 		conn.close()
 		s.close()
 		if save_file is not sys.stdout:
