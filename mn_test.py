@@ -42,9 +42,9 @@ class BBTopo(Topo):
 
         # TODO: Add links with appropriate characteristics
         self.addLink(h1, switch, 
-            bw=1000., delay="10ms", max_queue_size=100)
+            bw=100., delay="10ms", max_queue_size=100)
         self.addLink(h2, switch,
-            bw=10, delay="10ms", max_queue_size=100)
+            bw=2, delay="10ms", max_queue_size=100)
         return
 
 topo = BBTopo()
@@ -54,7 +54,7 @@ h1 = net.get('h1')
 h2 = net.get('h2')
 
 #start server on h1
-h1.popen("python http/data_generator.py -p 80 --duration 2 --dir . -i %s > a.txt 2> c.txt" % h1.IP(), shell=True)
+h1.popen("python http/data_generator.py -p 80 --duration 20 --dir . -i %s > a.txt 2> c.txt" % h1.IP(), shell=True)
 
 #start client on h2
 h2.popen("python client/optack.py %s 80 > b.txt 2> d.txt" % h1.IP(), shell=True).wait()
