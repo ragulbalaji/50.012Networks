@@ -165,7 +165,8 @@ class Connection:
         doff_reserved = tcph[4]
         tcph_length = doff_reserved >> 4
 
-        fin_flag = (tcph[5] & 0x1) == 1
+        fin_flag = (tcph[5] & 0x1) != 0
+        rst_flag = (tcph[5] & 0x4) != 0
 
         #print "Src port : %d, Dest port : %s, sequence : %d" % (source_port, dest_port, sequence)
         
@@ -181,6 +182,8 @@ class Connection:
             # On receiving a FIN, send an ACK for the last received packet number + 1
             data_size += 1
             self.fin = sequence+data_size
+        if rst_flag:
+            raise self.Closed
         
         return (sequence, data_size)
 
