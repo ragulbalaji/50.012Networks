@@ -7,12 +7,16 @@ from multiprocessing import Process, Value
 
 mss = 1460
 wscale = 4
+ack_delay = 0.005
 
-if len(sys.argv) < 3:
-    print "Usage : optack.py dest_ip dest_port"
+if len(sys.argv) < 4:
+    print "Usage : optack.py dest_ip dest_port duration"
     sys.exit()
+dest_ip = sys.argv[1]
+port = int(sys.argv[2])
+duration = int(sys.argv[3])
 
-c = Connection(sys.argv[1], int(sys.argv[2]))
+c = Connection(dest_ip, port)
 
 def pace(c, start_ack, mss, ack, window):
     """Reads the sequence number of the received packets,
@@ -51,10 +55,13 @@ while True:
         break # we have finished
     cont = c.send_raw(seq_nbr = next_seq, ack_nbr=ack.value)
     now = time.time()
-    print("%f, %d" % (now-start,(ack.value - start_ack) % (1 << 32)))
+    elapsed = now - start
+    print("%f, %d" % (elapsed, (ack.value - start_ack) % (1 << 32)))
+    if (elapsed > duration):
+	sys.exit()
     ack.value += window.value
     if window.value < maxwindow:
         window.value += mss
-    time.sleep(0.005)
+    time.sleep(ack_delay)
 
 p.join()

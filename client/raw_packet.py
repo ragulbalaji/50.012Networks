@@ -84,7 +84,6 @@ class Connection:
         tcp_dest = dest_port   # destination port
         tcp_seq = seq_nbr % (1<<32)
         tcp_ack_seq = ack_seq
-        tcp_doff = 6    #4 bit field, size of tcp header, 6 * 4 = 24 bytes
         #tcp flags
         tcp_fin = fin
         tcp_syn = syn
@@ -96,7 +95,6 @@ class Connection:
         tcp_check = 0
         tcp_urg_ptr = 0
          
-        tcp_offset_res = (tcp_doff << 4) + 0
         tcp_flags = tcp_fin + (tcp_syn << 1) + (tcp_rst << 2) + (tcp_psh <<3) + (tcp_ack << 4) + (tcp_urg << 5)
         
 	tcp_wscale_kind = 3
@@ -105,7 +103,15 @@ class Connection:
 	tcp_wscale = (tcp_wscale_shift << 8) + (tcp_wscale_len << 16) + (tcp_wscale_kind << 24)
 
         # the ! in the pack format string means network order
-        tcp_header = pack('!HHLLBBHHHL' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags, tcp_window, tcp_check, tcp_urg_ptr, tcp_wscale)
+	# If this is a syn packet, include the wscale option
+	if tcp_syn == 1:
+        	tcp_doff = 6    #4 bit field, size of tcp header, 6 * 4 = 24 bytes
+        	tcp_offset_res = (tcp_doff << 4) + 0
+        	tcp_header = pack('!HHLLBBHHHL' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags, tcp_window, tcp_check, tcp_urg_ptr, tcp_wscale)
+	else:
+        	tcp_doff = 5
+        	tcp_offset_res = (tcp_doff << 4) + 0
+        	tcp_header = pack('!HHLLBBHHH' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags, tcp_window, tcp_check, tcp_urg_ptr)
          
         user_data = content
          
@@ -123,7 +129,10 @@ class Connection:
         #print tcp_checksum
          
         # make the tcp header again and fill the correct checksum - remember checksum is NOT in network byte order
-        tcp_header = pack('!HHLLBBH' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags, tcp_window) + pack('H' , tcp_check) + pack('!HL' , tcp_urg_ptr, tcp_wscale)
+	if tcp_syn == 1:
+        	tcp_header = pack('!HHLLBBH' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags, tcp_window) + pack('H' , tcp_check) + pack('!HL' , tcp_urg_ptr, tcp_wscale)
+	else:
+        	tcp_header = pack('!HHLLBBH' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags, tcp_window) + pack('H' , tcp_check) + pack('!H' , tcp_urg_ptr)
          
         # final full packet - syn packets dont have any data
         #packet = ip_header + tcp_header + user_data

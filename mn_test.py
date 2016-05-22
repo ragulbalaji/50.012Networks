@@ -21,6 +21,7 @@ import os
 import math
 
 PORT = 8080
+DURATION = 20
 
 args = {
 	"delay": 20.,
@@ -56,7 +57,7 @@ h1 = net.get('h1')
 h2 = net.get('h2')
 
 #start server on h1
-h1.popen("python http/data_generator.py -p %s --duration 20 --dir . -i %s > a.txt 2> c.txt" % (str(PORT), h1.IP()), shell=True)
+h1.popen("python http/data_generator.py -p %d --duration %d --dir . -i %s > a.txt 2> c.txt" % (PORT, DURATION, h1.IP()), shell=True)
 
 #start client on h2
-h2.popen("python client/optack.py %s %s > b.txt 2> d.txt" % (h1.IP(), str(PORT)), shell=True).wait()
+h2.popen("python client/optack.py %s %d %d > b.txt 2> d.txt" % (h1.IP(), PORT, DURATION), shell=True).wait()
