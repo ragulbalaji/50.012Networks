@@ -1,15 +1,18 @@
+#!/usr/bin/env python2
+
 import sys
 import time
 from raw_packet import Connection
 from multiprocessing import Process, Value
 
+mss = 1460
+wscale = 4
+
 if len(sys.argv) < 3:
     print "Usage : optack.py dest_ip dest_port"
     sys.exit()
 
-
 c = Connection(sys.argv[1], int(sys.argv[2]))
-
 
 def pace(c, start_ack, mss, ack, window):
     """Reads the sequence number of the received packets,
@@ -29,19 +32,20 @@ def pace(c, start_ack, mss, ack, window):
                 #ack.value += window.value
         except Connection.Closed:
             window.value = -1
-            break
+            return
 
-next_seq = c.initiate_connection()
 start = time.time()
-maxwindow = 53270
-mss = 1460
 window = Value('i', mss)
+maxwindow = mss << wscale
+next_seq = c.initiate_connection(window=mss, wscale=wscale)
 (start_ack, _) = c.read_packet()
+
 ack = Value('i', start_ack)
 start = time.time()
 p = Process(target = pace, args=(c, start_ack, mss, ack, window))
-print "time, acked"
+print("time, acked")
 p.start()
+
 while True:
     if window.value < 0:
         break # we have finished

@@ -36,7 +36,7 @@ class Connection:
             print 'Socket could not be created. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
             sys.exit()
 
-    def send_raw(self, seq_nbr, ack_nbr=-1, content = '', syn=0, fin=0, rst=0):
+    def send_raw(self, seq_nbr, ack_nbr=-1, content = '', syn=0, fin=0, rst=0, window=5840, wscale=0):
         # first, decide whether we have an ack packet or not
         if ack_nbr == -1:
             ack = 0
@@ -84,7 +84,7 @@ class Connection:
         tcp_dest = dest_port   # destination port
         tcp_seq = seq_nbr % (1<<32)
         tcp_ack_seq = ack_seq
-        tcp_doff = 5    #4 bit field, size of tcp header, 5 * 4 = 20 bytes
+        tcp_doff = 6    #4 bit field, size of tcp header, 6 * 4 = 24 bytes
         #tcp flags
         tcp_fin = fin
         tcp_syn = syn
@@ -92,15 +92,20 @@ class Connection:
         tcp_psh = 0
         tcp_ack = ack
         tcp_urg = 0
-        tcp_window = socket.htons (5840)    #   maximum allowed window size
+        tcp_window = socket.htons (window)    #   maximum allowed window size
         tcp_check = 0
         tcp_urg_ptr = 0
          
         tcp_offset_res = (tcp_doff << 4) + 0
         tcp_flags = tcp_fin + (tcp_syn << 1) + (tcp_rst << 2) + (tcp_psh <<3) + (tcp_ack << 4) + (tcp_urg << 5)
-         
+        
+	tcp_wscale_kind = 3
+	tcp_wscale_len = 3 
+	tcp_wscale_shift = wscale
+	tcp_wscale = (tcp_wscale_shift << 8) + (tcp_wscale_len << 16) + (tcp_wscale_kind << 24)
+
         # the ! in the pack format string means network order
-        tcp_header = pack('!HHLLBBHHH' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags,  tcp_window, tcp_check, tcp_urg_ptr)
+        tcp_header = pack('!HHLLBBHHHL' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags, tcp_window, tcp_check, tcp_urg_ptr, tcp_wscale)
          
         user_data = content
          
@@ -118,7 +123,7 @@ class Connection:
         #print tcp_checksum
          
         # make the tcp header again and fill the correct checksum - remember checksum is NOT in network byte order
-        tcp_header = pack('!HHLLBBH' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags,  tcp_window) + pack('H' , tcp_check) + pack('!H' , tcp_urg_ptr)
+        tcp_header = pack('!HHLLBBH' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags, tcp_window) + pack('H' , tcp_check) + pack('!HL' , tcp_urg_ptr, tcp_wscale)
          
         # final full packet - syn packets dont have any data
         #packet = ip_header + tcp_header + user_data
@@ -188,7 +193,7 @@ class Connection:
         return (sequence, data_size)
 
 
-    def initiate_connection(self, content="GET / HTTP/1.0\r\n\r\n"):
+    def initiate_connection(self, content="GET / HTTP/1.0\r\n\r\n", window=5840, wscale=0):
         """
         Establishes a 3-Way TCP handshake with the remote server, and then
         sends a request to the server. By default, request the root page
@@ -198,7 +203,7 @@ class Connection:
         """
         r = random.Random()
         local_seq = r.randint(0, 1<<32-1)
-        self.send_raw(local_seq, syn=1)
+        self.send_raw(local_seq, syn=1, window=window, wscale=wscale)
         (seq,_) = self.read_packet()
         local_seq += 1
         self.send_raw(local_seq, ack_nbr=seq+1)

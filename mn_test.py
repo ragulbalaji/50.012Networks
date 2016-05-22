@@ -20,6 +20,8 @@ import sys
 import os
 import math
 
+PORT = 8080
+
 args = {
 	"delay": 20.,
 	"max_queue_size":100,
@@ -54,10 +56,7 @@ h1 = net.get('h1')
 h2 = net.get('h2')
 
 #start server on h1
-h1.popen("python http/data_generator.py -p 80 --duration 20 --dir . -i %s > a.txt 2> c.txt" % h1.IP(), shell=True)
+h1.popen("python http/data_generator.py -p %s --duration 20 --dir . -i %s > a.txt 2> c.txt" % (str(PORT), h1.IP()), shell=True)
 
 #start client on h2
-h2.popen("python client/optack.py %s 80 > b.txt 2> d.txt" % h1.IP(), shell=True).wait()
-#h2.popen("python client/connect.py %s 80 > b.txt 2> d.txt" % h1.IP(), shell=True).wait()
-#h2.popen("telnet %s 80" % h1.IP(), shell=True).wait()
-Popen("pgrep -f data_generator.py | xargs kill -9", shell=True).wait()
+h2.popen("python client/optack.py %s %s > b.txt 2> d.txt" % (h1.IP(), str(PORT)), shell=True).wait()
