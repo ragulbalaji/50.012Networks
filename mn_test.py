@@ -21,7 +21,7 @@ import os
 import math
 
 PORT = 8080
-DURATION = 20
+DURATION = 60
 
 args = {
 	"delay": 20.,
@@ -45,9 +45,9 @@ class BBTopo(Topo):
 
         # TODO: Add links with appropriate characteristics
         self.addLink(h1, switch, 
-            bw=100., delay="10ms", max_queue_size=100)
+            bw=100., delay="10ms", max_queue_size=1000)
         self.addLink(h2, switch,
-            bw=2, delay="10ms", max_queue_size=100)
+            bw=1.544, delay="10ms", max_queue_size=1000)
         return
 
 topo = BBTopo()

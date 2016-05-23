@@ -9,8 +9,6 @@ import socket, sys
 import random
 from struct import *
 
-
-
 class Connection:
     # Local variables :
     # Destionation address of the server : (ip, port)
@@ -32,6 +30,11 @@ class Connection:
             # Connect the raw socket. Thus, the only packets we will receive are those coming from our target IP address.
             self.s.connect(self.dest_addr)
             self.src_addr = self.s.getsockname()
+
+            # We need a second socket, for monitoring received raw packets. The IPPROTO_TCP socket
+            # does not let us handle retransmitted packets, which is really really bad for us
+            self.mon_s = socket.socket( socket.AF_PACKET , socket.SOCK_RAW , socket.ntohs(0x0003))
+
         except socket.error , msg:
             print 'Socket could not be created. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
             sys.exit()
@@ -226,9 +229,9 @@ class Connection:
         from the correct flow
         """
         while True:
-            rep = self.s.recvfrom(buffer_size)
-            (seq, length) = self.parse(rep[0])
-            if seq >= 0:
+            rep = self.mon_s.recvfrom(buffer_size)
+            (seq, length) = self.parse(rep[0][14:])
+            if seq > 0:
                 return (seq, length)
 
     def tear_down(self, seq):
@@ -237,7 +240,6 @@ class Connection:
         _ = self.read_packet() # wait for the ACK
         self.send_raw(seq+1, ack_nbr=self.fin, rst=1)
 
-        
     class Closed(Exception):
         pass
 

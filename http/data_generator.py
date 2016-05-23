@@ -7,7 +7,7 @@ import socket
 import time
 import sys
 
-BYTES_PER_ROUND = 4096
+BYTES_PER_ROUND = 20000
 
 def parse_args():
 	parser = ArgumentParser(description="Data generator")
@@ -33,18 +33,22 @@ def parse_args():
 def serve(ipaddr, port, directory, duration):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+	s.settimeout(5)
 	s.bind((ipaddr, port))
 	s.listen(1)
 	(conn, _) = s.accept()
 	start = time.time()
-	save_file = open(directory+"/%f.csv" % start, 'a+') if directory is not None else sys.stdout
+	save_file = open(directory+"/%f.csv" % start, 'a+', 0) if directory is not None else sys.stdout
 	save_file.write("time, sent\n")
 	data_sent = 0
 	while True:
 		now = time.time()
 		if duration > 0 and now - start >= duration:
 			break
-		conn.send("1"*BYTES_PER_ROUND)
+		try:
+			conn.send("1"*BYTES_PER_ROUND)
+		except:
+			break
 		data_sent += BYTES_PER_ROUND
 		save_file.write("%f, %d\n" % (now-start, data_sent))
 	# Could do something cleaner. Have to wait for all the data to get sent
