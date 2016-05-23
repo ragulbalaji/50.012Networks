@@ -13,8 +13,8 @@ if len(sys.argv) < 4:
     sys.exit()
 dest_ip = sys.argv[1]
 port = int(sys.argv[2])
-duration = int(sys.argv[3]) + 6
-target_rate = 6000000.
+duration = int(sys.argv[3]) + 1
+target_rate = 9000000.
 cur_rate = target_rate / 20.
 min_wait = 1.2*8*40./1544000.
 c = Connection(dest_ip, port)

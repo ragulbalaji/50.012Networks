@@ -33,7 +33,7 @@ class Connection:
 
             # We need a second socket, for monitoring received raw packets. The IPPROTO_TCP socket
             # does not let us handle retransmitted packets, which is really really bad for us
-            self.mon_s = socket.socket( socket.AF_PACKET , socket.SOCK_RAW , socket.ntohs(0x0003))
+            #self.mon_s = socket.socket( socket.AF_PACKET , socket.SOCK_RAW , socket.ntohs(0x0003))
 
         except socket.error , msg:
             print 'Socket could not be created. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
@@ -229,8 +229,10 @@ class Connection:
         from the correct flow
         """
         while True:
-            rep = self.mon_s.recvfrom(buffer_size)
-            (seq, length) = self.parse(rep[0][14:])
+            #rep = self.mon_s.recvfrom(buffer_size)
+            #(seq, length) = self.parse(rep[0][14:])
+            rep = self.s.recvfrom(buffer_size)
+            (seq, length) = self.parse(rep[0])
             if seq > 0:
                 return (seq, length)
 

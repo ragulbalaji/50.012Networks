@@ -45,13 +45,13 @@ class BBTopo(Topo):
 
         # TODO: Add links with appropriate characteristics
         self.addLink(h1, switch, 
-            bw=100., delay="10ms", max_queue_size=1000)
+            bw=100., delay="10ms", max_queue_size=10000)
         self.addLink(h2, switch,
-            bw=1.544, delay="10ms", max_queue_size=1000)
+            bw=1.544, delay="10ms", max_queue_size=10000)
         return
 
 topo = BBTopo()
-net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink)
+net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoStaticArp=True)
 net.start()
 h1 = net.get('h1')
 h2 = net.get('h2')

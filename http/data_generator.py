@@ -6,6 +6,7 @@ from argparse import ArgumentParser
 import socket
 import time
 import sys
+import struct
 
 BYTES_PER_ROUND = 20000
 
@@ -34,6 +35,8 @@ def serve(ipaddr, port, directory, duration):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	s.settimeout(5)
+	timeval = struct.pack('ll', 5, 0)
+	s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDTIMEO, timeval)
 	s.bind((ipaddr, port))
 	s.listen(1)
 	(conn, _) = s.accept()
@@ -48,10 +51,12 @@ def serve(ipaddr, port, directory, duration):
 		try:
 			conn.send("1"*BYTES_PER_ROUND)
 		except:
+			save_file.write("Timeout !\n")
 			break
 		data_sent += BYTES_PER_ROUND
 		save_file.write("%f, %d\n" % (now-start, data_sent))
 	# Could do something cleaner. Have to wait for all the data to get sent
+	save_file.write("Connection closing now ! Time : %f\n" % (now-start))
 	time.sleep(1)
 	conn.close()
 	s.close()
