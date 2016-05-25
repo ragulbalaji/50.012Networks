@@ -1,10 +1,4 @@
-'''
-    Raw sockets on Linux
-     
-    Silver Moon (m00n.silv3r@gmail.com)
-'''
- 
-# some imports
+
 import socket, sys
 import random
 from struct import *
@@ -26,20 +20,19 @@ class Connection:
         #create a raw socket
         try:
             self.s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
+            timeval = pack('ll', 5, 0)
+            self.s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDTIMEO, timeval)
+            self.s.settimeout(5)
             self.dest_addr = (dest_ip, dest_port)
             # Connect the raw socket. Thus, the only packets we will receive are those coming from our target IP address.
             self.s.connect(self.dest_addr)
             self.src_addr = self.s.getsockname()
-
-            # We need a second socket, for monitoring received raw packets. The IPPROTO_TCP socket
-            # does not let us handle retransmitted packets, which is really really bad for us
-            #self.mon_s = socket.socket( socket.AF_PACKET , socket.SOCK_RAW , socket.ntohs(0x0003))
-
         except socket.error , msg:
             print 'Socket could not be created. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
             sys.exit()
 
     def send_raw(self, seq_nbr, ack_nbr=-1, content = '', syn=0, fin=0, rst=0, window=5840, wscale=0):
+        """Send raw packets using Python's raw sockets. Code base don a script from Silver Moon (m00n.silv3r@gmail.com)."""
         # first, decide whether we have an ack packet or not
         if ack_nbr == -1:
             ack = 0
@@ -58,7 +51,6 @@ class Connection:
         # checksum functions needed for calculation checksum
         def checksum(msg):
             s = 0
-             
             # loop taking 2 characters at a time
             for i in range(0, len(msg), 2):
                 w = ord(msg[i]) + (ord(msg[i+1]) << 8 )
@@ -71,16 +63,11 @@ class Connection:
             s = ~s & 0xffff
              
             return s
-
-         
-        # tell kernel not to put in headers, since we are providing it, when using IPPROTO_RAW this is not necessary
-        # s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
              
         # now start constructing the packet
          
         source_ip = src_ip
         dest_ip = dest_ip # or socket.gethostbyname('www.google.com')
-         
          
         # tcp header fields
         tcp_source = src_port   # source port
@@ -100,21 +87,21 @@ class Connection:
          
         tcp_flags = tcp_fin + (tcp_syn << 1) + (tcp_rst << 2) + (tcp_psh <<3) + (tcp_ack << 4) + (tcp_urg << 5)
         
-	tcp_wscale_kind = 3
-	tcp_wscale_len = 3 
-	tcp_wscale_shift = wscale
-	tcp_wscale = (tcp_wscale_shift << 8) + (tcp_wscale_len << 16) + (tcp_wscale_kind << 24)
+    	tcp_wscale_kind = 3
+    	tcp_wscale_len = 3 
+    	tcp_wscale_shift = wscale
+    	tcp_wscale = (tcp_wscale_shift << 8) + (tcp_wscale_len << 16) + (tcp_wscale_kind << 24)
 
         # the ! in the pack format string means network order
-	# If this is a syn packet, include the wscale option
-	if tcp_syn == 1:
-        	tcp_doff = 6    #4 bit field, size of tcp header, 6 * 4 = 24 bytes
-        	tcp_offset_res = (tcp_doff << 4) + 0
-        	tcp_header = pack('!HHLLBBHHHL' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags, tcp_window, tcp_check, tcp_urg_ptr, tcp_wscale)
-	else:
-        	tcp_doff = 5
-        	tcp_offset_res = (tcp_doff << 4) + 0
-        	tcp_header = pack('!HHLLBBHHH' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags, tcp_window, tcp_check, tcp_urg_ptr)
+    	# If this is a syn packet, include the wscale option
+    	if tcp_syn == 1:
+            	tcp_doff = 6    #4 bit field, size of tcp header, 6 * 4 = 24 bytes
+            	tcp_offset_res = (tcp_doff << 4) + 0
+            	tcp_header = pack('!HHLLBBHHHL' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags, tcp_window, tcp_check, tcp_urg_ptr, tcp_wscale)
+    	else:
+            	tcp_doff = 5
+            	tcp_offset_res = (tcp_doff << 4) + 0
+            	tcp_header = pack('!HHLLBBHHH' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags, tcp_window, tcp_check, tcp_urg_ptr)
          
         user_data = content
          

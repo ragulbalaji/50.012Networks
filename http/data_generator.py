@@ -1,12 +1,12 @@
 #!/usr/bin/env python2
-
-"""Data generator: sends data to one connect client forever, or until stopped."""
+"""Data generator: sends data to one connected client forever, or until stopped."""
 
 from argparse import ArgumentParser
 import socket
 import time
 import sys
 import struct
+import os
 
 BYTES_PER_ROUND = 20000
 
@@ -37,11 +37,17 @@ def serve(ipaddr, port, directory, duration):
 	s.settimeout(5)
 	timeval = struct.pack('ll', 5, 0)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDTIMEO, timeval)
+	if directory is not None:
+		try:
+			os.makedirs(directory)
+		except OSError:
+			pass
 	s.bind((ipaddr, port))
 	s.listen(1)
 	(conn, _) = s.accept()
 	start = time.time()
-	save_file = open(directory+"/%f.csv" % start, 'a+', 0) if directory is not None else sys.stdout
+
+	save_file = open(directory+"/%s.csv" % ipaddr, 'w+') if directory is not None else sys.stdout
 	save_file.write("time, sent\n")
 	data_sent = 0
 	while True:
@@ -51,12 +57,12 @@ def serve(ipaddr, port, directory, duration):
 		try:
 			conn.send("1"*BYTES_PER_ROUND)
 		except:
-			save_file.write("Timeout !\n")
+			save_file.write("#Timeout !\n")
 			break
 		data_sent += BYTES_PER_ROUND
 		save_file.write("%f, %d\n" % (now-start, data_sent))
 	# Could do something cleaner. Have to wait for all the data to get sent
-	save_file.write("Connection closing now ! Time : %f\n" % (now-start))
+	save_file.write("#Connection closing now ! Time : %f\n" % (now-start))
 	time.sleep(1)
 	conn.close()
 	s.close()
@@ -66,3 +72,4 @@ def serve(ipaddr, port, directory, duration):
 if __name__ == "__main__":
 	args = parse_args()
 	serve(args.ipaddr, args.port, args.dir, args.duration)
+
