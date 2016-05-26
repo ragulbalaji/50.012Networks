@@ -10,6 +10,7 @@ remove the header and footer of each CSV file:
     ```
     sed -i '1d' *.csv
     ```
+
     ```
     sed -i '$d' *.csv
     ```
@@ -43,6 +44,7 @@ file:
     ```
     sed -i '1d' 10.0.0.2.csv
     ```
+
     ```
     sed -i '$d' 10.0.0.2.csv
     ```
