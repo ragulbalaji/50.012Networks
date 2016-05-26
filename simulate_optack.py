@@ -92,7 +92,7 @@ def opt_ack(args):
 
     #start client on h0
     h0 = net.get('h0')
-    h0.popen("python client/optack_mult.py %d %d %s" % (args.time, args.target_rate, server_addresses), shell=True).wait()
+    h0.popen("python client/optack_mult.py %d %d %s > /dev/null 2> /dev/null" % (args.time, args.target_rate, server_addresses), shell=True).wait()
 
     # Correctly terminate
     net.stop()
