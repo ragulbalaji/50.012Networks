@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """CS244 Spring'16 Project : Reproduce the Optimist-ACK attack. (Alexander Schaub, Trey Deitch)"""
 from mininet.topo import Topo
 from mininet.node import CPULimitedHost
