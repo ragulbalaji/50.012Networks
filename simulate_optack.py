@@ -92,7 +92,9 @@ def opt_ack(args):
 
     #start client on h0
     h0 = net.get('h0')
-    h0.popen("python client/optack_mult.py %d %d %s > /dev/null 2> /dev/null" % (args.time, args.target_rate, server_addresses), shell=True).wait()
+    # Suppress RST packets. Thank you very much, group-who-did-this-last-year !
+    h0.popen("iptables -t filter -I OUTPUT -p tcp --dport %d --tcp-flags RST RST -j DROP" % PORT)
+    h0.popen("python client/optack_mult.py %d %d %s > b.txt 2> d.txt" % (args.time, args.target_rate, server_addresses), shell=True).wait()
 
     # Correctly terminate
     net.stop()

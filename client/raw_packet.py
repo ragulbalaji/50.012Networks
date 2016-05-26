@@ -27,12 +27,13 @@ class Connection:
             # Connect the raw socket. Thus, the only packets we will receive are those coming from our target IP address.
             self.s.connect(self.dest_addr)
             self.src_addr = self.s.getsockname()
+            
         except socket.error , msg:
             print 'Socket could not be created. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
             sys.exit()
 
     def send_raw(self, seq_nbr, ack_nbr=-1, content = '', syn=0, fin=0, rst=0, window=5840, wscale=0):
-        """Send raw packets using Python's raw sockets. Code base don a script from Silver Moon (m00n.silv3r@gmail.com)."""
+        """Send raw packets using Python's raw sockets. Code based on a script from Silver Moon (m00n.silv3r@gmail.com)."""
         # first, decide whether we have an ack packet or not
         if ack_nbr == -1:
             ack = 0
