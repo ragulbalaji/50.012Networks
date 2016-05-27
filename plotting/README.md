@@ -27,18 +27,7 @@ Animated scatter plot
 
 The animated scatter plot shows the cumulative number of bytes output by a single victim.
 
-1. Run the following two commands to remove the header and footer of the CSV
-file:
-
-    ```
-    sed -i '1d' 10.0.0.2.csv
-    ```
-
-    ```
-    sed -i '$d' 10.0.0.2.csv
-    ```
-
-2. Run the animation generation script. You may need to adjust some constants
+1. Run the animation generation script. You may need to adjust some constants
 at the top of the file, such as the location of FFmpeg on your system or the
 name of the CSV file.
 
@@ -46,4 +35,4 @@ name of the CSV file.
     python animated-scatter-plot.py
     ```
 
-3. The animation will be saved as basic_animation.mp4
+2. The animation will be saved as basic_animation.mp4

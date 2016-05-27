@@ -19,6 +19,8 @@ Finally, run the script:
 
 And relax while the experiment is taking place ! (5-10 minutes in total)
 
+After this, the graph is available under results/output.png
+
 Note : Please ignore any "*** gave up after 3 retries" messages. This seems to be a Mininet bug when stopping the network.
 
 Troubleshooting
