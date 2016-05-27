@@ -18,10 +18,10 @@ import math
 PORT = 8080
 def parse_args():
     parser = ArgumentParser(description="Optimist-ACK simulation")
-    parser.add_argument('--bw-client', '-b',
-                        type=float,
-                        help="Bandwidth of client link (Mb/s)",
-                        default=1.544)
+    #parser.add_argument('--bw-client', '-b',
+    #                    type=float,
+    #                    help="Bandwidth of client link (Mb/s)",
+    #                    default=1.544)
 
     parser.add_argument('--bw-server', '-B',
                         type=float,
@@ -74,7 +74,7 @@ class BBTopo(Topo):
         for i in range(1, n+1):
             h = self.addHost('h%d' % i)
             self.addLink(h, switch,
-                bw=100., delay="%fms" % args.delay, max_queue_size=1000)
+                bw=args.B, delay="%fms" % args.delay, max_queue_size=1000)
         return
 
 
