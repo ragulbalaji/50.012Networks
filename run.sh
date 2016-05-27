@@ -2,7 +2,8 @@
 declare -a arr=("1" "2" "4" "8" "16" "32" "64")
 
 # Launch the experiments
-echo "Starting the experiments."
+echo "Starting the experiments. It will take about 5 minutes."
+echo  "Note : Ignore the '*** gave up after 3 retries' messages."
 sudo ./simulate_optack.py -d results/1 -n 1 -r 90 -t 30
 echo "Experiment with 1 server finished"
 sudo ./simulate_optack.py -d results/2 -n 2 -r 90 -t 30

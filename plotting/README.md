@@ -4,18 +4,7 @@ Plotting graphs
 Bytes/s vs time, for different numbers of victims
 -------------------------------------------------
 
-1. Inside each directory (1, 2, 4, 8, etc.), run the following two commands to
-remove the header and footer of each CSV file:
-
-    ```
-    sed -i '1d' *.csv
-    ```
-
-    ```
-    sed -i '$d' *.csv
-    ```
-
-2. Also inside each numbered directory, run the included program to generate a
+1. Inside each numbered directory, run the included program to generate a
 CSV with the total number of bytes sent by all the victims each second:
 
     ```
@@ -24,14 +13,14 @@ CSV with the total number of bytes sent by all the victims each second:
 
 where _N_ is the number of victims (1, 2, 4, etc.).
 
-3. Up one directory, you should now have 1.csv, 2.csv, 4.csv, etc. Run the
+2. Up one directory, you should now have 1.csv, 2.csv, 4.csv, etc. Run the
 GNUPlot script to generate the plot:
 
     ```
     gnuplot total-bytes-per-sec.plt
     ```
 
-4. The plot will be saved as output.png.
+3. The plot will be saved as output.png.
 
 Animated scatter plot
 ---------------------
