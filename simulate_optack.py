@@ -74,7 +74,7 @@ class BBTopo(Topo):
         for i in range(1, n+1):
             h = self.addHost('h%d' % i)
             self.addLink(h, switch,
-                bw=args.B, delay="%fms" % args.delay, max_queue_size=1000)
+                bw=args.bw_server, delay="%fms" % args.delay, max_queue_size=1000)
         return
 
 
