@@ -19,4 +19,4 @@ for fname in sys.argv[1:]:
                 i += 1
 
 for i in range(1, BUCKETS):
-    print(i,",", totals[i] - totals[i-1])
+    print("%d, %d" % (i, totals[i] - totals[i-1]))

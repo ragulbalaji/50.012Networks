@@ -48,7 +48,6 @@ def serve(ipaddr, port, directory, duration):
 	start = time.time()
 
 	save_file = open(directory+"/%s.csv" % ipaddr, 'w+') if directory is not None else sys.stdout
-	save_file.write("time, sent\n")
 	data_sent = 0
 	while True:
 		now = time.time()
@@ -57,13 +56,9 @@ def serve(ipaddr, port, directory, duration):
 		try:
 			conn.send("1"*BYTES_PER_ROUND)
 		except:
-			save_file.write("#Timeout !\n")
 			break
 		data_sent += BYTES_PER_ROUND
 		save_file.write("%f, %d\n" % (now-start, data_sent))
-	# Could do something cleaner. Have to wait for all the data to get sent
-	save_file.write("#Connection closing now ! Time : %f\n" % (now-start))
-	time.sleep(1)
 	conn.close()
 	s.close()
 	if save_file is not sys.stdout:

@@ -87,14 +87,14 @@ def opt_ack(args):
     server_addresses = ""
     for i in range(1, args.nb_servers+1):
         h = net.get('h%d' % i)
-        h.popen("python http/data_generator.py -p %d --duration %d --dir %s -i %s" % (PORT, args.time, args.dir, h.IP()), shell=True)
+        h.popen("python server/data_generator.py -p %d --duration %d --dir %s -i %s" % (PORT, args.time, args.dir, h.IP()), shell=True)
         server_addresses += "%s %d " % (h.IP(), PORT)
 
     #start client on h0
     h0 = net.get('h0')
     # Suppress RST packets. Thank you very much, group-who-did-this-last-year !
     h0.popen("iptables -t filter -I OUTPUT -p tcp --dport %d --tcp-flags RST RST -j DROP" % PORT)
-    h0.popen("python client/optack_mult.py %d %d %s > b.txt 2> d.txt" % (args.time, args.target_rate, server_addresses), shell=True).wait()
+    h0.popen("python client/optack.py %d %d %s > /dev/null 2> /dev/null" % (args.time, args.target_rate, server_addresses), shell=True).wait()
 
     # Correctly terminate
     net.stop()
