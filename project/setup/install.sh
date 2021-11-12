@@ -10,6 +10,9 @@ sudo apt install -y git xterm python3 python3-pip
 # new shit from git
 git clone git://github.com/mininet/mininet.git
 cd mininet
-git checkout 2.3.0
+# git checkout 2.3.0
+git checkout 2.2.2
 
+
+PYTHON=python2 util/install.sh -nv
 PYTHON=python3 util/install.sh -nv
