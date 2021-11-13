@@ -36,7 +36,7 @@ def ControlExperiment(expname=f'EXP_{time.time()}', hosts=4, test_time=10, trans
   # setup recv
   recv = net.getNodeByName('recv')
   recv.cmd(f'mkdir -p {savedir}')
-  recv.cmd(f'iperf -s -p 5001 -w 16m -i 1 > {savedir}/iperf-recv.csv &')
+  recv.cmd(f'iperf -s -p 5001 -w 16m -i 1 -N {transport_alg} > {savedir}/iperf-recv.csv &')
   # setup others
   for i in range(hosts):
     hi = net.getNodeByName(f'h{i}')
