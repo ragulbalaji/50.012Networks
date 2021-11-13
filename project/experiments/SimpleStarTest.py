@@ -13,7 +13,7 @@ from argparse import ArgumentParser
 import time
 
 class TopoStar(Topo):
-  def __init__(self, n=2, cpu=None, bw_atkr=1, bw_recv=1, bw_net=1, delay='100', maxq=None, diff=False):
+  def __init__(self, n=2, cpu=None, bw_atkr=10, bw_recv=10, bw_net=10, delay='100', maxq=None, diff=False):
     super(TopoStar, self ).__init__()
     self.addSwitch('s0', fail_mode='open')
     self.addHost('atkr', cpu=cpu)
@@ -23,7 +23,7 @@ class TopoStar(Topo):
     for i in range(n): self.addHost(f'h{i}', cpu=cpu)
     for i in range(n): self.addLink(f'h{i}', 's0', bw=bw_net, delay=delay)
 
-def ControlExperiment(hosts=4, test_time=10):
+def ControlExperiment(hosts=8, test_time=10):
   print("[Info] Starting Control Experiment")
   topo = TopoStar(n=hosts)
   net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoPinCpus=True, controller=OVSController)
