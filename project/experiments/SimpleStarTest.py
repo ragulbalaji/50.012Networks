@@ -42,7 +42,7 @@ def ControlExperiment(hosts=8, test_time=10):
     hi = net.getNodeByName(f'h{i}')
     hi.cmd(f'iperf -c {recv.IP()} -p 5001 -i 1 -w 16m -N -Z {"reno"} -t {test_time + 10} -y C > {savedir}/iperf_h{i}.csv &')
   time.sleep(5) # delay start by 5 seconds
-  atkr.cmd(f'iperf -c {recv.IP()} -p 5001 -i 1 -w 16m -N -Z {"reno"} -t {test_time} -y C > {savedir}/iperf_atkr.csv')
+  atkr.cmd(f'iperf -c {recv.IP()} -p 5001 -i 1 -w 16m -N -Z {"reno"} -t {test_time} -P 10 -y C > {savedir}/iperf_atkr.csv')
   time.sleep(5) # delay  end  by 5 seconds
   print("[Info] TEST ENDED, returning to CLI")
   # tests end
