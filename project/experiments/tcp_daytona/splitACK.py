@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/python3
 from scapy.all import *
 import random
 import sys

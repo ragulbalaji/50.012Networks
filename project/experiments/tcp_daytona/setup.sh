@@ -1,9 +1,9 @@
 #!/bin/bash
 
 sudo apt-get update
-sudo apt-get -y install python-pip
-python -m pip install --upgrade pip
-pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
+sudo apt-get -y install python3-pip
+python3 -m pip install --upgrade pip
+pip3 install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
 sudo pip install scapy
 sudo apt-get -y install mininet
 sudo apt-get -y install openvswitch-testcontroller
