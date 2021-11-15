@@ -21,7 +21,7 @@ from mininet.util import dumpNodeConnections, quietRun
 from mininet.node import CPULimitedHost, OVSController
 from mininet.link import TCLink
 
-##
+
 # Globals
 ##########
 # time (sec), cwnd (MSS)
@@ -200,6 +200,8 @@ def ControlExperiment(expname="EXP_%s" % time.time(), hosts=8, test_time=10, tra
     print("[Info] Starting Control Experiment")
     # start tests
     savedir = './results/{0}/{1}'.format(expname, transport_alg.replace(" ", "_"))
+    print(savedir)
+    os.system("mkdir -p {}".format(savedir))
 
     for i in range(1, 2):
         hi = net.getNodeByName("h%s" % i)
@@ -227,10 +229,11 @@ def ControlExperiment(expname="EXP_%s" % time.time(), hosts=8, test_time=10, tra
 if __name__ == '__main__':
     ExperimentName = time.strftime("%Y%b%d_%H%M%S")
     TransportAlgos = ['-Z reno', '-Z cubic', '-u']
+    print(ExperimentName)
     for algo in TransportAlgos:
         print('[Test] Running {0} with {1} algo...'.format(ExperimentName, algo))
         ControlExperiment(expname=ExperimentName, transport_alg=algo)
-    os.system('zip ./results/{0}.zip -r ./results/{1}/'.format(ExperimentName, ExperimentName))
-    os.system('rm -rf ./results/{}'.format(ExperimentName))  # remove small files so git doesnt get angry
+    # os.system('zip ./results/{0}.zip -r ./results/{1}/'.format(ExperimentName, ExperimentName))
+    # os.system('rm -rf ./results/{}'.format(ExperimentName))  # remove small files so git doesnt get angry
 
 
