@@ -7,6 +7,7 @@ import csv
 import subprocess
 from datetime import datetime
 from time import mktime, sleep
+import os, time
 
 import matplotlib
 
@@ -17,6 +18,7 @@ from mininet.log import info, lg, setLogLevel
 from mininet.net import Mininet
 from mininet.topo import Topo
 from mininet.util import dumpNodeConnections, quietRun
+from mininet.node import CPULimitedHost, OVSController
 
 ##
 # Globals
@@ -165,22 +167,74 @@ class TreeTopo(Topo):
         # connect Layer 1 switches to Layer 2 hosts
         hosts = {}
         for i in range(fanout ** depth):
-            hostname = f"h{i+1}"
+            hostname = "h{}".format(i+1)
             hosts[hostname] = self.addHost(hostname)
 
         # Link the hosts to router
         for i in range(1, 5):
-            hostname = f"h{i}"
+            hostname = "h{}".format(i)
             self.addLink(s2, hosts[hostname], cls=TCLink, **hi_params)
 
         for i in range(5, 9):
-            hostname = f"h{i}"
+            hostname = "h{}".format(i)
             self.addLink(s3, hosts[hostname], cls=TCLink, **hi_params)
 
         for i in range(9, 13):
-            hostname = f"h{i}"
+            hostname = "h{}".format(i)
             self.addLink(s4, hosts[hostname], cls=TCLink, **hi_params)
 
         for i in range(13, 17):
-            hostname = f"h{i}"
+            hostname = "h{}".format(i)
             self.addLink(s5, hosts[hostname], cls=TCLink, **hi_params)
+
+
+def ControlExperiment(expname="EXP_%s" % time.time(), hosts=8, test_time=10, transport_alg='-Z reno'):
+    # xpname=f'EXP_{time.time()}'
+    topo = SimpleTreeTopo(n=hosts)
+    net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoPinCpus=True,
+                  controller=OVSController)
+    net.start()
+    net.pingAll()
+
+    print("[Info] Starting Control Experiment")
+    # start tests
+    savedir = './results/{0}/{1}'.format(expname, transport_alg.replace(" ", "_"))
+    atkr = net.getNodeByName('atkr')
+    # setup recv
+    recv = net.getNodeByName('recv')
+    recv.cmd('mkdir -p {0}'.format(savedir))
+    recv.cmd('iperf -s -p 5001 -w 16m -i 1 -N {0} > {1}/iperf-recv.csv &'.format(transport_alg, savedir))
+    # the other 2 recv hosts - hardcoded, change later
+    for i in range(0, 1):
+        hi = net.getNodeByName("h%s" % i)
+        hi.cmd('iperf -s -p 5001 -w 16m -i 1 -N {0} > {1}/iperf-recv.csv &'.format(transport_alg, savedir))
+
+    # setup others
+    for i in range(1, 3):
+        hi = net.getNodeByName("h%s" % i)
+        hi.cmd('iperf -c {0} -p 5001 -i 1 -w 16m -b 1M -N {1} -t {2} -y C > {3}/iperf_h{4}.csv &'
+               .format(recv.IP(), transport_alg, test_time + 10, savedir, i))
+    time.sleep(5)  # delay start by 5 seconds
+    for i in range(3, 4):
+        hi = net.getNodeByName("h%s" % i)
+        hi.cmd('iperf -c {0} -p 5001 -i 1 -w 16m -b 1M -N {1} -t {2} -y C > {3}/iperf_h{4}.csv &'
+               .format(recv.IP(), transport_alg, test_time + 10, savedir, i))
+
+    time.sleep(5)  # delay end by 5 seconds
+    print("[Info] Test Ended")
+    # tests end
+
+    # CLI(net) # comment out when running main test
+    net.stop()
+
+
+if __name__ == '__main__':
+    ExperimentName = time.strftime("%Y%b%d_%H%M%S")
+    TransportAlgos = ['-Z reno', '-Z cubic', '-u']
+    for algo in TransportAlgos:
+        print('[Test] Running {0} with {1} algo...'.format(ExperimentName, algo))
+        ControlExperiment(expname=ExperimentName, transport_alg=algo)
+    os.system('zip ./results/{0}.zip -r ./results/{1}/'.format(ExperimentName, ExperimentName))
+    os.system('rm -rf ./results/{}'.format(ExperimentName))  # remove small files so git doesnt get angry
+
+
