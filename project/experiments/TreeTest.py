@@ -58,7 +58,6 @@ attacker + 2 normal      4 normal
 
         # normal node - 4 hosts
         self.addSwitch('s2', fail_mode='open')
-        self.addLink('norm', 's2', bw=bw_atkr, delay=delay)
         for i in range(2*((n//3)-1), n-2, 1):
             self.addHost("h%s" % i, cpu=cpu)
             self.addLink("h%s" % i, 's2', bw=bw_net, delay=delay)

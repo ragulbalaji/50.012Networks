@@ -9,16 +9,17 @@ from datetime import datetime
 from time import mktime, sleep
 import os, time
 
-import matplotlib
+#import matplotlib
 
-matplotlib.use("Agg")  # Force matplotlib to not use any Xwindows backend.
-import matplotlib.pyplot as plt
-from mininet.link import TCLink
+#matplotlib.use("Agg")  # Force matplotlib to not use any Xwindows backend.
+#import matplotlib.pyplot as plt
+# from mininet.link import TCLink
 from mininet.log import info, lg, setLogLevel
 from mininet.net import Mininet
 from mininet.topo import Topo
 from mininet.util import dumpNodeConnections, quietRun
 from mininet.node import CPULimitedHost, OVSController
+from mininet.link import TCLink
 
 ##
 # Globals
@@ -190,7 +191,7 @@ class TreeTopo(Topo):
 
 def ControlExperiment(expname="EXP_%s" % time.time(), hosts=8, test_time=10, transport_alg='-Z reno'):
     # xpname=f'EXP_{time.time()}'
-    topo = SimpleTreeTopo(n=hosts)
+    topo = SimpleTreeTopo()
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoPinCpus=True,
                   controller=OVSController)
     net.start()
@@ -199,26 +200,21 @@ def ControlExperiment(expname="EXP_%s" % time.time(), hosts=8, test_time=10, tra
     print("[Info] Starting Control Experiment")
     # start tests
     savedir = './results/{0}/{1}'.format(expname, transport_alg.replace(" ", "_"))
-    atkr = net.getNodeByName('atkr')
-    # setup recv
-    recv = net.getNodeByName('recv')
-    recv.cmd('mkdir -p {0}'.format(savedir))
-    recv.cmd('iperf -s -p 5001 -w 16m -i 1 -N {0} > {1}/iperf-recv.csv &'.format(transport_alg, savedir))
-    # the other 2 recv hosts - hardcoded, change later
-    for i in range(0, 1):
+
+    for i in range(1, 2):
         hi = net.getNodeByName("h%s" % i)
         hi.cmd('iperf -s -p 5001 -w 16m -i 1 -N {0} > {1}/iperf-recv.csv &'.format(transport_alg, savedir))
 
     # setup others
-    for i in range(1, 3):
+    for i in range(2, 4):
         hi = net.getNodeByName("h%s" % i)
-        hi.cmd('iperf -c {0} -p 5001 -i 1 -w 16m -b 1M -N {1} -t {2} -y C > {3}/iperf_h{4}.csv &'
-               .format(recv.IP(), transport_alg, test_time + 10, savedir, i))
+        hi.cmd('iperf -c {0} -p 5001 -i 1 -w 16m -N {1} -t {2} -y C > {3}/iperf_h{4}.csv &'
+               .format(hi.IP(), transport_alg, test_time + 10, savedir, i))
     time.sleep(5)  # delay start by 5 seconds
-    for i in range(3, 4):
+    for i in range(4, 5):
         hi = net.getNodeByName("h%s" % i)
-        hi.cmd('iperf -c {0} -p 5001 -i 1 -w 16m -b 1M -N {1} -t {2} -y C > {3}/iperf_h{4}.csv &'
-               .format(recv.IP(), transport_alg, test_time + 10, savedir, i))
+        hi.cmd('iperf -c {0} -p 5001 -i 1 -w 16m -N {1} -t {2} -y C > {3}/iperf_h{4}.csv &'
+               .format(hi.IP(), transport_alg, test_time + 10, savedir, i))
 
     time.sleep(5)  # delay end by 5 seconds
     print("[Info] Test Ended")
