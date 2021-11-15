@@ -1,0 +1,176 @@
+#!/usr/bin/env python
+"""CS244 Spring'16 Project : Reproduce the Optimist-ACK attack. (Alexander Schaub, Trey Deitch)"""
+from mininet.topo import Topo
+from mininet.node import CPULimitedHost
+from mininet.link import TCLink
+from mininet.net import Mininet
+
+from subprocess import Popen, PIPE
+from time import sleep, time
+from multiprocessing import Process
+from argparse import ArgumentParser
+
+
+import sys
+import os
+import math
+
+PORT = 8080
+def parse_args():
+    parser = ArgumentParser(description="Optimist-ACK simulation")
+    #parser.add_argument('--bw-client', '-b',
+    #                    type=float,
+    #                    help="Bandwidth of client link (Mb/s)",
+    #                    default=1.544)
+
+    
+    
+    parser.add_argument('--use_ring_topo', action='store_true')
+    parser.add_argument('--num_attackers', type=int, default=1)
+    parser.add_argument('--num_normal_receivers', type=int, default=0)
+
+    
+    parser.add_argument('--bw-server', '-B',
+                        type=float,
+                        help="Bandwidth of servers (Mb/s)",
+                        default=100.)
+
+    parser.add_argument('--delay',
+                        type=float,
+                        help="Link propagation delay (ms)",
+                        default=10.)
+
+    parser.add_argument('--dir', '-d',
+                        help="Directory to store outputs",
+                        required=True)
+
+    parser.add_argument('--time', '-t',
+                        help="Duration (sec) to run the experiment",
+                        type=int,
+                        default=45)
+
+    parser.add_argument('--nb_servers', '-n',
+                        type=int,
+                        help="Number of servers to spawn and contact",
+                        default=10)
+
+    parser.add_argument('--target_rate', '-r',
+                        type=float,
+                        help="Target bandwidth for the client to sustain (Mb/s)",
+                        default=72.)
+
+    # Expt parameters
+    args = parser.parse_args()
+    # Convert the target rate from Mb/s to B/s
+    args.target_rate *= (1000000. / 8.)
+
+    return args
+
+class BBTopo(Topo):
+    "Star topology : one router, one client, n servers"
+
+    def build(self, n=1):
+        # Single switch
+        switch = self.addSwitch('s0')
+        # Connect the client
+        h0 = self.addHost('h0')
+        self.addLink(h0, switch, 
+            bw=1.544, delay="%fms" % args.delay, max_queue_size=1000)
+
+        # Connect n servers
+        for i in range(1, n+1):
+            h = self.addHost('h%d' % i)
+            self.addLink(h, switch,
+                bw=args.bw_server, delay="%fms" % args.delay, max_queue_size=1000)
+        return
+
+class RingTopo(Topo):
+    "Ring topology: a attackers , b normal receivers, c senders(servers),  a+b+c switches, "
+    
+    def build(self, a, b, c):
+        switch_list = []
+        n = a+b+c
+        for i in range(n):
+            switch_list.append(self.addSwitch( 's{i}'.format(i=i)))
+
+        attacker_list=[]
+        for i in range(a):
+            attacker_list.append(self.addHost('a{i}'.format(i=i)))
+        receiver_list = []
+        for i in range(b):
+            receiver_list.append(self.addHost('r{i}'.format(i=i)))
+        server_list = []
+        for i in range(n - a - b):
+            server_list.append(self.addHost('h{i}'.format(i=i)))
+        
+        
+   
+        #Link between switches, forming a ring
+        for i in range(n-1):
+            self.addLink(switch_list[i], switch_list[i+1])
+        self.addLink(switch_list[- 1], switch_list[0])
+        
+        """ [0, a]: attacker, [a: a+b]: receiver, [a+b:n] server"""
+        #Link between switches and hosts
+        for i in range(a):
+            self.addLink(switch_list[i], attacker_list[i])
+        for i in range(a, a+b):
+            self.addLink(switch_list[i], receiver_list[i-a])
+        for i in range(a+b, n):
+             self.addLink(switch_list[i], server_list[i-a-b ])
+        
+def opt_ack(args):
+    # Perform the Opt-ACK attack by creating the desired topology, spawning servers,  and launching the script
+    if args.use_ring_topo:
+        topo = RingTopo(args.num_attackers, args.num_normal_receivers, args.nb_servers)
+    else:
+        topo = BBTopo(n=args.nb_servers)
+    net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoStaticArp=True)
+    net.start()
+
+    if args.use_ring_topo:
+        server_addresses = ""
+        for i in range(0, args.nb_servers):
+            server = net.get('h%d' % i)
+            server.popen("python server/data_generator.py -p %d --duration %d --dir %s -i %s" % (PORT, args.time, args.dir, server.IP()), shell=True)
+            server_addresses += "%s %d " % (server.IP(), PORT)
+        
+        for i in range(0, args.num_normal_receivers):
+            receiver = net.get('r%d'%i)
+            receiver.popen("iptables -t filter -I OUTPUT -p tcp --dport %d --tcp-flags RST RST -j DROP" % PORT)
+            receiver.popen("python client/ack_normal.py %d %d %s > /dev/null 2> /dev/null" % (args.time, args.target_rate, server_addresses), shell=True)
+            
+
+        for i in range(0, args.num_attackers-1):
+            attacker = net.get('a%d'%i)
+        # Suppress RST packets. Thank you very much, group-who-did-this-last-year !
+            attacker.popen("iptables -t filter -I OUTPUT -p tcp --dport %d --tcp-flags RST RST -j DROP" % PORT)
+            attacker.popen("python client/optack.py %d %d %s > /dev/null 2> /dev/null" % (args.time, args.target_rate, server_addresses), shell=True)
+     
+        #wait for this process to finish
+        i = args.num_attackers-1
+        attacker = net.get('a%d'%i)
+        # Suppress RST packets. Thank you very much, group-who-did-this-last-year !
+        attacker.popen("iptables -t filter -I OUTPUT -p tcp --dport %d --tcp-flags RST RST -j DROP" % PORT)
+        attacker.popen("python client/optack.py %d %d %s > /dev/null 2> /dev/null" % (args.time, args.target_rate, server_addresses), shell=True).wait()
+        
+            
+    else:
+        server_addresses = ""
+        for i in range(1, args.nb_servers+1):
+            h = net.get('h%d' % i)
+            h.popen("python server/data_generator.py -p %d --duration %d --dir %s -i %s" % (PORT, args.time, args.dir, h.IP()), shell=True)
+            server_addresses += "%s %d " % (h.IP(), PORT)
+
+        #start client on h0
+        h0 = net.get('h0')
+        # Suppress RST packets. Thank you very much, group-who-did-this-last-year !
+        h0.popen("iptables -t filter -I OUTPUT -p tcp --dport %d --tcp-flags RST RST -j DROP" % PORT)
+        h0.popen("python client/optack.py %d %d %s > /dev/null 2> /dev/null" % (args.time, args.target_rate, server_addresses), shell=True).wait()
+
+        # Correctly terminate
+        net.stop()
+
+if __name__ == "__main__":
+    args = parse_args()
+    opt_ack(args)
