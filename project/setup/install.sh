@@ -8,7 +8,7 @@ sudo apt install -y git xterm python3 python3-pip
 # sudo apt install mininet
 
 # new shit from git
-git clone git://github.com/mininet/mininet.git
+git clone git://github.com/mininet/mininet
 cd mininet
 # git checkout 2.3.0
 git checkout 2.2.2
