@@ -20,8 +20,8 @@ class TopoTree(Topo):
         s2 = self.addSwitch("s2", fail_mode='open')
         s3 = self.addSwitch("s3", fail_mode='open')
 
-        self.addLink(s1, s2, bw=bw_atkr, delay=delay)
-        self.addLink(s1, s3, bw=bw_atkr, delay=delay)
+        self.addLink(s1, s2, bw=bw_net, delay=delay)
+        self.addLink(s1, s3, bw=bw_net, delay=delay)
 
         self.addHost('atkr', cpu=cpu)
         self.addHost('recv', cpu=cpu)
@@ -31,8 +31,8 @@ class TopoTree(Topo):
         self.addHost("h0", cpu=cpu)
         self.addHost("h1", cpu=cpu)
 
-        self.addLink('h0', 's2', bw=bw_atkr, delay=delay)
-        self.addLink('h1', 's3', bw=bw_atkr, delay=delay)
+        self.addLink('h0', 's2', bw=bw_net, delay=delay)
+        self.addLink('h1', 's3', bw=bw_net, delay=delay)
 
 
 def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=4, test_time=10, transport_alg='-Z reno'):
@@ -53,12 +53,12 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=4, test_tim
     # setup others
     for i in range(0, 2):
         hi = net.getNodeByName('h{i}'.format(i=i))
-        hi.cmd('iperf -c {j} -p 5001 -i 1 -w 16m -N {transport_alg} -t {a} -y C > {savedir}/iperf_h{i}.csv &'
+        hi.cmd('iperf -c {j} -p 5001 -i 1 -w 16m -b 1M -N {transport_alg} -t {a} -y C > {savedir}/iperf_h{i}.csv &'
         .format(j=recv.IP(), transport_alg=transport_alg, a=test_time + 10,savedir = savedir, i=i))
     # time.sleep(5) # delay start by 5 seconds
 
     atkr = net.getNodeByName('atkr')
-    atkr.cmd('iperf -c {a} -p 5001 -i 1 -w 16m -N {transport_alg} -t {test_time} -y C > {savedir}/iperf_atkr.csv'
+    atkr.cmd('iperf -c {a} -p 5001 -i 1 -w 16m -b 5M -N {transport_alg} -t {test_time} -y C > {savedir}/iperf_atkr.csv'
         .format(a=recv.IP(), transport_alg=transport_alg, test_time=test_time, savedir=savedir))
     # time.sleep(5) # delay  end  by 5 seconds
     print("[Info] Test Ended")
