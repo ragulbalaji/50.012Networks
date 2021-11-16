@@ -23,7 +23,7 @@ class TreeTopo(Topo):
         """
         1 attacker client + 1 server + 8 normal client
 
-        see topo: {LINK TO COME}
+        see topo here: https://drive.google.com/file/d/1noPCEP8JwEg37yzA0JoBRk9u4TXJXHhx/view?usp=sharing
 
         """
         
@@ -53,7 +53,7 @@ class TreeTopo(Topo):
         self.addLink(s0, s9, bw=bw_infra, delay=delay)
         self.addLink(s0, s10, bw=bw_infra, delay=delay)
 
-        # h1 is attacher, h10 is server that is listening for data
+        # h1 is attacker, h10 is server that is listening for data
         for i in range(0, n):
             self.addHost("h{}".format(i+1), cpu=cpu)
 
