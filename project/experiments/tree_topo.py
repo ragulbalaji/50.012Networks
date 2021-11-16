@@ -1,7 +1,3 @@
-##
-# Mininet code to compare 4 different TCP congestion control algorithms.
-#
-
 import argparse
 import csv
 import subprocess
@@ -126,21 +122,21 @@ class TreeTopo(Topo):
         :param  delay   One way propagation delay, delay = RTT / 2. Default is 2ms.
         """
         # The bandwidth (bw) is in Mbps, delay in milliseconds and queue size is in packets
-        br_params = dict(
-            bw=984,
-            delay="{0}ms".format(delay),
-            max_queue_size=82 * delay,
-            use_htb=True,
-        )  # backbone router interface tc params
+        # br_params = dict(
+        #     bw=984,
+        #     delay="{0}ms".format(delay),
+        #     max_queue_size=82 * delay,
+        #     use_htb=True,
+        # )  # backbone router interface tc params
         ar_params = dict(
-            bw=252,
+            bw=1000,
             delay="0ms",
             max_queue_size=(21 * delay * 20) / 100,
             use_htb=True,
         )  # access router intf tc params
         # TODO: remove queue size from hosts and try.
         hi_params = dict(
-            bw=960,
+            bw=500,
             delay="0ms",
             max_queue_size=80 * delay,
             use_htb=True,
@@ -286,64 +282,64 @@ def tcp_tests(algs, delays, iperf_runtime, iperf_delayed_start):
             for i in range(2, 10):
                 hostname = f"h{i}"
                 _host = hosts[hostname]
+                _server_addr = host_addrs["h16"]
+                _client_sending_rate = "50M"
+
                 popens[hostname] = _host.popen(
-                    f"iperf -c {host_addrs['h16']} -p 5001 -i 1 -w 16m -M 1460 -N -Z {alg} -t {iperf_runtime} -y C > iperf_{alg}_{hostname}-h16_{delay}ms.txt",
+                    f"iperf -c {_server_addr} -p 5001 -b {_client_sending_rate} -i 1 -w 16m -M 1460 -N -Z {alg} -t {iperf_runtime} -y C > iperf_{alg}_{hostname}_{delay}ms.txt",
                     shell=True,
                 )
 
             # Delay before starting the second iperf proc
-            print("*** Waiting for {0}sec...".format(iperf_delayed_start))
-            sleep(iperf_delayed_start)
+            # print("*** Waiting for {0}sec...".format(iperf_delayed_start))
+            # sleep(iperf_delayed_start)
 
-            print("*** Starting iperf client h3...")
-            popens[h3] = h3.popen(
-                "iperf -c {0} -p 5001 -i 1 -w 16m -M 1460 -N -Z {1} -t {2} -y C > \
-                                   iperf_{1}_{3}_{4}ms.txt".format(
-                    h4.IP(), alg, iperf_runtime, "h3-h4", delay
-                ),
+            print("*** Starting iperf attacking client h1...")
+            attacker_hostname = "h1"
+            attacker_host = hosts[attacker_hostname]
+            _aggressive_sending_rate = "1000M"
+
+            popens[attacker_hostname] = attacker_host.popen(
+                f"iperf -c {_server_addr} -p 5001 -b {_aggressive_sending_rate} -i 1 -w 16m -M 1460 -N -Z {alg} -t {iperf_runtime} -y C > iperf_{alg}_{attacker_hostname}_{delay}ms.txt",
                 shell=True,
             )
 
             # Wait for clients to finish sending data
-            print(
-                "*** Waiting {0}sec for iperf clients to finish...".format(
-                    iperf_runtime
-                )
-            )
-            popens[h1].wait()
-            popens[h3].wait()
+            print(f"*** Waiting {iperf_runtime}sec for iperf clients to finish...")
+            for i in range(1, 10):
+                hostname = f"h{i}"
+                popens[hostname].wait()
 
             # Terminate the servers and tcpprobe subprocesses
             print("*** Terminate the iperf servers and tcpprobe processes...")
-            popens[h2].terminate()
-            popens[h4].terminate()
+            popens["h16"].terminate()
             tcpprobe_proc.terminate()
 
-            popens[h2].wait()
-            popens[h4].wait()
+            popens["h16"].wait()
             tcpprobe_proc.wait()
+
             clean_tcpprobe_procs()
 
             print("*** Stopping test...")
             net.stop()
 
-            print("*** Processing data...")
-            data_cwnd = parse_tcpprobe_data(alg, delay, host_addrs)
-            data_fairness = parse_iperf_data(alg, delay, host_addrs)
+            # print("*** Processing data...")
+            # data_cwnd = parse_tcpprobe_data(alg, delay, host_addrs)
+            # data_fairness = parse_iperf_data(alg, delay, host_addrs)
 
-            draw_cwnd_plot(
-                data_cwnd["h1"]["time"],
-                data_cwnd["h1"]["cwnd"],
-                data_cwnd["h3"]["time"],
-                data_cwnd["h3"]["cwnd"],
-                alg,
-                delay,
-            )
-            draw_fairness_plot(
-                data_fairness["h1"]["time"],
-                data_fairness["h1"]["Mbps"],
-                data_fairness["h3"]["time"],
-                data_fairness["h3"]["Mbps"],
-                alg,
-                delay,
-            )
+            # draw_cwnd_plot(
+            #     data_cwnd["h1"]["time"],
+            #     data_cwnd["h1"]["cwnd"],
+            #     data_cwnd["h3"]["time"],
+            #     data_cwnd["h3"]["cwnd"],
+            #     alg,
+            #     delay,
+            # )
+            # draw_fairness_plot(
+            #     data_fairness["h1"]["time"],
+            #     data_fairness["h1"]["Mbps"],
+            #     data_fairness["h3"]["time"],
+            #     data_fairness["h3"]["Mbps"],
+            #     alg,
+            #     delay,
+            # )
