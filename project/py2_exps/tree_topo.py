@@ -84,14 +84,14 @@ class SimpleTreeTopo(Topo):
         )  # backbone router interface tc params
         ar_params = dict(
             bw=252,
-            delay="0ms",
+            delay="{0}ms".format(delay),
             max_queue_size=(21 * delay * 20) / 100,
             use_htb=True,
         )  # access router intf tc params
         # TODO: remove queue size from hosts and try.
         hi_params = dict(
             bw=960,
-            delay="0ms",
+            delay="{0}ms".format(delay),
             max_queue_size=80 * delay,
             use_htb=True,
         )  # host interface tc params
@@ -137,14 +137,14 @@ class TreeTopo(Topo):
         )  # backbone router interface tc params
         ar_params = dict(
             bw=252,
-            delay="0ms",
+            delay="{0}ms".format(delay),
             max_queue_size=(21 * delay * 20) / 100,
             use_htb=True,
         )  # access router intf tc params
         # TODO: remove queue size from hosts and try.
         hi_params = dict(
             bw=960,
-            delay="0ms",
+            delay="{0}ms".format(delay),
             max_queue_size=80 * delay,
             use_htb=True,
         )  # host interface tc params
@@ -210,15 +210,16 @@ def ControlExperiment(expname="EXP_%s" % time.time(), hosts=8, test_time=10, tra
     # setup others
     for i in range(2, 4):
         hi = net.getNodeByName("h%s" % i)
-        hi.cmd('iperf -c {0} -p 5001 -i 1 -w 16m -N {1} -t {2} -y C > {3}/iperf_h{4}.csv &'
-               .format(hi.IP(), transport_alg, test_time + 10, savedir, i))
-    time.sleep(5)  # delay start by 5 seconds
-    for i in range(4, 5):
-        hi = net.getNodeByName("h%s" % i)
-        hi.cmd('iperf -c {0} -p 5001 -i 1 -w 16m -N {1} -t {2} -y C > {3}/iperf_h{4}.csv &'
+        hi.cmd('iperf -c {0} -p 5001 -i 1 -w 16m -b 1M -N {1} -t {2} -y C > {3}/iperf_h{4}.csv &'
                .format(hi.IP(), transport_alg, test_time + 10, savedir, i))
 
-    time.sleep(5)  # delay end by 5 seconds
+    # time.sleep(5)  # delay start by 5 seconds
+    for i in range(4, 5):
+        hi = net.getNodeByName("h%s" % i)
+        hi.cmd('iperf -c {0} -p 5001 -i 1 -w 16m -b 2M -N {1} -t {2} -y C > {3}/iperf_h{4}.csv &'
+               .format(hi.IP(), transport_alg, test_time + 10, savedir, i))
+
+    # time.sleep(5)  # delay end by 5 seconds
     print("[Info] Test Ended")
     # tests end
 

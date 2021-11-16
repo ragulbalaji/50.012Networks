@@ -1,2 +1,4 @@
 .DS_Store
 mininet/
+/py2
+/.idea
