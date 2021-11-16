@@ -40,7 +40,7 @@ class TreeTopo(Topo):
         s7 = self.addSwitch("s7", fail_mode='open')
         s8 = self.addSwitch("s8", fail_mode='open')
         s9 = self.addSwitch("s9", fail_mode='open')
-        s10 = self.addSwitch("s6", fail_mode='open')
+        s10 = self.addSwitch("s10", fail_mode='open')
 
         self.addLink(s0, s1, bw=bw_infra, delay=delay)
         self.addLink(s0, s2, bw=bw_infra, delay=delay)
@@ -154,7 +154,7 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=10, test_ti
         hi.cmd('iperf -c {j} -p 5001 -i 1 -w 16m -N {transport_alg} -t {a} -y C > {savedir}/iperf_h{i}.csv &'
             .format(j=recv.IP(), transport_alg=transport_alg, a=test_time + 10,savedir = savedir, i=i))
 
-    atkr = net.getNodeByName("h0")
+    atkr = net.getNodeByName("h1")
     atkr.cmd('iperf -c {a} -p 5001 -i 1 -w 16m -N {transport_alg} -t {test_time} -y C > {savedir}/iperf_atkr.csv'
         .format(a=recv.IP(), transport_alg=transport_alg, test_time=test_time, savedir=savedir))
 
