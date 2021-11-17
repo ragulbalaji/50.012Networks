@@ -132,7 +132,7 @@ class _TreeTopo(Topo):
             self.addLink(s5, hosts[hostname], cls=TCLink, **hi_params)
 
 
-def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=10, test_time=10, transport_alg='-Z reno',
+def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=10, test_time=60, transport_alg='-Z reno',
     bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100):
     n = hosts
     topo = TreeTopo(n=hosts, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
@@ -182,15 +182,28 @@ if __name__ == '__main__':
         [500, 800, 250, 100],
         [500, 900, 250, 100],
         [500, 1000, 250, 100],
+        [500, 100, 500, 100],
+        [500, 200, 500, 100],
+        [500, 300, 500, 100],
+        [500, 400, 500, 100],
+        [500, 500, 500, 100],
+        [500, 600, 500, 100],
+        [500, 700, 500, 100],
+        [500, 800, 500, 100],
+        [500, 900, 500, 100],
+        [500, 1000, 500, 100],
     ]
     for links in link_sizes:
         for algo in TransportAlgos:
             bw_infra, bw_atkr, bw_recv, bw_net = links[0], links[1], links[2], links[3]
-	    links_str = [str(link_int) for link_int in links]
+            links_str = []
+            for link in links:
+                links_str.append(str(link))
             ExperimentName = timenow + "_" + algo.replace(" ", "_") + "_" + "_".join(links_str)
-            print('[Test] Running {ExperimentName} with {algo} CCalgo...'
-                .format(ExperimentName=ExperimentName, algo=algo))
-            ControlExperiment(expname=ExperimentName, transport_alg=algo,
-                bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
-	    os.system('zip ./results/{ExperimentName}.zip -r ./results/{ExperimentName}/'.format(ExperimentName=ExperimentName))
-    	    os.system('rm -rf ./results/{ExperimentName}'.format(ExperimentName=ExperimentName)) # remove small files so git doesnt get angry
+            print('[Test] Running {ExperimentName} with {algo} CCalgo...'.format(ExperimentName=ExperimentName, algo=algo))
+            ControlExperiment(expname=ExperimentName, transport_alg=algo, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)     
+	        
+            os.system('zip ./results/{ExperimentName}.zip -r ./results/{ExperimentName}/'
+                .format(ExperimentName=ExperimentName))
+    	    os.system('rm -rf ./results/{ExperimentName}'
+                .format(ExperimentName=ExperimentName)) # remove small files so git doesnt get angry
