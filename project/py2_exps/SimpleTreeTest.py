@@ -180,10 +180,11 @@ if __name__ == '__main__':
     for algo in TransportAlgos:
         for links in link_sizes:
             bw_infra, bw_atkr, bw_recv, bw_net = links[0], links[1], links[2], links[3]
-            ExperimentName = timenow + "_" + algo.replace(" ", "_") + "_" + "_".join(links)
+	    links_str = [str(link_int) for link_int in links]
+            ExperimentName = timenow + "_" + algo.replace(" ", "_") + "_" + "_".join(links_str)
             print('[Test] Running {ExperimentName} with {algo} CCalgo...'
                 .format(ExperimentName=ExperimentName, algo=algo))
             ControlExperiment(expname=ExperimentName, transport_alg=algo,
                 bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
-    os.system('zip ./results/{ExperimentName}.zip -r ./results/{ExperimentName}/'.format(ExperimentName=ExperimentName))
-    os.system('rm -rf ./results/{ExperimentName}'.format(ExperimentName=ExperimentName)) # remove small files so git doesnt get angry
+	    os.system('zip ./results/{ExperimentName}.zip -r ./results/{ExperimentName}/'.format(ExperimentName=ExperimentName))
+    	    os.system('rm -rf ./results/{ExperimentName}'.format(ExperimentName=ExperimentName)) # remove small files so git doesnt get angry
