@@ -11,6 +11,7 @@ from mininet.node import OVSController
 
 import time
 import os
+from tqdm import tqdm
 
 class TopoStar(Topo):
   def __init__(self, n=2, cpu=None, bw_atkr=10, bw_recv=10, bw_net=10, delay='100', maxq=None, diff=False):
@@ -23,7 +24,7 @@ class TopoStar(Topo):
     for i in range(n): self.addHost(f'h{i}', cpu=cpu)
     for i in range(n): self.addLink(f'h{i}', 's0', bw=bw_net, delay=delay)
 
-def ControlExperiment(expname=f'EXP_{time.time()}', hosts=4, test_time=10, transport_alg='-Z reno'):
+def ControlExperiment(expname=f'EXP_{time.time()}', hosts=4, test_time=10, transport_alg=('-Z reno', 'TCPreno')):
   topo = TopoStar(n=hosts)
   net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoPinCpus=True, controller=OVSController)
   net.start()
@@ -31,20 +32,18 @@ def ControlExperiment(expname=f'EXP_{time.time()}', hosts=4, test_time=10, trans
 
   print("[Info] Starting Control Experiment")
   # start tests
-  savedir = f'./results/{expname}/{transport_alg.replace(" ","_")}'
+  savedir = f'./results/{expname}/{transport_alg[1]}'
   atkr = net.getNodeByName('atkr')
   # setup recv
   recv = net.getNodeByName('recv')
   recv.cmd(f'mkdir -p {savedir}')
-  recv.cmd(f'iperf -s -p 5001 -w 16m -i 1 -N {transport_alg} > {savedir}/iperf-recv.csv &')
+  recv.cmd(f'iperf -s -p 5001 -w 16m -i 1 -N {transport_alg[0]} > {savedir}/iperf-recv.csv &')
   # setup others
   for i in range(hosts):
     hi = net.getNodeByName(f'h{i}')
-    hi.cmd(f'iperf -c {recv.IP()} -p 5001 -i 1 -w 16m -N {transport_alg} -t {test_time + 10} -y C > {savedir}/iperf_h{i}.csv &')
-  time.sleep(5) # delay start by 5 seconds
+    hi.cmd(f'iperf -c {recv.IP()} -p 5001 -i 1 -w 16m -N {transport_alg[0]} -t {test_time} -y C > {savedir}/iperf_h{i}.csv &')
   attacker_parallel_connections = 2
-  atkr.cmd(f'iperf -c {recv.IP()} -p 5001 -i 1 -w 16m -N {transport_alg} -t {test_time} -P {attacker_parallel_connections} -y C > {savedir}/iperf_atkr.csv')
-  time.sleep(5) # delay  end  by 5 seconds
+  atkr.cmd(f'iperf -c {recv.IP()} -p 5001 -i 1 -w 16m -N {transport_alg[0]} -t {test_time} -P {attacker_parallel_connections} -y C > {savedir}/iperf_atkr.csv')
   print("[Info] Test Ended")
   # tests end
 
@@ -53,9 +52,13 @@ def ControlExperiment(expname=f'EXP_{time.time()}', hosts=4, test_time=10, trans
 
 if __name__ == '__main__':
   ExperimentName = time.strftime("%Y%b%d_%H%M%S")
-  TransportAlgos = ['-Z reno', '-Z cubic', '-u']
+  TransportAlgos = [
+    ('-Z reno', 'TCPreno'),
+    ('-Z cubic', 'TCPcubic')
+    # ('-u', 'UDP')
+  ]
   for algo in TransportAlgos:
-    print(f'[Test] Running {ExperimentName} with {algo} CCalgo...')
+    print(f'[Test] Running {ExperimentName} with {algo[1]} CCalgo...')
     ControlExperiment(expname=ExperimentName, transport_alg=algo)
   os.system(f'zip ./results/{ExperimentName}.zip -r ./results/{ExperimentName}/')
   os.system(f'rm -rf ./results/{ExperimentName}') # remove small files so git doesnt get angry
