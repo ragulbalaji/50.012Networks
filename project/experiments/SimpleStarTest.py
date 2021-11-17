@@ -13,7 +13,7 @@ import time
 import os
 
 class TopoStar(Topo):
-  def __init__(self, n=2, cpu=None, bw_consumer=2, bw_producer=10, delay='100', maxq=None, diff=False):
+  def __init__(self, n=2, cpu=None, bw_consumer=2, bw_producer=20, delay='100', maxq=None, diff=False):
     super(TopoStar, self ).__init__()
     self.addSwitch('s0', fail_mode='open')
     self.addHost('atkr', cpu=cpu)
@@ -29,7 +29,7 @@ def ControlExperiment(expname=f'EXP_{time.time()}', hosts=8, test_time=10, trans
   net.start()
   net.pingAll()
 
-  print("[Info] Starting Control Experiment")
+  print(f'[Test] Running {expname} with {transport_alg[1]}, {attacker_parallel_connections} atkr_para_conn...')
   # start tests
   savedir = f'./results/{expname}/{transport_alg[1]}/{attacker_parallel_connections}conn'
   atkr = net.getNodeByName('atkr')
@@ -62,7 +62,6 @@ if __name__ == '__main__':
       os.system('sudo mn -c')
 
       # test
-      print(f'[Test] Running {ExperimentName} with {algo[1]} CCalgo, {atkr_para_conn} Connections...')
       ControlExperiment(expname=ExperimentName, transport_alg=algo, attacker_parallel_connections=atkr_para_conn)
 
   print("[Info] All Tests Ended!")
