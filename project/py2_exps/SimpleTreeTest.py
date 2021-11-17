@@ -172,13 +172,19 @@ if __name__ == '__main__':
     TransportAlgos = ['-Z reno', '-Z cubic', '-u']
     # [bw_infra, bw_atkr, bw_recv, bw_net]
     link_sizes = [
-        [1000, 800, 500, 100],
-        [1000, 900, 500, 100],
-        [1000, 1000, 500, 100],
-        [1000, 1010, 500, 100],
+        [500, 100, 250, 100],
+        [500, 200, 250, 100],
+        [500, 300, 250, 100],
+        [500, 400, 250, 100],
+        [500, 500, 250, 100],
+        [500, 600, 250, 100],
+        [500, 700, 250, 100],
+        [500, 800, 250, 100],
+        [500, 900, 250, 100],
+        [500, 1000, 250, 100],
     ]
-    for algo in TransportAlgos:
-        for links in link_sizes:
+    for links in link_sizes:
+        for algo in TransportAlgos:
             bw_infra, bw_atkr, bw_recv, bw_net = links[0], links[1], links[2], links[3]
 	    links_str = [str(link_int) for link_int in links]
             ExperimentName = timenow + "_" + algo.replace(" ", "_") + "_" + "_".join(links_str)
