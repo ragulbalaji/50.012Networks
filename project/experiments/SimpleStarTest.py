@@ -13,7 +13,7 @@ import time
 import os
 
 class TopoStar(Topo):
-  def __init__(self, n=2, cpu=None, bw_consumer=2, bw_producer=20, delay='100', maxq=None, diff=False):
+  def __init__(self, n=2, cpu=None, bw_consumer=2, bw_producer=20, delay='50', maxq=None, diff=False):
     super(TopoStar, self ).__init__()
     self.addSwitch('s0', fail_mode='open')
     self.addHost('atkr', cpu=cpu)
@@ -36,12 +36,12 @@ def ControlExperiment(expname=f'EXP_{time.time()}', hosts=8, test_time=10, trans
   # setup recv
   recv = net.getNodeByName('recv')
   recv.cmd(f'mkdir -p {savedir}')
-  recv.cmd(f'iperf -s -p 5001 -w 16m -i 1 -N {transport_alg[0]} > {savedir}/iperf-recv.csv &')
+  recv.cmd(f'iperf -s -p 5001 -w 64K -i 1 -N {transport_alg[0]} > {savedir}/iperf-recv.csv &')
   # setup others
   for i in range(hosts):
     hi = net.getNodeByName(f'h{i}')
-    hi.cmd(f'iperf -c {recv.IP()} -p 5001 -i 1 -w 16m -N {transport_alg[0]} -t {test_time} -y C > {savedir}/iperf_h{i}.csv &')
-  atkr.cmd(f'iperf -c {recv.IP()} -p 5001 -i 1 -w 16m -N {transport_alg[0]} -t {test_time} -P {attacker_parallel_connections} -y C > {savedir}/iperf_atkr.csv')
+    hi.cmd(f'iperf -c {recv.IP()} -p 5001 -i 1 -w 64K -N {transport_alg[0]} -t {test_time} -y C > {savedir}/iperf_h{i}.csv &')
+  atkr.cmd(f'iperf -c {recv.IP()} -p 5001 -i 1 -w 64K -N {transport_alg[0]} -t {test_time} -P {attacker_parallel_connections} -y C > {savedir}/iperf_atkr.csv')
   print("[Info] Test Ended")
   # tests end
 
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     ('-Z cubic', 'TCPcubic')
     # ('-u', 'UDP')
   ]
-  for atkr_para_conn in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
+  for atkr_para_conn in [1, 2, 5, 7, 10]:
     for algo in transport_algos:
       # reset
       time.sleep(1)
