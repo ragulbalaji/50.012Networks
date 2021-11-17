@@ -1,0 +1,81 @@
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 30.5 MByte (WARNING: requested 15.3 MByte)
+------------------------------------------------------------
+[  6] local 10.0.0.6 port 5001 connected with 10.0.0.5 port 58348
+[  5] local 10.0.0.6 port 5001 connected with 10.0.0.3 port 44146
+[  4] local 10.0.0.6 port 5001 connected with 10.0.0.2 port 41996
+[  7] local 10.0.0.6 port 5001 connected with 10.0.0.4 port 48600
+[  9] local 10.0.0.6 port 5001 connected with 10.0.0.1 port 59664
+[  8] local 10.0.0.6 port 5001 connected with 10.0.0.1 port 59662
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0- 1.0 sec   206 KBytes  1.69 Mbits/sec
+[  9]  0.0- 1.0 sec   141 KBytes  1.16 Mbits/sec
+[  7]  0.0- 1.0 sec   161 KBytes  1.32 Mbits/sec
+[  6]  0.0- 1.0 sec   294 KBytes  2.41 Mbits/sec
+[  5]  0.0- 1.0 sec   294 KBytes  2.41 Mbits/sec
+[  8]  0.0- 1.0 sec   139 KBytes  1.14 Mbits/sec
+[SUM]  0.0- 1.0 sec   280 KBytes  2.29 Mbits/sec
+[  6]  1.0- 2.0 sec   260 KBytes  2.13 Mbits/sec
+[  5]  1.0- 2.0 sec   297 KBytes  2.43 Mbits/sec
+[  4]  1.0- 2.0 sec   181 KBytes  1.48 Mbits/sec
+[  9]  1.0- 2.0 sec   107 KBytes   880 Kbits/sec
+[  7]  1.0- 2.0 sec   163 KBytes  1.33 Mbits/sec
+[  8]  1.0- 2.0 sec   147 KBytes  1.20 Mbits/sec
+[SUM]  1.0- 2.0 sec   255 KBytes  2.09 Mbits/sec
+[  4]  2.0- 3.0 sec   189 KBytes  1.55 Mbits/sec
+[  7]  2.0- 3.0 sec   148 KBytes  1.22 Mbits/sec
+[  6]  2.0- 3.0 sec   272 KBytes  2.22 Mbits/sec
+[  8]  2.0- 3.0 sec   133 KBytes  1.09 Mbits/sec
+[  9]  2.0- 3.0 sec   215 KBytes  1.76 Mbits/sec
+[SUM]  2.0- 3.0 sec   348 KBytes  2.85 Mbits/sec
+[  5]  2.0- 3.0 sec   212 KBytes  1.74 Mbits/sec
+[  6]  3.0- 4.0 sec   260 KBytes  2.13 Mbits/sec
+[  5]  3.0- 4.0 sec   354 KBytes  2.90 Mbits/sec
+[  4]  3.0- 4.0 sec   164 KBytes  1.34 Mbits/sec
+[  7]  3.0- 4.0 sec   180 KBytes  1.47 Mbits/sec
+[  9]  3.0- 4.0 sec  45.2 KBytes   371 Kbits/sec
+[  8]  3.0- 4.0 sec   158 KBytes  1.30 Mbits/sec
+[SUM]  3.0- 4.0 sec   204 KBytes  1.67 Mbits/sec
+[  9]  4.0- 5.0 sec   178 KBytes  1.46 Mbits/sec
+[  4]  4.0- 5.0 sec   158 KBytes  1.30 Mbits/sec
+[  6]  4.0- 5.0 sec   238 KBytes  1.95 Mbits/sec
+[  5]  4.0- 5.0 sec   139 KBytes  1.14 Mbits/sec
+[  8]  4.0- 5.0 sec  2.83 KBytes  23.2 Kbits/sec
+[SUM]  4.0- 5.0 sec   181 KBytes  1.48 Mbits/sec
+[  7]  4.0- 5.0 sec  52.3 KBytes   429 Kbits/sec
+[  9]  5.0- 6.0 sec  0.00 Bytes  0.00 bits/sec
+[  6]  5.0- 6.0 sec  0.00 Bytes  0.00 bits/sec
+[  4]  5.0- 6.0 sec  0.00 Bytes  0.00 bits/sec
+[  5]  5.0- 6.0 sec  0.00 Bytes  0.00 bits/sec
+[  8]  5.0- 6.0 sec  0.00 Bytes  0.00 bits/sec
+[SUM]  5.0- 6.0 sec  0.00 Bytes  0.00 bits/sec
+[  7]  5.0- 6.0 sec  0.00 Bytes  0.00 bits/sec
+[  9]  6.0- 7.0 sec  0.00 Bytes  0.00 bits/sec
+[  6]  6.0- 7.0 sec  1.41 KBytes  11.6 Kbits/sec
+[  5]  6.0- 7.0 sec  1.41 KBytes  11.6 Kbits/sec
+[  8]  6.0- 7.0 sec  1.41 KBytes  11.6 Kbits/sec
+[SUM]  6.0- 7.0 sec  1.41 KBytes  11.6 Kbits/sec
+[  7]  6.0- 7.0 sec  1.41 KBytes  11.6 Kbits/sec
+[  4]  6.0- 7.0 sec  0.00 Bytes  0.00 bits/sec
+[  7]  7.0- 8.0 sec   559 KBytes  4.58 Mbits/sec
+[  9]  7.0- 8.0 sec  1.41 KBytes  11.6 Kbits/sec
+[  8]  7.0- 8.0 sec   389 KBytes  3.19 Mbits/sec
+[SUM]  7.0- 8.0 sec   390 KBytes  3.20 Mbits/sec
+[  5]  7.0- 8.0 sec   355 KBytes  2.91 Mbits/sec
+[  4]  7.0- 8.0 sec  84.8 KBytes   695 Kbits/sec
+[  6]  7.0- 8.0 sec   154 KBytes  1.26 Mbits/sec
+[  4]  8.0- 9.0 sec  62.2 KBytes   510 Kbits/sec
+[  7]  8.0- 9.0 sec  5.66 KBytes  46.3 Kbits/sec
+[  8]  8.0- 9.0 sec  5.66 KBytes  46.3 Kbits/sec
+[  9]  8.0- 9.0 sec   479 KBytes  3.93 Mbits/sec
+[SUM]  8.0- 9.0 sec   485 KBytes  3.97 Mbits/sec
+[  5]  8.0- 9.0 sec  0.00 Bytes  0.00 bits/sec
+[  6]  8.0- 9.0 sec  0.00 Bytes  0.00 bits/sec
+[  6]  9.0-10.0 sec   642 KBytes  5.26 Mbits/sec
+[  5]  9.0-10.0 sec  1.33 MBytes  11.2 Mbits/sec
+[  4]  9.0-10.0 sec   170 KBytes  1.39 Mbits/sec
+[  7]  9.0-10.0 sec  22.6 KBytes   185 Kbits/sec
+[  9]  9.0-10.0 sec  0.00 Bytes  0.00 bits/sec
+[  8]  9.0-10.0 sec  96.2 KBytes   788 Kbits/sec
+[SUM]  9.0-10.0 sec  96.2 KBytes   788 Kbits/sec

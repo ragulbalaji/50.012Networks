@@ -11,18 +11,17 @@ from mininet.node import OVSController
 
 import time
 import os
-from tqdm import tqdm
 
 class TopoStar(Topo):
-  def __init__(self, n=2, cpu=None, bw_atkr=10, bw_recv=10, bw_net=10, delay='100', maxq=None, diff=False):
+  def __init__(self, n=2, cpu=None, bw_consumer=10, bw_producer=10, delay='100', maxq=None, diff=False):
     super(TopoStar, self ).__init__()
     self.addSwitch('s0', fail_mode='open')
     self.addHost('atkr', cpu=cpu)
     self.addHost('recv', cpu=cpu)
-    self.addLink('atkr', 's0', bw=bw_atkr, delay=delay)
-    self.addLink('recv', 's0', bw=bw_recv, delay=delay)
+    self.addLink('atkr', 's0', bw=bw_consumer, delay=delay)
+    self.addLink('recv', 's0', bw=bw_producer, delay=delay)
     for i in range(n): self.addHost(f'h{i}', cpu=cpu)
-    for i in range(n): self.addLink(f'h{i}', 's0', bw=bw_net, delay=delay)
+    for i in range(n): self.addLink(f'h{i}', 's0', bw=bw_consumer, delay=delay)
 
 def ControlExperiment(expname=f'EXP_{time.time()}', hosts=4, test_time=10, transport_alg=('-Z reno', 'TCPreno')):
   topo = TopoStar(n=hosts)
@@ -60,5 +59,5 @@ if __name__ == '__main__':
   for algo in TransportAlgos:
     print(f'[Test] Running {ExperimentName} with {algo[1]} CCalgo...')
     ControlExperiment(expname=ExperimentName, transport_alg=algo)
-  os.system(f'zip ./results/{ExperimentName}.zip -r ./results/{ExperimentName}/')
-  os.system(f'rm -rf ./results/{ExperimentName}') # remove small files so git doesnt get angry
+  # os.system(f'zip ./results/{ExperimentName}.zip -r ./results/{ExperimentName}/')
+  # os.system(f'rm -rf ./results/{ExperimentName}') # remove small files so git doesnt get angry
