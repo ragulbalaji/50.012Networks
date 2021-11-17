@@ -19,7 +19,8 @@ tcpprobe_csv_header = ['time', 'src_addr_port', 'dst_addr_port', 'bytes', 'next_
 iperf_csv_header = ['time', 'src_addr', 'src_port', 'dst_addr' ,'dst_port', 'other', 'interval', 'B_sent', 'bps']
 
 class TreeTopo(Topo):
-    def __init__(self, n=10, cpu=None, bw_infra = 1000, bw_atkr=800, bw_recv=500, bw_net=100, delay='100', maxq=None, diff=False):
+    def __init__(self, n=10, cpu=None, 
+        bw_infra = 1000, bw_atkr=800, bw_recv=500, bw_net=100, delay='100', maxq=None, diff=False):
         """
         1 attacker client + 1 server + 8 normal client
 
@@ -131,9 +132,10 @@ class _TreeTopo(Topo):
             self.addLink(s5, hosts[hostname], cls=TCLink, **hi_params)
 
 
-def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=10, test_time=10, transport_alg='-Z reno'):
+def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=10, test_time=10, transport_alg='-Z reno',
+    bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100):
     n = hosts
-    topo = TreeTopo(n=hosts)
+    topo = TreeTopo(n=hosts, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoPinCpus=True, controller=OVSController)
     net.start()
     net.pingAll()
@@ -166,10 +168,22 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=10, test_ti
 
 
 if __name__ == '__main__':
-    ExperimentName = time.strftime("%Y%b%d_%H%M%S")
+    timenow = time.strftime("%Y%b%d_%H%M%S")
     TransportAlgos = ['-Z reno', '-Z cubic', '-u']
+    # [bw_infra, bw_atkr, bw_recv, bw_net]
+    link_sizes = [
+        [1000, 800, 500, 100],
+        [1000, 900, 500, 100],
+        [1000, 1000, 500, 100],
+        [1000, 1010, 500, 100],
+    ]
     for algo in TransportAlgos:
-        print('[Test] Running {ExperimentName} with {algo} CCalgo...'.format(ExperimentName=ExperimentName, algo=algo))
-        ControlExperiment(expname=ExperimentName, transport_alg=algo)
+        for links in link_sizes:
+            bw_infra, bw_atkr, bw_recv, bw_net = links[0], links[1], links[2], links[3]
+            ExperimentName = timenow + "_" + algo.replace(" ", "_") + "_" + "_".join(links)
+            print('[Test] Running {ExperimentName} with {algo} CCalgo...'
+                .format(ExperimentName=ExperimentName, algo=algo))
+            ControlExperiment(expname=ExperimentName, transport_alg=algo,
+                bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
     os.system('zip ./results/{ExperimentName}.zip -r ./results/{ExperimentName}/'.format(ExperimentName=ExperimentName))
     os.system('rm -rf ./results/{ExperimentName}'.format(ExperimentName=ExperimentName)) # remove small files so git doesnt get angry
