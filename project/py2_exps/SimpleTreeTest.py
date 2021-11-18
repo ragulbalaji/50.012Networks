@@ -180,7 +180,7 @@ class _TreeTopo(Topo):
             self.addLink(s5, hosts[hostname], cls=TCLink, **hi_params)
 
 
-def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=16, test_time=10, transport_alg='-Z reno',
+def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_time=600, transport_alg='-Z reno',
     bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100):
     n = hosts
     topo = TopoStar(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
@@ -298,6 +298,17 @@ if __name__ == '__main__':
         [500, 800, 1000, 10],
         [500, 900, 1000, 10],
         [500, 1000, 1000, 10],
+
+        [1000, 100, 1000, 10],
+        [1000, 200, 1000, 10],
+        [1000, 300, 1000, 10],
+        [1000, 400, 1000, 10],
+        [1000, 500, 1000, 10],
+        [1000, 600, 1000, 10],
+        [1000, 700, 1000, 10],
+        [1000, 800, 1000, 10],
+        [1000, 900, 1000, 10],
+        [1000, 1000, 1000, 10],
     ]
 
     for links in link_sizes:
