@@ -20,12 +20,11 @@ iperf_csv_header = ['time', 'src_addr', 'src_port', 'dst_addr' ,'dst_port', 'oth
 
 class TreeTopo(Topo):
     def __init__(self, n=10, cpu=None, 
-        bw_infra = 1000, bw_atkr=800, bw_recv=500, bw_net=100, delay='100', maxq=None, diff=False):
+        bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100, delay='100', maxq=None, diff=False):
         """
         1 attacker client + 1 server + 8 normal client
 
         see topo here: https://drive.google.com/file/d/1noPCEP8JwEg37yzA0JoBRk9u4TXJXHhx/view?usp=sharing
-
         """
         
         super(TreeTopo, self ).__init__()
@@ -43,16 +42,26 @@ class TreeTopo(Topo):
         s9 = self.addSwitch("s9", fail_mode='open')
         s10 = self.addSwitch("s10", fail_mode='open')
 
-        self.addLink(s0, s1, bw=bw_infra, delay=delay)
-        self.addLink(s0, s2, bw=bw_infra, delay=delay)
-        self.addLink(s0, s3, bw=bw_infra, delay=delay)
-        self.addLink(s0, s4, bw=bw_infra, delay=delay)
-        self.addLink(s0, s5, bw=bw_infra, delay=delay)
-        self.addLink(s0, s6, bw=bw_infra, delay=delay)
-        self.addLink(s0, s7, bw=bw_infra, delay=delay)
-        self.addLink(s0, s8, bw=bw_infra, delay=delay)
-        self.addLink(s0, s9, bw=bw_infra, delay=delay)
-        self.addLink(s0, s10, bw=bw_infra, delay=delay)
+        s01 = self.addSwitch("s01", fail_mode='open')
+        s02 = self.addSwitch("s02", fail_mode='open') 
+        s03 = self.addSwitch("s03", fail_mode='open') 
+        s04 = self.addSwitch("s04", fail_mode='open')      
+
+        self.addLink(s0, s01, bw=bw_infra, delay=delay)  
+        self.addLink(s0, s02, bw=bw_infra, delay=delay)  
+        self.addLink(s0, s03, bw=bw_infra, delay=delay)  
+        self.addLink(s0, s04, bw=bw_infra, delay=delay)  
+
+        self.addLink(s01, s1, bw=bw_infra, delay=delay)
+        self.addLink(s01, s2, bw=bw_infra, delay=delay)
+        self.addLink(s02, s3, bw=bw_infra, delay=delay)
+        self.addLink(s02, s4, bw=bw_infra, delay=delay)
+        self.addLink(s02, s5, bw=bw_infra, delay=delay)
+        self.addLink(s03, s6, bw=bw_infra, delay=delay)
+        self.addLink(s03, s7, bw=bw_infra, delay=delay)
+        self.addLink(s03, s8, bw=bw_infra, delay=delay)
+        self.addLink(s04, s9, bw=bw_infra, delay=delay)
+        self.addLink(s04, s10, bw=bw_infra, delay=delay)
 
         # h1 is attacker, h10 is server that is listening for data
         for i in range(0, n):
@@ -132,7 +141,7 @@ class _TreeTopo(Topo):
             self.addLink(s5, hosts[hostname], cls=TCLink, **hi_params)
 
 
-def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=10, test_time=60, transport_alg='-Z reno',
+def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=10, test_time=10, transport_alg='-Z reno',
     bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100):
     n = hosts
     topo = TreeTopo(n=hosts, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
@@ -147,17 +156,17 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=10, test_ti
     # setup recv
     recv = net.getNodeByName("h{}".format(n))
     recv.cmd('mkdir -p {savedir}'.format(savedir=savedir))
-    recv.cmd('iperf -s -p 5001 -w 16m -i 1 -N {transport_alg} > {savedir}/iperf-recv.csv &'
+    recv.cmd('iperf -s -p 5001 -w 64K -i 1 -N {transport_alg} > {savedir}/iperf-recv.csv &'
         .format(transport_alg=transport_alg, savedir=savedir))
     
     # setup others
     for i in range(1, n-1):
         hi = net.getNodeByName('h{i}'.format(i=i+1))
-        hi.cmd('iperf -c {j} -p 5001 -i 1 -w 16m -N {transport_alg} -t {a} -y C > {savedir}/iperf_h{i}.csv &'
+        hi.cmd('iperf -c {j} -p 5001 -i 1 -w 64K -N {transport_alg} -t {a} -y C > {savedir}/iperf_h{i}.csv &'
             .format(j=recv.IP(), transport_alg=transport_alg, a=test_time + 10,savedir = savedir, i=i))
 
     atkr = net.getNodeByName("h1")
-    atkr.cmd('iperf -c {a} -p 5001 -i 1 -w 16m -N {transport_alg} -t {test_time} -y C > {savedir}/iperf_atkr.csv'
+    atkr.cmd('iperf -c {a} -p 5001 -i 1 -w 64K -N {transport_alg} -t {test_time} -y C > {savedir}/iperf_atkr.csv'
         .format(a=recv.IP(), transport_alg=transport_alg, test_time=test_time, savedir=savedir))
 
     print("[Info] Test Ended")
@@ -204,7 +213,7 @@ if __name__ == '__main__':
         [500, 1000, 500, 50],
     ]
 
-    link_sizes = [
+    link_sizes_v3 = [
         [500, 100, 500, 10],
         [500, 200, 500, 10],
         [500, 300, 500, 10],
@@ -216,7 +225,43 @@ if __name__ == '__main__':
         [500, 900, 500, 10],
         [500, 1000, 500, 10],
     ]
-    for links in link_sizes:
+
+    link_sizes = [
+        [500, 100, 500, 25],
+        [500, 200, 500, 25],
+        [500, 300, 500, 25],
+        [500, 400, 500, 25],
+        [500, 500, 500, 25],
+        [500, 600, 500, 25],
+        [500, 700, 500, 25],
+        [500, 800, 500, 25],
+        [500, 900, 500, 25],
+        [500, 1000, 500, 25],
+
+        [500, 100, 1000, 25],
+        [500, 200, 1000, 25],
+        [500, 300, 1000, 25],
+        [500, 400, 1000, 25],
+        [500, 500, 1000, 25],
+        [500, 600, 1000, 25],
+        [500, 700, 1000, 25],
+        [500, 800, 1000, 25],
+        [500, 900, 1000, 25],
+        [500, 1000, 1000, 25],
+
+        [500, 100, 1000, 10],
+        [500, 200, 1000, 10],
+        [500, 300, 1000, 10],
+        [500, 400, 1000, 10],
+        [500, 500, 1000, 10],
+        [500, 600, 1000, 10],
+        [500, 700, 1000, 10],
+        [500, 800, 1000, 10],
+        [500, 900, 1000, 10],
+        [500, 1000, 1000, 10],
+    ]
+
+    for links in link_sizes_v3:
         for algo in TransportAlgos:
             bw_infra, bw_atkr, bw_recv, bw_net = links[0], links[1], links[2], links[3]
             links_str = []
