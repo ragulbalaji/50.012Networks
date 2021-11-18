@@ -173,7 +173,7 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=16, test_ti
         .format(transport_alg=transport_alg, savedir=savedir))
     
     # setup others
-    for i in range(1, 9):
+    for i in range(1, n-1):
         hi = net.getNodeByName('h{i}'.format(i=i+1))
         hi.cmd('iperf -c {j} -p 5001 -i 1 -w 64K -N {transport_alg} -t {a} -y C > {savedir}/iperf_h{i}.csv &'
             .format(j=recv.IP(), transport_alg=transport_alg, a=test_time + 10,savedir = savedir, i=i))
