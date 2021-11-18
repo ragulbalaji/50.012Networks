@@ -142,7 +142,7 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=10, test_ti
 
     print("[Info] Starting Control Experiment")
     # start tests
-    savedir = './results/{expname}/{h}'.format(expname=expname, h=transport_alg.replace(" ","_"))
+    savedir = './results/{expname}_{h}'.format(expname=expname, h=transport_alg.replace(" ","_"))
 
     # setup recv
     recv = net.getNodeByName("h{}".format(n))
@@ -192,6 +192,16 @@ if __name__ == '__main__':
         [500, 800, 500, 100],
         [500, 900, 500, 100],
         [500, 1000, 500, 100],
+        [500, 100, 500, 50],
+        [500, 200, 500, 50],
+        [500, 300, 500, 50],
+        [500, 400, 500, 50],
+        [500, 500, 500, 50],
+        [500, 600, 500, 50],
+        [500, 700, 500, 50],
+        [500, 800, 500, 50],
+        [500, 900, 500, 50],
+        [500, 1000, 500, 50],
     ]
     for links in link_sizes:
         for algo in TransportAlgos:
@@ -203,7 +213,7 @@ if __name__ == '__main__':
             print('[Test] Running {ExperimentName} with {algo} CCalgo...'.format(ExperimentName=ExperimentName, algo=algo))
             ControlExperiment(expname=ExperimentName, transport_alg=algo, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)     
 	        
-            os.system('zip ./results/{ExperimentName}.zip -r ./results/{ExperimentName}/'
-                .format(ExperimentName=ExperimentName))
-    	    os.system('rm -rf ./results/{ExperimentName}'
-                .format(ExperimentName=ExperimentName)) # remove small files so git doesnt get angry
+            # os.system('zip ./results/{ExperimentName}.zip -r ./results/{ExperimentName}/'
+            #     .format(ExperimentName=ExperimentName))
+    	    # os.system('rm -rf ./results/{ExperimentName}'
+            #     .format(ExperimentName=ExperimentName)) # remove small files so git doesnt get angry
