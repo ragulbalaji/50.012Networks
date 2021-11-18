@@ -2,39 +2,39 @@ from os import listdir
 from os.path import isfile, join
 import csv
 
-respath = "./results/"
+respath = "./v3/"
 d = {}
 # <algo, <recvlink, <net_bw, [atck_link]>>>
 d["udp"] = {
     250: 
         {
-            50: {}, 100: {}
+            10: {}
         }, 
     500: 
         {
-            50: {}, 100: {}
+            10: {}
         }
     }
 
 d["reno"] = {
     250: 
         {
-            50: {}, 100: {}
+            10: {}
         }, 
     500: 
         {
-            50: {}, 100: {}
+            10: {}
         }
     }
 
 d["cubic"] = {
     250: 
         {
-            50: {}, 100: {}
+            10: {}
         }, 
     500: 
         {
-            50: {}, 100: {}
+            10: {}
         }
     }
 
@@ -84,6 +84,7 @@ for algo in d.keys():
         print("recvlink: " + str(recvlink))
         for normlink in d[algo][recvlink].keys():
             print("normal link bandwidth: " + str(normlink))
+            print(d[algo][recvlink][normlink].keys())
             for atklink in d[algo][recvlink][normlink].keys():
                 print("attacker link: " + str(atklink))
                 count = d[algo][recvlink][normlink][atklink]["count"]
