@@ -95,15 +95,22 @@ class TopoStar(Topo):
         super(TopoStar, self ).__init__()
 
         self.addSwitch('s0', fail_mode='open')
+        self.addSwitch('s_atkr', fail_mode='open')
+        self.addSwitch('s_recv', fail_mode='open')
+
         self.addHost('atkr', cpu=cpu)
         self.addHost('recv', cpu=cpu)
-        self.addLink('atkr', 's0', bw=bw_atkr, delay=delay)
-        self.addLink('recv', 's0', bw=bw_recv, delay=delay)
+        
+        self.addLink('atkr', 's_atkr', bw=bw_atkr, delay=delay)
+        self.addLink('recv', 's_recv', bw=bw_recv, delay=delay)
+        self.addLink('s0', 's_atkr', bw=bw_infra, delay=delay)
+        self.addLink('s0', 's_recv', bw=bw_infra, delay=delay)
 
         for i in range(n): 
             self.addHost('h{i}'.format(i=i), cpu=cpu)
-        for i in range(n): 
-            self.addLink('h{i}'.format(i=i), 's0', bw=bw_net, delay=delay)
+            self.addSwitch('s{i}'.format(i=i), fail_mode='open')
+            self.addLink('h{i}'.format(i=i), 's{i}'.format(i=i), bw=bw_net, delay=delay)
+            self.addLink('s0', 's{i}'.format(i=i), bw=bw_net, delay=delay)
 
 
 class _TreeTopo(Topo):
@@ -293,7 +300,7 @@ if __name__ == '__main__':
         [500, 1000, 1000, 10],
     ]
 
-    for links in link_sizes_v3:
+    for links in link_sizes:
         for algo in TransportAlgos:
             bw_infra, bw_atkr, bw_recv, bw_net = links[0], links[1], links[2], links[3]
             links_str = []
