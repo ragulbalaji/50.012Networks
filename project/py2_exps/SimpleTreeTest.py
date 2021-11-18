@@ -91,7 +91,7 @@ class TreeTopo(Topo):
 
 
 class TopoStar(Topo):
-    def __init__(self, n=8, cpu=None, bw_atkr=10, bw_recv=10, bw_net=10, delay='100', maxq=None, diff=False):
+    def __init__(self, n=8, cpu=None, bw_infra=1000, bw_atkr=10, bw_recv=10, bw_net=10, delay='100', maxq=None, diff=False):
         super(TopoStar, self ).__init__()
 
         self.addSwitch('s0', fail_mode='open')
