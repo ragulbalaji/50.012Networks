@@ -13,7 +13,7 @@ import time
 import os
 
 class TopoStar(Topo):
-  def __init__(self, n=2, cpu=None, bw_consumer=2, bw_producer=20, delay='50', maxq=None, diff=False):
+  def __init__(self, n=2, cpu=None, bw_consumer=2, bw_producer=10, delay='50', maxq=None, diff=False):
     super(TopoStar, self ).__init__()
     self.addSwitch('s0', fail_mode='open')
     self.addHost('atkr', cpu=cpu)
@@ -49,13 +49,13 @@ def ControlExperiment(expname=f'EXP_{time.time()}', hosts=8, test_time=10, trans
   net.stop()
 
 if __name__ == '__main__':
-  ExperimentName = time.strftime("%Y%b%d_%H%M%S")
+  ExperimentName = time.strftime("%Y%b%d_%H%M%S_Choker64K10M")
   transport_algos = [
     ('-Z reno', 'TCPreno'),
     ('-Z cubic', 'TCPcubic')
     # ('-u', 'UDP')
   ]
-  for atkr_para_conn in range(1, 51):
+  for atkr_para_conn in range(1, 21):
     for algo in transport_algos:
       # reset
       time.sleep(1)
