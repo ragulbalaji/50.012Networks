@@ -20,9 +20,7 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-FIN = 0x01
-
-DIVIDE_FACTOR = 3
+DIVIDE_FACTOR = 2
 
 if __name__ == "__main__":
     print "Making connection to %s from port %d." % (args.host, args.sport)
@@ -34,52 +32,36 @@ if __name__ == "__main__":
     window = 65535  # Advertise a large window size.
 
     syn = ip_header / TCP(
-        sport=args.sport, dport=args.dport, flags="S", window=window
+        sport=args.sport, dport=args.dport, flags="S", window=window, seq=seq_no
     )  # Construct a SYN packet.
     synack = sr1(syn)  # Send the SYN packet and receive a SYNACK
 
     ack = ip_header / TCP(
         sport=args.sport,
         dport=args.dport,
-        flags="FA",
+        flags="A",
         window=window,
-        ack=(synack[TCP].seq + 1),
-        seq=(synack[TCP].ack),
+        ack=(synack.seq + 1),
+        seq=(seq_no + 1),
     )  # ACK the SYNACK
 
     socket = conf.L2socket(iface="client-eth0")
 
-    def handle_packet(pkt):
-        data = pkt.payload.payload
+    def handle_packet(data):
+        data = data.payload.payload
 
-        if IP not in pkt:
-            return
-        if TCP not in pkt:
-            return
-        if pkt[IP].src != args.host:
-            return
         if data.sport != args.dport:
             return
         if data.dport != args.sport:
             return
         if not data.payload or len(data.payload) == 0:
             return
-
-        add = 0
-        if pkt.flags & FIN:
-            add = 1
-
-        final_ack = data.seq + len(data.payload) + add
+        final_ack = data.seq + len(data.payload) + 1
         start_ack = data.seq
 
-        ack_nos = list()
-
-        ack_interval = int(len(data.payload) / DIVIDE_FACTOR)
-        if ack_interval != 0:
-            ack_nos = range(start_ack + ack_interval, final_ack, ack_interval)
-
-        if final_ack not in ack_nos:
-            ack_nos.append(final_ack)
+        ack_interval = int((final_ack - start_ack) / DIVIDE_FACTOR)
+        ack_nos = range(start_ack + ack_interval, final_ack, ack_interval)
+        ack_nos.append(final_ack)
 
         for ack_no in ack_nos:
             socket.send(
@@ -91,9 +73,9 @@ if __name__ == "__main__":
                     window=window,
                     flags="A",
                     ack=ack_no,
-                    seq=(pkt[TCP].ack),
+                    seq=(seq_no + 1),
                 )
             )
 
     socket.send(Ether() / ack)
-    sniff(iface="client-eth0", filter="tcp and ip", prn=handle_packet, timeout=4)
+    sniff(iface="client-eth0", filter="tcp and ip", prn=handle_packet, timeout=5)
