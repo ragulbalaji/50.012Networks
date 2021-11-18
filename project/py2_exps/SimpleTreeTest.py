@@ -193,7 +193,7 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=16, test_ti
     
     # setup others
     for i in range(n):
-        hi = net.getNodeByName('h{i}'.format(i=i+1))
+        hi = net.getNodeByName('h{i}'.format(i=i))
         hi.cmd('iperf -c {j} -p 5001 -i 1 -w 64K -N {transport_alg} -t {a} -y C > {savedir}/iperf_h{i}.csv &'
             .format(j=recv.IP(), transport_alg=transport_alg, a=test_time + 10,savedir = savedir, i=i))
 
@@ -301,7 +301,7 @@ if __name__ == '__main__':
                 links_str.append(str(link))
             ExperimentName = timenow + "_" + algo.replace(" ", "_") + "_" + "_".join(links_str)
             print('[Test] Running {ExperimentName} with {algo} CCalgo...'.format(ExperimentName=ExperimentName, algo=algo))
-            ControlExperiment(expname=ExperimentName, transport_alg=algo, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)     
+            ControlExperiment(expname=ExperimentName, hosts=8, transport_alg=algo, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)     
 	        
             # os.system('zip ./results/{ExperimentName}.zip -r ./results/{ExperimentName}/'
             #     .format(ExperimentName=ExperimentName))
