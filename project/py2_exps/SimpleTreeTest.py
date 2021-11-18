@@ -95,16 +95,16 @@ class TopoStar(Topo):
         super(TopoStar, self ).__init__()
 
         self.addSwitch('s0', fail_mode='open')
-        self.addSwitch('s_atkr', fail_mode='open')
-        self.addSwitch('s_recv', fail_mode='open')
+        self.addSwitch('s98', fail_mode='open')
+        self.addSwitch('s99', fail_mode='open')
 
         self.addHost('atkr', cpu=cpu)
         self.addHost('recv', cpu=cpu)
         
-        self.addLink('atkr', 's_atkr', bw=bw_atkr, delay=delay)
-        self.addLink('recv', 's_recv', bw=bw_recv, delay=delay)
-        self.addLink('s0', 's_atkr', bw=bw_infra, delay=delay)
-        self.addLink('s0', 's_recv', bw=bw_infra, delay=delay)
+        self.addLink('atkr', 's98', bw=bw_atkr, delay=delay)
+        self.addLink('recv', 's99', bw=bw_recv, delay=delay)
+        self.addLink('s0', 's98', bw=bw_infra, delay=delay)
+        self.addLink('s0', 's99', bw=bw_infra, delay=delay)
 
         for i in range(n): 
             self.addHost('h{i}'.format(i=i), cpu=cpu)
