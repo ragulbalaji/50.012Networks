@@ -1,0 +1,200 @@
+udp
+recvlink: 250
+normal link bandwidth: 50
+normal link bandwidth: 100
+attacker link: 700
+data: 63056676
+attacker link: 1000
+data: 63053734
+attacker link: 100
+data: 63053734
+attacker link: 600
+data: 63056676
+attacker link: 800
+data: 63056676
+attacker link: 900
+data: 63047850
+attacker link: 400
+data: 63050792
+attacker link: 300
+data: 63056676
+attacker link: 200
+data: 63053734
+attacker link: 500
+data: 63055205
+recvlink: 500
+normal link bandwidth: 50
+attacker link: 400
+data: 63069825
+attacker link: 100
+data: 63046379
+attacker link: 800
+data: 63047850
+attacker link: 200
+data: 63052263
+attacker link: 700
+data: 63058057
+attacker link: 900
+data: 63069825
+attacker link: 1000
+data: 63069825
+attacker link: 500
+data: 63052263
+attacker link: 600
+data: 63047850
+attacker link: 300
+data: 63063941
+normal link bandwidth: 100
+attacker link: 800
+data: 63069825
+attacker link: 900
+data: 63056676
+attacker link: 300
+data: 63047850
+attacker link: 400
+data: 63072767
+attacker link: 500
+data: 63053734
+attacker link: 200
+data: 63056676
+attacker link: 1000
+data: 63050792
+attacker link: 700
+data: 63047850
+attacker link: 600
+data: 63078651
+attacker link: 100
+data: 63056676
+reno
+recvlink: 250
+normal link bandwidth: 50
+normal link bandwidth: 100
+attacker link: 800
+data: 1156710400
+attacker link: 900
+data: 1124859904
+attacker link: 500
+data: 1050673152
+attacker link: 1000
+data: 1112014848
+attacker link: 400
+data: 1210449920
+attacker link: 100
+data: 1017511936
+attacker link: 700
+data: 1034682368
+attacker link: 200
+data: 1113587712
+attacker link: 600
+data: 1062338560
+attacker link: 300
+data: 1089077248
+recvlink: 500
+normal link bandwidth: 50
+attacker link: 200
+data: 1166671872
+attacker link: 900
+data: 1127088128
+attacker link: 600
+data: 1070071808
+attacker link: 300
+data: 1311768576
+attacker link: 800
+data: 1092354048
+attacker link: 1000
+data: 1076625408
+attacker link: 700
+data: 1102053376
+attacker link: 400
+data: 1206517760
+attacker link: 100
+data: 1149370368
+attacker link: 500
+data: 1203634176
+normal link bandwidth: 100
+attacker link: 200
+data: 1304035328
+attacker link: 700
+data: 1371799552
+attacker link: 300
+data: 1189740544
+attacker link: 600
+data: 1186332672
+attacker link: 500
+data: 1217396736
+attacker link: 100
+data: 1234829312
+attacker link: 400
+data: 1183318016
+attacker link: 1000
+data: 1199833088
+attacker link: 800
+data: 1174142976
+attacker link: 900
+data: 1222639616
+cubic
+recvlink: 250
+normal link bandwidth: 50
+normal link bandwidth: 100
+attacker link: 500
+data: 1298399232
+attacker link: 800
+data: 1348337664
+attacker link: 600
+data: 1007550464
+attacker link: 1000
+data: 1314521088
+attacker link: 300
+data: 1353318400
+attacker link: 200
+data: 1253703680
+attacker link: 100
+data: 1202061312
+attacker link: 700
+data: 1134166016
+attacker link: 400
+data: 1255669760
+attacker link: 900
+data: 1319239680
+recvlink: 500
+normal link bandwidth: 50
+attacker link: 300
+data: 1183711232
+attacker link: 600
+data: 1267204096
+attacker link: 200
+data: 1311375360
+attacker link: 700
+data: 1095892992
+attacker link: 100
+data: 1439563776
+attacker link: 400
+data: 1294729216
+attacker link: 500
+data: 1245970432
+attacker link: 900
+data: 1070858240
+attacker link: 1000
+data: 1057357824
+attacker link: 800
+data: 1496580096
+normal link bandwidth: 100
+attacker link: 900
+data: 1654784000
+attacker link: 400
+data: 1428946944
+attacker link: 700
+data: 1641414656
+attacker link: 100
+data: 1855455232
+attacker link: 200
+data: 1451491328
+attacker link: 300
+data: 1726349312
+attacker link: 1000
+data: 1753350144
+attacker link: 600
+data: 1594359808
+attacker link: 800
+data: 2015625216
+attacker link: 500
