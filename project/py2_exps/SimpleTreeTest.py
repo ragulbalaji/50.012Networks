@@ -180,7 +180,7 @@ class _TreeTopo(Topo):
             self.addLink(s5, hosts[hostname], cls=TCLink, **hi_params)
 
 
-def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_time=600, transport_alg='-Z reno',
+def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_time=60, transport_alg='-Z reno',
     bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100):
     n = hosts
     topo = TopoStar(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
