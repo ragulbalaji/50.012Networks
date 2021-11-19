@@ -190,7 +190,7 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_tim
 
     print("[Info] Starting Control Experiment")
     # start tests
-    savedir = './results/{expname}_{h}'.format(expname=expname, h=transport_alg.replace(" ","_"))
+    savedir = './_results/{expname}_{h}'.format(expname=expname, h=transport_alg.replace(" ","_"))
 
     # setup recv
     recv = net.getNodeByName('recv')
