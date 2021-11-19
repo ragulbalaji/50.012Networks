@@ -189,7 +189,7 @@ class TreeTopo(Topo):
             self.addLink(s5, hosts[hostname], cls=TCLink, **hi_params)
 
 
-def ControlExperiment(expname="EXP_%s" % time.time(), hosts=8, test_time=10, transport_alg='-Z reno'):
+def ControlExperiment(expname="EXP_%s" % time.time(), hosts=8, test_time=600, transport_alg='-Z reno'):
     # xpname=f'EXP_{time.time()}'
     topo = SimpleTreeTopo()
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoPinCpus=True,

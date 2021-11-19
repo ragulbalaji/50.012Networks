@@ -106,7 +106,7 @@ class TopoStar(Topo):
         self.addLink('s0', 's98', bw=bw_infra, delay=delay)
         self.addLink('s0', 's99', bw=bw_infra, delay=delay)
 
-        for i in range(n): 
+        for i in range(1, n): 
             self.addHost('h{i}'.format(i=i), cpu=cpu)
             self.addSwitch('s{i}'.format(i=i), fail_mode='open')
             self.addLink('h{i}'.format(i=i), 's{i}'.format(i=i), bw=bw_net, delay=delay)
@@ -180,10 +180,10 @@ class _TreeTopo(Topo):
             self.addLink(s5, hosts[hostname], cls=TCLink, **hi_params)
 
 
-def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=16, test_time=10, transport_alg='-Z reno',
+def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_time=60, transport_alg='-Z reno',
     bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100):
     n = hosts
-    topo = TopoStar(n=hosts, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
+    topo = TopoStar(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoPinCpus=True, controller=OVSController)
     net.start()
     net.pingAll()
@@ -199,7 +199,7 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=16, test_ti
         .format(transport_alg=transport_alg, savedir=savedir))
     
     # setup others
-    for i in range(n):
+    for i in range(1, n):
         hi = net.getNodeByName('h{i}'.format(i=i))
         hi.cmd('iperf -c {j} -p 5001 -i 1 -w 64K -N {transport_alg} -t {a} -y C > {savedir}/iperf_h{i}.csv &'
             .format(j=recv.IP(), transport_alg=transport_alg, a=test_time + 10,savedir = savedir, i=i))
@@ -298,6 +298,17 @@ if __name__ == '__main__':
         [500, 800, 1000, 10],
         [500, 900, 1000, 10],
         [500, 1000, 1000, 10],
+
+        [1000, 100, 1000, 10],
+        [1000, 200, 1000, 10],
+        [1000, 300, 1000, 10],
+        [1000, 400, 1000, 10],
+        [1000, 500, 1000, 10],
+        [1000, 600, 1000, 10],
+        [1000, 700, 1000, 10],
+        [1000, 800, 1000, 10],
+        [1000, 900, 1000, 10],
+        [1000, 1000, 1000, 10],
     ]
 
     for links in link_sizes:
