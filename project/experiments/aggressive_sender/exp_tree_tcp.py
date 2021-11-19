@@ -10,8 +10,7 @@ from mininet.log import info, lg, setLogLevel
 from mininet.net import Mininet
 from mininet.topo import Topo
 from mininet.util import dumpNodeConnections, quietRun
-
-from tree_topo import TreeTopoTCP
+from topo_tree import TreeTopoTCP
 from utils import clean_tcpprobe_procs, start_tcpprobe
 
 output_dir = "out"
@@ -67,7 +66,7 @@ def tcp_tests(algs=["reno"], delays=2, iperf_runtime=10):
                     "-p",
                     "5001",
                     "-w",
-                    "16m",
+                    "64K",
                     "-y",
                     "C",
                     ">",
@@ -79,7 +78,7 @@ def tcp_tests(algs=["reno"], delays=2, iperf_runtime=10):
             # Client options:
             # -i: interval between reports set to 1sec
             # -l: length read/write buffer set to default 8KB
-            # -w: TCP window size (socket buffer size) set to 16MB
+            # -w: TCP window size (socket buffer size) set to 64K
             # -M: TCP MSS (MTU-40B) set to 1460B for an MTU of 1500B
             # -N: disable Nagle's Alg
             # -Z: select TCP Congestion Control alg
@@ -94,7 +93,7 @@ def tcp_tests(algs=["reno"], delays=2, iperf_runtime=10):
                 _host = hosts[hostname]
                 _server_addr = host_addrs["h16"]
                 popens[hostname] = _host.popen(
-                    f"iperf -c {_server_addr} -p 5001 -i 1 -w 16K -M 1460 -N -Z {alg} -t {iperf_runtime} -y C > {output_dir}/iperf_{alg}_{hostname}_{delay}ms.txt",
+                    f"iperf -c {_server_addr} -p 5001 -i 1 -w 64K -M 1460 -N -Z {alg} -t {iperf_runtime} -y C > {output_dir}/iperf_{alg}_{hostname}_{delay}ms.txt",
                     shell=True,
                 )
 
@@ -103,7 +102,7 @@ def tcp_tests(algs=["reno"], delays=2, iperf_runtime=10):
             attacker_host = hosts[attacker_hostname]
 
             popens[attacker_hostname] = attacker_host.popen(
-                f"iperf -c {_server_addr} -p 5001 -i 1 -w 16K -M 1460 -N -Z {alg} -t {iperf_runtime} -y C > {output_dir}/iperf_{alg}_{attacker_hostname}_{delay}ms.txt",
+                f"iperf -c {_server_addr} -p 5001 -i 1 -w 64K -M 1460 -N -Z {alg} -t {iperf_runtime} -y C > {output_dir}/iperf_{alg}_{attacker_hostname}_{delay}ms.txt",
                 shell=True,
             )
 
@@ -127,6 +126,10 @@ def tcp_tests(algs=["reno"], delays=2, iperf_runtime=10):
 
 
 def main():
+    import subprocess
+
+    from puts import timestamp_seconds
+
     parser = argparse.ArgumentParser(description="TCP Test")
     parser.add_argument(
         "-a",
@@ -153,6 +156,9 @@ def main():
     args = parser.parse_args()
     setLogLevel("info")
     tcp_tests(args.algorithms, args.delays, args.iperf_runtime)
+    export_name = f"result_{timestamp_seconds()}.zip"
+    cmd = f"zip -r {export_name} {output_dir} && rm -rf {output_dir}"
+    subprocess.run(cmd, shell=True)
 
 
 if __name__ == "__main__":
