@@ -6,8 +6,8 @@ class TreeTopoTCP(Topo):
     def __init__(
         self,
         delay: int = 2,  # delay in ms
-        bw_infra: int = 1000,  # bandwidth in Mbps
-        bw_user: int = 50,  # bandwidth in Mbps
+        bw_infra: int = 500,  # bandwidth in Mbps
+        bw_user: int = 20,  # bandwidth in Mbps
         bw_attack: int = 1000,  # bandwidth in Mbps
     ):
         super(TreeTopoTCP, self).__init__()

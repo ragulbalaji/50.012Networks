@@ -1,6 +1,15 @@
-import matplotlib.pyplot as plt
+import subprocess
 from pathlib import Path
+
+import matplotlib.pyplot as plt
 import pandas as pd
+
+zip_name = "result_20211119T164920"
+
+zip_path = Path(zip_name + ".zip")
+if zip_path.exists():
+    subprocess.run(f"unzip {zip_path}", shell=True)
+
 
 basedir = "out"
 # hostnames = ["server"] + [f"h{i}" for i in range(1, 10)]
@@ -69,8 +78,9 @@ def main():
             axi.set_xlabel("time")
             axi.set_ylabel("transferred_bytes")
 
-    plt.savefig(Path("graph.png"))
-    plt.show()
+    plt.savefig(Path(zip_name + ".png"))
+    # plt.show()
+    subprocess.run(f"rm -rf {basedir}", shell=True)
 
 
 if __name__ == "__main__":
