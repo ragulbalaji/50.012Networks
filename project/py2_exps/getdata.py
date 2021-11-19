@@ -2,39 +2,39 @@ from os import listdir
 from os.path import isfile, join
 import csv
 
-respath = "./v3/"
+respath = "./_results/"
 d = {}
 # <algo, <recvlink, <net_bw, [atck_link]>>>
 d["udp"] = {
-    250: 
+    1000: 
         {
-            10: {}
+            10: {}, 25: {}
         }, 
     500: 
         {
-            10: {}
+            10: {}, 25: {}
         }
     }
 
 d["reno"] = {
-    250: 
+    1000: 
         {
-            10: {}
+            10: {}, 25: {}
         }, 
     500: 
         {
-            10: {}
+            10: {}, 25: {}
         }
     }
 
 d["cubic"] = {
-    250: 
+    1000: 
         {
-            10: {}
+            10: {}, 25: {}
         }, 
     500: 
         {
-            10: {}
+            10: {}, 25: {}
         }
     }
 
@@ -54,18 +54,47 @@ for pathname in listdir(respath):
     else:
         bw_infra, bw_atkr, bw_recv, bw_net = parts[-6], parts[-5], parts[-4], parts[-3]
 
+    if int(bw_infra) != 1000:
+        continue
+
     currdict = d[algo][int(bw_recv)][int(bw_net)]
     if bw_atkr not in currdict:
-        currdict[bw_atkr] = {"count": 0, "sum": 0}
+        currdict[bw_atkr] = {"count": 0, "sum": 0, "total": 0}
 
     count = 0
     sum = 0
+    found = False
     for filename in listdir(join(respath, pathname)):
+        filepath = join(respath, pathname, filename)
+
         csvparts = filename.split(".")
+        if csvparts[0][-2:] == 'cv':
+            with open(filepath, newline='') as file:
+                reader = csv.reader(file, delimiter = ',')
+                for row in reader:
+                    row_content = row[0].split(" ")
+                    if len(row_content) < 2:
+                        continue
+                    
+                    if row_content[-1] == "Bandwidth":
+                        found = True
+                        continue
+                    if found:
+                        for i in range(len(row_content)):
+                            if row_content[i] == "MBytes" or row_content[i] == "KBytes":
+                                unit = row_content[i]
+                                val = row_content[i-1]
+                        # val = row_content[-5]
+                        # unit = row_content[-4]
+                        if unit == "MBytes":
+                            currdict[bw_atkr]["total"] += float(val) * 1000000
+                        elif unit == "KBytes":
+                            currdict[bw_atkr]["total"] += float(val) * 1000
+                        else:
+                            currdict[bw_atkr]["total"] += float(val)
+
         if csvparts[0][-2:] not in targets:
             continue
-        
-        filepath = join(respath, pathname, filename)
         
         with open(filepath, newline='') as file:
             reader = csv.reader(file, delimiter = ',')
@@ -90,7 +119,9 @@ for algo in d.keys():
                 count = d[algo][recvlink][normlink][atklink]["count"]
                 sum = d[algo][recvlink][normlink][atklink]["sum"]
                 res = 0
-                if count != 0:
-                    res = sum / count
-                print("data: " + str(sum))
+                total = d[algo][recvlink][normlink][atklink]["total"]
+
+                if total != 0:
+                    res = sum / total
+                print("data: " + str(sum) + " total:" + str(total) + " ratio: " + str(res))
     
