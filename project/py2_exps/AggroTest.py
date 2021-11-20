@@ -192,6 +192,7 @@ class LineTopo1(Topo):
 
         self.addHost('atkr', cpu=cpu)
         self.addHost('recv', cpu=cpu)
+	self.addSwitch("s9", fail_mode="open")
         
         self.addLink('atkr', 's9', bw=bw_atkr, delay=delay)
         self.addLink('recv', 's9', bw=bw_infra, delay=delay)
@@ -203,7 +204,7 @@ class LineTopo1(Topo):
             self.addLink('h{i}'.format(i=i), 's{i}'.format(i=i), bw=bw_net, delay=delay)
 
             if i > 1:
-                self.addLink('h{i}'.format(i=i-1), 's{i}'.format(i=i), bw=bw_net, delay=delay)
+                self.addLink('h{i}'.format(i=i-1), 's{i}'.format(i=i-1), bw=bw_net, delay=delay)
 
 
 class LineTopo2(Topo):
@@ -242,7 +243,7 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_tim
 
     print("[Info] Starting Control Experiment")
     # start tests
-    savedir = './_results/{expname}_{h}'.format(expname=expname, h=transport_alg.replace(" ","_"))
+    savedir = './line1_results/{expname}_{h}'.format(expname=expname, h=transport_alg.replace(" ","_"))
 
     # setup recv
     recv = net.getNodeByName('recv')
