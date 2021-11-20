@@ -90,9 +90,9 @@ class TreeTopo(Topo):
             self.addLink("h{}".format(i+1), "s{}".format(i+1), bw=bw_net, delay=delay)
 
 
-class TopoStar(Topo):
+class StarTopo(Topo):
     def __init__(self, n=8, cpu=None, bw_infra=1000, bw_atkr=10, bw_recv=10, bw_net=10, delay='100', maxq=None, diff=False):
-        super(TopoStar, self ).__init__()
+        super(StarTopo, self ).__init__()
 
         self.addSwitch('s0', fail_mode='open')
         self.addSwitch('s98', fail_mode='open')
@@ -106,7 +106,7 @@ class TopoStar(Topo):
         self.addLink('s0', 's98', bw=bw_infra, delay=delay)
         self.addLink('s0', 's99', bw=bw_infra, delay=delay)
 
-        for i in range(1, n): 
+        for i in range(1, n+1): 
             self.addHost('h{i}'.format(i=i), cpu=cpu)
             self.addSwitch('s{i}'.format(i=i), fail_mode='open')
             self.addLink('h{i}'.format(i=i), 's{i}'.format(i=i), bw=bw_net, delay=delay)
@@ -180,10 +180,32 @@ class _TreeTopo(Topo):
             self.addLink(s5, hosts[hostname], cls=TCLink, **hi_params)
 
 
+class TopoLine(Topo):
+    def __init__(self, n=8, cpu=None, bw_infra=1000, bw_atkr=10, bw_recv=1000, bw_net=10, delay='100', 
+        maxq=None, diff=False):
+        # recvlink == infra
+        super(TopoLine, self ).__init__()
+
+        self.addSwitch('s0', fail_mode='open')
+
+        self.addHost('atkr', cpu=cpu)
+        self.addHost('recv', cpu=cpu)
+        
+        self.addLink('atkr', 's9', bw=bw_atkr, delay=delay)
+        self.addLink('recv', 's9', bw=bw_infra, delay=delay)
+
+
+        for i in range(1, n): 
+            self.addHost('h{i}'.format(i=i), cpu=cpu)
+            self.addSwitch('s{i}'.format(i=i), fail_mode='open')
+            self.addLink('h{i}'.format(i=i), 's{i}'.format(i=i), bw=bw_net, delay=delay)
+            self.addLink('s0', 's{i}'.format(i=i), bw=bw_net, delay=delay)
+
+
 def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_time=60, transport_alg='-Z reno',
     bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100):
     n = hosts
-    topo = TopoStar(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
+    topo = StarTopo(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoPinCpus=True, controller=OVSController)
     net.start()
     net.pingAll()
@@ -199,7 +221,7 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_tim
         .format(transport_alg=transport_alg, savedir=savedir))
     
     # setup others
-    for i in range(1, n):
+    for i in range(1, n+1):
         hi = net.getNodeByName('h{i}'.format(i=i))
         hi.cmd('iperf -c {j} -p 5001 -i 1 -w 64K -N {transport_alg} -t {a} -y C > {savedir}/iperf_h{i}.csv &'
             .format(j=recv.IP(), transport_alg=transport_alg, a=test_time + 10,savedir = savedir, i=i))
