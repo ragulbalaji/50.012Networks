@@ -180,13 +180,15 @@ class _TreeTopo(Topo):
             self.addLink(s5, hosts[hostname], cls=TCLink, **hi_params)
 
 
-class TopoLine(Topo):
+class LineTopo1(Topo):
     def __init__(self, n=8, cpu=None, bw_infra=1000, bw_atkr=10, bw_recv=1000, bw_net=10, delay='100', 
         maxq=None, diff=False):
-        # recvlink == infra
-        super(TopoLine, self ).__init__()
+        """
+        recvlink == infra
 
-        self.addSwitch('s0', fail_mode='open')
+        h1 - s1 - h2 - s2 - h3 - s3 - ... - h7 - s7 - h8 - s8 - atkr - s9 - recv
+        """
+        super(LineTopo1, self ).__init__()
 
         self.addHost('atkr', cpu=cpu)
         self.addHost('recv', cpu=cpu)
@@ -195,17 +197,45 @@ class TopoLine(Topo):
         self.addLink('recv', 's9', bw=bw_infra, delay=delay)
 
 
-        for i in range(1, n): 
+        for i in range(1, n+1): 
             self.addHost('h{i}'.format(i=i), cpu=cpu)
             self.addSwitch('s{i}'.format(i=i), fail_mode='open')
             self.addLink('h{i}'.format(i=i), 's{i}'.format(i=i), bw=bw_net, delay=delay)
-            self.addLink('s0', 's{i}'.format(i=i), bw=bw_net, delay=delay)
+
+            if i > 1:
+                self.addLink('h{i}'.format(i=i-1), 's{i}'.format(i=i), bw=bw_net, delay=delay)
+
+
+class LineTopo2(Topo):
+    def __init__(self, n=8, cpu=None, bw_infra=1000, bw_atkr=10, bw_recv=1000, bw_net=10, delay='100', 
+        maxq=None, diff=False):
+        """
+        recvlink == infra
+
+        atkr - s9 - h1 - s1 - h2 - s2 - h3 - s3 - ... - h7 - s7 - h8 - s8 - recv
+        """
+        super(LineTopo2, self ).__init__()
+
+        self.addHost('atkr', cpu=cpu)
+        self.addHost('recv', cpu=cpu)
+        
+        for i in range(1, n+1): 
+            self.addHost('h{i}'.format(i=i), cpu=cpu)
+            self.addSwitch('s{i}'.format(i=i), fail_mode='open')
+            self.addLink('h{i}'.format(i=i), 's{i}'.format(i=i), bw=bw_net, delay=delay)
+
+            if i > 1:
+                self.addLink('h{i}'.format(i=i-1), 's{i}'.format(i=i), bw=bw_net, delay=delay)
+
+        self.addLink('atkr', 's9', bw=bw_atkr, delay=delay)
+        self.addLink('h1', 's9', bw=bw_infra, delay=delay)
+        self.addLink('recv', 's9', bw=bw_infra, delay=delay)
 
 
 def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_time=60, transport_alg='-Z reno',
     bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100):
     n = hosts
-    topo = StarTopo(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
+    topo = LineTopo1(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoPinCpus=True, controller=OVSController)
     net.start()
     net.pingAll()
@@ -409,7 +439,8 @@ if __name__ == '__main__':
                 links_str.append(str(link))
             ExperimentName = timenow + "_" + algo.replace(" ", "_") + "_" + "_".join(links_str)
             print('[Test] Running {ExperimentName} with {algo} CCalgo...'.format(ExperimentName=ExperimentName, algo=algo))
-            ControlExperiment(expname=ExperimentName, hosts=8, transport_alg=algo, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)     
+            ControlExperiment(expname=ExperimentName, hosts=8, 
+                transport_alg=algo, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)     
 	        
             # os.system('zip ./results/{ExperimentName}.zip -r ./results/{ExperimentName}/'
             #     .format(ExperimentName=ExperimentName))
