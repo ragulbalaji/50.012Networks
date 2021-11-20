@@ -19,7 +19,7 @@ tcpprobe_csv_header = ['time', 'src_addr_port', 'dst_addr_port', 'bytes', 'next_
 iperf_csv_header = ['time', 'src_addr', 'src_port', 'dst_addr' ,'dst_port', 'other', 'interval', 'B_sent', 'bps']
 
 class TreeTopo(Topo):
-    def __init__(self, n=16, cpu=None, 
+    def __init__(self, n=8, cpu=None, 
         bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100, delay='100', maxq=None, diff=False):
         """
         1 attacker client + 1 server + 8 normal client
@@ -41,12 +41,12 @@ class TreeTopo(Topo):
         s8 = self.addSwitch("s8", fail_mode='open')
         s9 = self.addSwitch("s9", fail_mode='open')
         s10 = self.addSwitch("s10", fail_mode='open')
-        s11 = self.addSwitch("s11", fail_mode='open')
-        s12 = self.addSwitch("s12", fail_mode='open')
-        s13 = self.addSwitch("s13", fail_mode='open')
-        s14 = self.addSwitch("s14", fail_mode='open')
-        s15 = self.addSwitch("s15", fail_mode='open')
-        s16 = self.addSwitch("s16", fail_mode='open')
+        # s11 = self.addSwitch("s11", fail_mode='open')
+        # s12 = self.addSwitch("s12", fail_mode='open')
+        # s13 = self.addSwitch("s13", fail_mode='open')
+        # s14 = self.addSwitch("s14", fail_mode='open')
+        # s15 = self.addSwitch("s15", fail_mode='open')
+        # s16 = self.addSwitch("s16", fail_mode='open')
 
         s01 = self.addSwitch("s01", fail_mode='open')
         s02 = self.addSwitch("s02", fail_mode='open') 
@@ -70,24 +70,24 @@ class TreeTopo(Topo):
 
         self.addLink(s03, s9, bw=bw_infra, delay=delay)
         self.addLink(s03, s10, bw=bw_infra, delay=delay)
-        self.addLink(s03, s11, bw=bw_infra, delay=delay)
-        self.addLink(s03, s12, bw=bw_infra, delay=delay)
+        # self.addLink(s03, s11, bw=bw_infra, delay=delay)
+        # self.addLink(s03, s12, bw=bw_infra, delay=delay)
 
-        self.addLink(s04, s13, bw=bw_infra, delay=delay)
-        self.addLink(s04, s14, bw=bw_infra, delay=delay)
-        self.addLink(s04, s15, bw=bw_infra, delay=delay)
-        self.addLink(s04, s16, bw=bw_infra, delay=delay)
+        # self.addLink(s04, s13, bw=bw_infra, delay=delay)
+        # self.addLink(s04, s14, bw=bw_infra, delay=delay)
+        # self.addLink(s04, s15, bw=bw_infra, delay=delay)
+        # self.addLink(s04, s16, bw=bw_infra, delay=delay)
 
-        # h1 is attacker, h10 is server that is listening for data
-        for i in range(0, n):
+        for i in range(0, n): # 1-8
             self.addHost("h{}".format(i+1), cpu=cpu)
-
-        self.addLink("h1", "s1", bw=bw_atkr, delay=delay)
-        self.addLink("h16", "s16", bw=bw_recv, delay=delay)
+        self.addHost('atkr', cpu=cpu)
+        self.addHost('recv', cpu=cpu)
+        self.addLink('atkr', "s1", bw=bw_atkr, delay=delay)
+        self.addLink('recv', "s10", bw=bw_recv, delay=delay)
 
         # h2 - h9 are normal hosts, the rest of the hosts are idle
-        for i in range(1, n-1):
-            self.addLink("h{}".format(i+1), "s{}".format(i+1), bw=bw_net, delay=delay)
+        for i in range(1, n+1): # 1-9 maps to 2-9
+            self.addLink("h{}".format(i), "s{}".format(i+1), bw=bw_net, delay=delay)
 
 
 class StarTopo(Topo):
