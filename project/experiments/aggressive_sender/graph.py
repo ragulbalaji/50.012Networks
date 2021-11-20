@@ -4,7 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 
-zip_name = "result_20211119T164920"
+zip_name = "result_500-20-1000"
 
 zip_path = Path(zip_name + ".zip")
 if zip_path.exists():
@@ -14,7 +14,8 @@ if zip_path.exists():
 basedir = "out"
 # hostnames = ["server"] + [f"h{i}" for i in range(1, 10)]
 hostnames = [f"h{i}" for i in range(1, 10)]
-delays = [21, 81, 162]
+# delays = [21, 81, 162]
+delays = [50, 100]
 transport_algos = ["reno", "cubic"]
 test_time = 30
 

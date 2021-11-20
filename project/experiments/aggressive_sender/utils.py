@@ -1,19 +1,8 @@
-import argparse
-import csv
+from __future__ import print_function
+
 import subprocess
-from datetime import datetime
-from pathlib import Path
-from time import mktime, sleep
 
-import matplotlib
-
-matplotlib.use("Agg")  # Force matplotlib to not use any Xwindows backend.
-import matplotlib.pyplot as plt
-from mininet.link import TCLink
-from mininet.log import info, lg, setLogLevel
-from mininet.net import Mininet
-from mininet.topo import Topo
-from mininet.util import dumpNodeConnections, quietRun
+from mininet.util import quietRun
 
 ##
 # Globals
