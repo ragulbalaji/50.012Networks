@@ -44,6 +44,7 @@ def pace(connections, duration, start_ack, mss, overrun_ack):
                 elapsed = now - start
                 to_save.append("%f, %d"%(elapsed, r_seq))
                 print("%f, %d, %d"%(elapsed, r_seq, length))
+            
                 sys.stdout.flush()
                 # Tiemout. Terminate the thread
                 if (elapsed > duration):

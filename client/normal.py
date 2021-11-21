@@ -10,7 +10,7 @@ if len(sys.argv) < 5 or len(sys.argv) % 2 != 1:
     print("Usage : optack_mult.py duration target_rate dest_ip dest_port [dest_ip dest_port [...]] ")
     sys.exit()
 
-
+to_save=[]
 # No need for fancy argument parsing
 duration = int(sys.argv[1]) + 1    
 target_rate = int(sys.argv[2])
@@ -45,6 +45,8 @@ def optack():
         # On timeout, send a reset to everyone, and then quit
 
         for (i, client) in enumerate(client_list):
+            if elapsed >= duration:
+                return
             # Check for an overrun
             client.recv(1460)
             total_num_byte += 1460
@@ -52,4 +54,7 @@ def optack():
             sys.stdout.flush()
 
 if __name__ == "__main__":
+
     optack()
+
+        
