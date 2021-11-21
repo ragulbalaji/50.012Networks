@@ -50,8 +50,8 @@ def ControlExperiment(expname=f'EXP_{time.time()}', bw_consumer=2, bw_producer=2
 
 if __name__ == '__main__':
   transport_algos = [
-    #('-Z reno', 'TCPreno'),
-    #('-Z cubic', 'TCPcubic'),
+    ('-Z reno', 'TCPreno'),
+    ('-Z cubic', 'TCPcubic'),
     ('-u', 'UDP')
   ]
 
