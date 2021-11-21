@@ -91,7 +91,7 @@ class TreeTopo(Topo):
 
 
 class StarTopo(Topo):
-    def __init__(self, n=8, cpu=None, bw_infra=1000, bw_atkr=10, bw_recv=10, bw_net=10, delay='100', maxq=None, diff=False):
+    def __init__(self, n=8, cpu=None, bw_infra=1000, bw_atkr=10, bw_recv=10, bw_net=10, delay='10', maxq=None, diff=False):
         super(StarTopo, self ).__init__()
 
         self.addSwitch('s0', fail_mode='open')
@@ -231,7 +231,7 @@ class LineTopo2(Topo):
         self.addLink('recv', 's9', bw=bw_infra, delay=delay)
 
 
-def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_time=60, transport_alg='-Z reno',
+def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_time=30, transport_alg='-Z reno',
     bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100):
     n = hosts
     topo = StarTopo(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
@@ -430,7 +430,7 @@ if __name__ == '__main__':
         [1000, 1000, 500, 5],
     ]
 
-    link_sizes = [
+    link_sizes_v6 = [
         [1000, 100, 100, 10],
         [1000, 200, 100, 10],
         [1000, 300, 100, 10],
@@ -452,6 +452,41 @@ if __name__ == '__main__':
         [1000, 800, 300, 1],
         [1000, 900, 300, 1],
         [1000, 1000, 300, 1],
+    ]
+
+    link_sizes = [
+        [1000, 100, 400, 25],
+        [1000, 200, 400, 25],
+        [1000, 300, 400, 25],
+        [1000, 400, 400, 25],
+        [1000, 500, 400, 25],
+        [1000, 600, 400, 25],
+        [1000, 700, 400, 25],
+        [1000, 800, 400, 25],
+        [1000, 900, 400, 25],
+        [1000, 1000, 400, 25],
+
+        [1000, 10, 50, 1],
+        [1000, 20, 50, 1],
+        [1000, 30, 50, 1],
+        [1000, 40, 50, 1],
+        [1000, 50, 50, 1],
+        [1000, 60, 50, 1],
+        [1000, 70, 50, 1],
+        [1000, 80, 50, 1],
+        [1000, 90, 50, 1],
+        [1000, 100, 50, 1],
+
+        [1000, 1, 5, 1],
+        [1000, 2, 5, 1],
+        [1000, 3, 5, 1],
+        [1000, 4, 5, 1],
+        [1000, 5, 5, 1],
+        [1000, 6, 5, 1],
+        [1000, 7, 5, 1],
+        [1000, 8, 5, 1],
+        [1000, 9, 5, 1],
+        [1000, 10, 5, 1],
     ]
 
     for links in link_sizes:
