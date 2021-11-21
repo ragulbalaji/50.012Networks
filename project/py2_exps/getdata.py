@@ -2,37 +2,37 @@ from os import listdir
 from os.path import isfile, join
 import csv
 
-respath = "./v5_star/"
+respath = "./v6_star/"
 d = {}
 # <algo, <recvlink, <net_bw, [atck_link]>>>
 d["udp"] = {
-    1000: 
+    100: 
         {
             10: {}, 1: {}, 5: {}
         }, 
-    500: 
+    300: 
         {
             10: {}, 1: {}, 5: {}
         }
     }
 
 d["reno"] = {
-    1000: 
+    100: 
         {
             10: {}, 1: {}, 5: {}
         }, 
-    500: 
+    300: 
         {
             10: {}, 1: {}, 5: {}
         }
     }
 
 d["cubic"] = {
-    1000: 
+    100: 
         {
             10: {}, 1: {}, 5: {}
         }, 
-    500: 
+    300: 
         {
             10: {}, 1: {}, 5: {}
         }

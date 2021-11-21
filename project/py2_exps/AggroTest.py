@@ -268,7 +268,7 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_tim
 
 if __name__ == '__main__':
     timenow = time.strftime("%Y%b%d_%H%M%S")
-    TransportAlgos = ['-Z reno', '-Z cubic', '-u']
+    TransportAlgos = ['-Z reno', '-Z cubic']
     # [bw_infra, bw_atkr, bw_recv, bw_net]
     link_sizes_v2 = [
         [500, 100, 250, 100],

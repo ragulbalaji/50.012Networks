@@ -1,0 +1,167 @@
+udp
+recvlink: 100
+normal link bandwidth: 10
+dict_keys(['500', '900', '1000', '300', '600', '800', '100', '400', '700', '200'])
+attacker link: 500
+data: 63077180 total:0 ratio: 0
+attacker link: 900
+data: 63077180 total:0 ratio: 0
+attacker link: 1000
+data: 63106510 total:0 ratio: 0
+attacker link: 300
+data: 63071296 total:0 ratio: 0
+attacker link: 600
+data: 63066883 total:0 ratio: 0
+attacker link: 800
+data: 63096303 total:0 ratio: 0
+attacker link: 100
+data: 63093271 total:0 ratio: 0
+attacker link: 400
+data: 63090419 total:0 ratio: 0
+attacker link: 700
+data: 63078651 total:0 ratio: 0
+attacker link: 200
+data: 63087477 total:0 ratio: 0
+normal link bandwidth: 1
+dict_keys([])
+normal link bandwidth: 5
+dict_keys([])
+recvlink: 300
+normal link bandwidth: 10
+dict_keys([])
+normal link bandwidth: 1
+dict_keys(['300', '600', '100', '1000', '900', '400', '700', '200', '800', '500'])
+attacker link: 300
+data: 63080122 total:0 ratio: 0
+attacker link: 600
+data: 63103568 total:0 ratio: 0
+attacker link: 100
+data: 63074238 total:0 ratio: 0
+attacker link: 1000
+data: 63075709 total:0 ratio: 0
+attacker link: 900
+data: 63090419 total:0 ratio: 0
+attacker link: 400
+data: 63083064 total:0 ratio: 0
+attacker link: 700
+data: 63069825 total:0 ratio: 0
+attacker link: 200
+data: 63077180 total:0 ratio: 0
+attacker link: 800
+data: 63077180 total:0 ratio: 0
+attacker link: 500
+data: 63075709 total:0 ratio: 0
+normal link bandwidth: 5
+dict_keys([])
+
+reno
+recvlink: 100
+normal link bandwidth: 10
+dict_keys(['400', '500', '100', '600', '900', '200', '700', '1000', '800', '300'])
+attacker link: 400
+data: 574619648 total:802510000.0 ratio: 0.7160280220807217
+attacker link: 500
+data: 574619648 total:800350000.0 ratio: 0.7179604523021178
+attacker link: 100
+data: 574619648 total:799090000.0 ratio: 0.719092527750316
+attacker link: 600
+data: 574619648 total:798440000.0 ratio: 0.7196779319673363
+attacker link: 900
+data: 574619648 total:798730000.0 ratio: 0.7194166339063263
+attacker link: 200
+data: 574619648 total:798470000.0 ratio: 0.7196508923315842
+attacker link: 700
+data: 574619648 total:799170000.0 ratio: 0.7190205438142072
+attacker link: 1000
+data: 574619648 total:798330000.0 ratio: 0.7197770946851553
+attacker link: 800
+data: 574619648 total:798240000.0 ratio: 0.719858248145921
+attacker link: 300
+data: 573440000 total:800350000.0 ratio: 0.7164865371400012
+normal link bandwidth: 1
+dict_keys([])
+normal link bandwidth: 5
+dict_keys([])
+recvlink: 300
+normal link bandwidth: 10
+dict_keys([])
+normal link bandwidth: 1
+dict_keys(['700', '800', '100', '600', '900', '300', '400', '1000', '500', '200'])
+attacker link: 700
+data: 56623104 total:1856712000.0 ratio: 0.030496438866124635
+attacker link: 800
+data: 56623104 total:1852812000.0 ratio: 0.03056063108399557
+attacker link: 100
+data: 56623104 total:1416096000.0 ratio: 0.03998535692495424
+attacker link: 600
+data: 56623104 total:1847912000.0 ratio: 0.030641666919203944
+attacker link: 900
+data: 56623104 total:1850312000.0 ratio: 0.030601922270406288
+attacker link: 300
+data: 56623104 total:1830812000.0 ratio: 0.030927863702007632
+attacker link: 400
+data: 56623104 total:1843596000.0 ratio: 0.030713401417664175
+attacker link: 1000
+data: 56623104 total:1851112000.0 ratio: 0.030588696956207945
+attacker link: 500
+data: 56623104 total:1839312000.0 ratio: 0.030784936976434668
+attacker link: 200
+data: 56623104 total:1355112000.0 ratio: 0.04178481483449339
+normal link bandwidth: 5
+dict_keys([])
+
+cubic
+recvlink: 100
+normal link bandwidth: 10
+dict_keys(['900', '800', '600', '300', '700', '200', '400', '100', '500', '1000'])
+attacker link: 900
+data: 574619648 total:798700000.0 ratio: 0.719443655940904
+attacker link: 800
+data: 574619648 total:798740000.0 ratio: 0.7194076270125448
+attacker link: 600
+data: 574619648 total:798300000.0 ratio: 0.7198041438055869
+attacker link: 300
+data: 574619648 total:800240000.0 ratio: 0.7180591422573228
+attacker link: 700
+data: 574619648 total:798520000.0 ratio: 0.7196058307869558
+attacker link: 200
+data: 574619648 total:799040000.0 ratio: 0.719137525030036
+attacker link: 400
+data: 573440000 total:800670000.0 ratio: 0.7162001823472841
+attacker link: 100
+data: 574619648 total:797060000.0 ratio: 0.7209239555365969
+attacker link: 500
+data: 574619648 total:798940000.0 ratio: 0.7192275364858437
+attacker link: 1000
+data: 573440000 total:798760000.0 ratio: 0.7179127647854174
+normal link bandwidth: 1
+dict_keys([])
+normal link bandwidth: 5
+dict_keys([])
+recvlink: 300
+normal link bandwidth: 10
+dict_keys([])
+normal link bandwidth: 1
+dict_keys(['400', '1000', '500', '100', '600', '900', '200', '700', '800', '300'])
+attacker link: 400
+data: 56623104 total:1802312000.0 ratio: 0.03141692670303477
+attacker link: 1000
+data: 56623104 total:1838112000.0 ratio: 0.030805034731289496
+attacker link: 500
+data: 56623104 total:1837812000.0 ratio: 0.030810063270889514
+attacker link: 100
+data: 56623104 total:1417696000.0 ratio: 0.03994022978127892
+attacker link: 600
+data: 56623104 total:1842012000.0 ratio: 0.03073981276994938
+attacker link: 900
+data: 56623104 total:1839612000.0 ratio: 0.030779916634594687
+attacker link: 200
+data: 56623104 total:1354812000.0 ratio: 0.041794067368756696
+attacker link: 700
+data: 56623104 total:1833912000.0 ratio: 0.030875583997487337
+attacker link: 800
+data: 56623104 total:1835012000.0 ratio: 0.03085707559405606
+attacker link: 300
+data: 56623104 total:1862696000.0 ratio: 0.030398467597503833
+normal link bandwidth: 5
+dict_keys([])
