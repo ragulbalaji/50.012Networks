@@ -5,6 +5,7 @@ import sys
 import time
 from raw_packet import Connection
 from multiprocessing import Process, Value
+import sys
 
 if len(sys.argv) < 5 or len(sys.argv) % 2 != 1:
     print("Usage : optack_mult.py duration target_rate dest_ip dest_port [dest_ip dest_port [...]] ")
@@ -13,7 +14,7 @@ if len(sys.argv) < 5 or len(sys.argv) % 2 != 1:
 # Some constants
 mss = 1460
 wscale = 4
-client_bw = 1544000.
+client_bw = 2000000.
 maxwindow = 15000 << wscale
 min_wait = 1.2*8*40./client_bw
 
@@ -21,12 +22,15 @@ min_wait = 1.2*8*40./client_bw
 duration = int(sys.argv[1]) + 1    
 target_rate = int(sys.argv[2])
 
+to_save = []
+
 def pace(connections, duration, start_ack, mss, overrun_ack):
     """Reads the sequence number of the received packets,
     and ensures that we don't overrun the server"""
     last_received_seq = [x for x in start_ack]
     first_seq = [x for x in start_ack]
     start = time.time()
+    
     while True:
         for (i, c) in enumerate(connections):
             try:
@@ -38,6 +42,9 @@ def pace(connections, duration, start_ack, mss, overrun_ack):
                 
                 now = time.time()
                 elapsed = now - start
+                to_save.append("%f, %d"%(elapsed, r_seq))
+                print("%f, %d, %d"%(elapsed, r_seq, length))
+                sys.stdout.flush()
                 # Tiemout. Terminate the thread
                 if (elapsed > duration):
                     sys.exit()
@@ -56,7 +63,7 @@ def optack():
             if port < 0 or port > 65536:
                 raise ValueError
             c = Connection(dest_ip, port)
-            print('Connecting to %s:%d' % (dest_ip, port))
+        
             connections.append(c)
         except ValueError:
             print("Not a valid IP / port pair : (%s, %s)" % (sys.argv[i], sys.argv[i+1]) )
@@ -81,7 +88,7 @@ def optack():
 
     # Start the pacing thread
     p = Process(target = pace, args=(connections, duration, start_ack, mss, overrun_ack))
-    print("time, acked (actual ACK number sent)")
+
     p.start()
     while True:
         round_start = time.time()
@@ -90,7 +97,7 @@ def optack():
         if elapsed > duration:
             for (i, c) in enumerate(connections):
                 c.send_raw(seq[i]+1, ack_nbr=ack[i], rst=1)
-            return
+            break
 
         for (i, c) in enumerate(connections):
             # Check for an overrun
@@ -104,7 +111,7 @@ def optack():
             c.send_raw(seq_nbr = seq[i], ack_nbr=ack[i])
             now = time.time()
             elapsed = now - start
-            print("#%d : %f, %d, (%d)" % (i, elapsed, (ack[i] - start_ack[i]) % (1 << 32), ack[i]))
+            #print("#%d : %f, %d, (%d)" % (i, elapsed, (ack[i] - start_ack[i]) % (1 << 32), ack[i]))
 
             # Next ack : current plus one congestion window
             ack[i] += window[i]
@@ -112,7 +119,7 @@ def optack():
             # if a large number of servers are to be contacted as it avoid sending a burst of ACKS
             # that might cause queing
             waited = now - before_sent
-            wait = max(min_wait - waited, window[i]/(cur_rate * nbr_connections) - waited)
+            wait =  window[i]/(cur_rate * nbr_connections) - waited
             time.sleep(max(wait, 0))
             # Increase the window, until the maximum is reached
             if window[i] < maxwindow:
