@@ -191,8 +191,6 @@ class LineTopo1(Topo):
         super(LineTopo1, self ).__init__()
 
         self.addHost('atkr', cpu=cpu)
-        self.addHost('recv', cpu=cpu)
-	self.addSwitch("s9", fail_mode="open")
         
         self.addLink('atkr', 's9', bw=bw_atkr, delay=delay)
         self.addLink('recv', 's9', bw=bw_infra, delay=delay)
@@ -236,7 +234,7 @@ class LineTopo2(Topo):
 def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_time=60, transport_alg='-Z reno',
     bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100):
     n = hosts
-    topo = LineTopo1(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
+    topo = TreeTopo(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoPinCpus=True, controller=OVSController)
     net.start()
     net.pingAll()
