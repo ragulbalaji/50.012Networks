@@ -110,7 +110,7 @@ class StarTopo(Topo):
             self.addHost('h{i}'.format(i=i), cpu=cpu)
             self.addSwitch('s{i}'.format(i=i), fail_mode='open')
             self.addLink('h{i}'.format(i=i), 's{i}'.format(i=i), bw=bw_net, delay=delay)
-            self.addLink('s0', 's{i}'.format(i=i), bw=bw_net, delay=delay)
+            self.addLink('s0', 's{i}'.format(i=i), bw=bw_infra, delay=delay)
 
 
 class _TreeTopo(Topo):
@@ -234,7 +234,7 @@ class LineTopo2(Topo):
 def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_time=60, transport_alg='-Z reno',
     bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100):
     n = hosts
-    topo = TreeTopo(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
+    topo = StarTopo(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoPinCpus=True, controller=OVSController)
     net.start()
     net.pingAll()
@@ -362,7 +362,7 @@ if __name__ == '__main__':
         [1000, 1000, 1000, 10],
     ]
 
-    link_sizes = [
+    link_sizes_v5 = [
         [1000, 100, 1000, 10],
         [1000, 200, 1000, 10],
         [1000, 300, 1000, 10],
@@ -428,6 +428,30 @@ if __name__ == '__main__':
         [1000, 800, 500, 5],
         [1000, 900, 500, 5],
         [1000, 1000, 500, 5],
+    ]
+
+    link_sizes = [
+        [1000, 100, 100, 10],
+        [1000, 200, 100, 10],
+        [1000, 300, 100, 10],
+        [1000, 400, 100, 10],
+        [1000, 500, 100, 10],
+        [1000, 600, 100, 10],
+        [1000, 700, 100, 10],
+        [1000, 800, 100, 10],
+        [1000, 900, 100, 10],
+        [1000, 1000, 100, 10],
+
+        [1000, 100, 300, 1],
+        [1000, 200, 300, 1],
+        [1000, 300, 300, 1],
+        [1000, 400, 300, 1],
+        [1000, 500, 300, 1],
+        [1000, 600, 300, 1],
+        [1000, 700, 300, 1],
+        [1000, 800, 300, 1],
+        [1000, 900, 300, 1],
+        [1000, 1000, 300, 1],
     ]
 
     for links in link_sizes:
