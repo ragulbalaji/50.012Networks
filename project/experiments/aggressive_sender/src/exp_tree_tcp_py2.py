@@ -13,14 +13,20 @@ from mininet.net import Mininet
 
 # from mininet.topo import Topo
 # from mininet.util import dumpNodeConnections, quietRun
-from topo_tree_py2 import TreeTopoTCP
+from topo_tree_py2 import TreeTopoTCP, TreeTopoTCPv2
 from utils import clean_tcpprobe_procs, start_tcpprobe
 
 output_dir = "out"
 
 
 def tcp_tests(
-    algs=["reno"], delays=2, iperf_runtime=10, bw_infra=100, bw_user=10, bw_attack=500
+    algs=["reno"],
+    delays=2,
+    iperf_runtime=10,
+    bw_infra=100,
+    bw_user=10,
+    bw_attack=500,
+    bw_server=10,
 ):
     """Run the TCP congestion control tests.
 
@@ -51,8 +57,12 @@ def tcp_tests(
 
             # Create the net topology
             # print(f"*** Creating topology for delay={delay}ms...")
-            topo = TreeTopoTCP(
-                delay=delay, bw_infra=bw_infra, bw_user=bw_user, bw_attack=bw_attack
+            topo = TreeTopoTCPv2(
+                delay=delay,
+                bw_infra=bw_infra,
+                bw_user=bw_user,
+                bw_attack=bw_attack,
+                bw_server=bw_server,
             )
 
             # Start mininet
@@ -62,7 +72,7 @@ def tcp_tests(
             # Get the hosts
             hosts = {}
             host_addrs = {}
-            for i in range(1, 17):
+            for i in range(1, 11):
                 hostname = "h{}".format(i)
                 hosts[hostname] = net.get(hostname)
                 host_addrs[hostname] = hosts[hostname].IP()
@@ -72,8 +82,8 @@ def tcp_tests(
             # Run iperf
             popens = dict()
 
-            print("*** Starting server h16...")
-            popens["h16"] = hosts["h16"].popen(
+            print("*** Starting server h10...")
+            popens["h10"] = hosts["h10"].popen(
                 [
                     "iperf",
                     "-s",
@@ -105,7 +115,7 @@ def tcp_tests(
                 # print(f"*** Starting normal client h{i}...")
                 hostname = "h{}".format(i)
                 _host = hosts[hostname]
-                _server_addr = host_addrs["h16"]
+                _server_addr = host_addrs["h10"]
                 popens[hostname] = _host.popen(
                     "iperf -c {} -p 5001 -i 1 -w 64K -M 1460 -N -Z {} -t {} -y C > {}/iperf_{}_{}_{}ms.txt".format(
                         _server_addr,
@@ -124,7 +134,7 @@ def tcp_tests(
             attacker_host = hosts[attacker_hostname]
 
             popens[attacker_hostname] = attacker_host.popen(
-                "iperf -c {} -p 5001 -i 1 -w 64K -M 1460 -N -Z {} -t {} -y C > {}/iperf_{}_{}_{}ms.txt".format(
+                "iperf -c {} -p 5001 -i 1 -w 1M -M 1460 -N -Z {} -t {} -y C > {}/iperf_{}_{}_{}ms.txt".format(
                     _server_addr,
                     attacker_algo,
                     iperf_runtime,
@@ -142,10 +152,10 @@ def tcp_tests(
                 popens[hostname].wait()
 
             print("*** Terminate the iperf servers and tcpprobe processes...")
-            popens["h16"].terminate()
+            popens["h10"].terminate()
             tcpprobe_proc.terminate()
 
-            popens["h16"].wait()
+            popens["h10"].wait()
             tcpprobe_proc.wait()
 
             print("*** Cleaning tcp probe processes...")
@@ -170,7 +180,7 @@ def main():
         "--delays",
         nargs="+",
         type=int,
-        default=[50, 100],
+        default=[2, 50],
         help="List of backbone router one-way propagation delays to test.",
     )
     parser.add_argument(
@@ -182,9 +192,10 @@ def main():
     )
     args = parser.parse_args()
     setLogLevel("info")
-    bw_infra = 100
-    bw_user = 20
-    bw_attack = [20, 50, 100, 500, 1000]
+    bw_infra = 500
+    bw_user = 10
+    bw_server = 200
+    bw_attack = [10, 50, 100, 200, 400, 800, 1000]
 
     for bw_attack_i in bw_attack:
         tcp_tests(
@@ -194,6 +205,7 @@ def main():
             bw_infra=bw_infra,
             bw_user=bw_user,
             bw_attack=bw_attack_i,
+            bw_server=bw_server,
         )
         export_name = "result_{}-{}-{}.zip".format(bw_infra, bw_user, bw_attack_i)
         cmd = "zip -r {} {} && rm -rf {}".format(export_name, output_dir, output_dir)
