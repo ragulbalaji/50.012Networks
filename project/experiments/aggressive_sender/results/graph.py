@@ -4,7 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 
-zip_name = "result_500-20-1000"
+zip_name = "result_100-20-1000"
 
 zip_path = Path(zip_name + ".zip")
 if zip_path.exists():

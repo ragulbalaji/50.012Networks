@@ -35,6 +35,11 @@ def tcp_tests(
     # )
     for alg in algs:
         # print(f"*** Starting test for algorithm={alg}...")
+        if alg == "cubic":
+            attacker_algo = "reno"
+        elif alg == "reno":
+            attacker_algo = "cubic"
+
         for delay in delays:
             # print(f"*** Starting test for delay={delay}ms...")
 
@@ -121,10 +126,10 @@ def tcp_tests(
             popens[attacker_hostname] = attacker_host.popen(
                 "iperf -c {} -p 5001 -i 1 -w 64K -M 1460 -N -Z {} -t {} -y C > {}/iperf_{}_{}_{}ms.txt".format(
                     _server_addr,
-                    alg,
+                    attacker_algo,
                     iperf_runtime,
                     output_dir,
-                    alg,
+                    alg,  # not changing filename for graphing convinience
                     attacker_hostname,
                     delay,
                 ),
@@ -177,7 +182,7 @@ def main():
     )
     args = parser.parse_args()
     setLogLevel("info")
-    bw_infra = 500
+    bw_infra = 100
     bw_user = 20
     bw_attack = [20, 50, 100, 500, 1000]
 
