@@ -58,21 +58,21 @@ if __name__ == '__main__':
   # window_sizes = ["64K", "128K", "256K"]
   # consumer_bandwidths = [2, 4, 6]
   # producer_bandwidths = [10, 16, 20]
-  window_sizes = ["16K", "64K", "128K", "256K", "512K", "1024K"]
-  consumer_bandwidths = [6]
-  producer_bandwidths = [24]
+  window_sizes = ["16K", "64K", "256K", "512K", "1024K"]
+  consumer_bandwidths = [4, 6] #[2, 4, 6]
+  producer_bandwidths = [10, 16, 24]
   NUM_START = 1
-  NUM_END = 512
-  STEP = "exp"
+  NUM_END = 250
+  STEP = 5
   NUM_EXPS = f"{NUM_START}-{NUM_END}"
-  TEST_TIME = 10
+  TEST_TIME = 5
 
   ExperimentName = f"NUMEXP-{NUM_EXPS}_TTIME-{TEST_TIME}_STEP-{STEP}"
 
   for CONSUMER_BW in consumer_bandwidths:
     for PRODUCER_BW in producer_bandwidths:
       for WINDOW_SIZE in window_sizes:
-        for ATKR_PARA_CONN in [2**i for i in range(10)]:# range(NUM_START, NUM_END + 2, STEP):
+        for ATKR_PARA_CONN in range(NUM_START, NUM_END + 2, STEP):
           for ALGO in transport_algos:
             # reset
             time.sleep(1)
