@@ -21,12 +21,15 @@ output_dir = "out"
 
 def tcp_tests(
     algs=["reno"],
-    delays=2,
+    delays=[2],
     iperf_runtime=10,
     bw_infra=100,
+    bw_server=10,
     bw_user=10,
     bw_attack=500,
-    bw_server=10,
+    mix_protocol=False,
+    normal_window_size="32K",
+    attacker_window_size="1M",
 ):
     """Run the TCP congestion control tests.
 
@@ -42,9 +45,9 @@ def tcp_tests(
     for alg in algs:
         # print(f"*** Starting test for algorithm={alg}...")
         if alg == "cubic":
-            attacker_algo = "reno"
+            attacker_algo = "reno" if mix_protocol else alg
         elif alg == "reno":
-            attacker_algo = "cubic"
+            attacker_algo = "cubic" if mix_protocol else alg
 
         for delay in delays:
             # print(f"*** Starting test for delay={delay}ms...")
@@ -90,7 +93,7 @@ def tcp_tests(
                     "-p",
                     "5001",
                     "-w",
-                    "64K",
+                    normal_window_size,
                     "-y",
                     "C",
                     ">",
@@ -117,8 +120,9 @@ def tcp_tests(
                 _host = hosts[hostname]
                 _server_addr = host_addrs["h10"]
                 popens[hostname] = _host.popen(
-                    "iperf -c {} -p 5001 -i 1 -w 64K -M 1460 -N -Z {} -t {} -y C > {}/iperf_{}_{}_{}ms.txt".format(
+                    "iperf -c {} -p 5001 -i 1 -w {} -M 1460 -N -Z {} -t {} -y C > {}/iperf_{}_{}_{}ms.txt".format(
                         _server_addr,
+                        normal_window_size,
                         alg,
                         iperf_runtime,
                         output_dir,
@@ -134,8 +138,9 @@ def tcp_tests(
             attacker_host = hosts[attacker_hostname]
 
             popens[attacker_hostname] = attacker_host.popen(
-                "iperf -c {} -p 5001 -i 1 -w 1M -M 1460 -N -Z {} -t {} -y C > {}/iperf_{}_{}_{}ms.txt".format(
+                "iperf -c {} -p 5001 -i 1 -w {} -M 1460 -N -Z {} -t {} -y C > {}/iperf_{}_{}_{}ms.txt".format(
                     _server_addr,
+                    attacker_window_size,
                     attacker_algo,
                     iperf_runtime,
                     output_dir,
@@ -166,48 +171,44 @@ def tcp_tests(
 
 
 def main():
-
-    parser = argparse.ArgumentParser(description="TCP Test")
-    parser.add_argument(
-        "-a",
-        "--algorithms",
-        nargs="+",
-        default=["reno", "cubic"],
-        help="List TCP Congestion Control algorithms to test.",
-    )
-    parser.add_argument(
-        "-d",
-        "--delays",
-        nargs="+",
-        type=int,
-        default=[2, 50],
-        help="List of backbone router one-way propagation delays to test.",
-    )
-    parser.add_argument(
-        "-i",
-        "--iperf-runtime",
-        type=int,
-        default=30,
-        help="Time to run the iperf clients.",
-    )
-    args = parser.parse_args()
+    """Run the tests."""
     setLogLevel("info")
+    algs = ["reno", "cubic"]
+    delays = [2, 50]
+    iperf_runtime = 30
+
     bw_infra = 500
-    bw_user = 10
     bw_server = 200
+    bw_user = 10
     bw_attack = [10, 50, 100, 200, 400, 800, 1000]
+    mix_protocol = False
+    normal_window_size = "32K"
+    attacker_window_size = "32K"
 
     for bw_attack_i in bw_attack:
         tcp_tests(
-            args.algorithms,
-            args.delays,
-            args.iperf_runtime,
+            algs=algs,
+            delays=delays,
+            iperf_runtime=iperf_runtime,
             bw_infra=bw_infra,
+            bw_server=bw_server,
             bw_user=bw_user,
             bw_attack=bw_attack_i,
-            bw_server=bw_server,
+            mix_protocol=mix_protocol,
+            normal_window_size=normal_window_size,
+            attacker_window_size=attacker_window_size,
         )
-        export_name = "result_{}-{}-{}.zip".format(bw_infra, bw_user, bw_attack_i)
+
+        export_name = "result_{}-{}-{}-{}-{}-{}-{}.zip".format(
+            bw_infra,
+            bw_server,
+            bw_user,
+            bw_attack_i,
+            "Mix" if mix_protocol else "NoMix",
+            normal_window_size,
+            attacker_window_size,
+        )
+
         cmd = "zip -r {} {} && rm -rf {}".format(export_name, output_dir, output_dir)
         subprocess.call(cmd, shell=True)
 
