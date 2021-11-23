@@ -1,19 +1,4 @@
-udp
-recvlink: 400
-normal link bandwidth: 25
-dict_keys([])
-normal link bandwidth: 1
-dict_keys([])
-recvlink: 50
-normal link bandwidth: 25
-dict_keys([])
-normal link bandwidth: 1
-dict_keys([])
-recvlink: 5
-normal link bandwidth: 25
-dict_keys([])
-normal link bandwidth: 1
-dict_keys([])
+
 reno
 recvlink: 400
 normal link bandwidth: 25
@@ -40,31 +25,6 @@ attacker link: 1000
 data: 593494016 total:707820000.0 ratio: 0.8384815574581108
 normal link bandwidth: 1
 dict_keys([])
-recvlink: 50
-normal link bandwidth: 25
-dict_keys([])
-normal link bandwidth: 1
-dict_keys(['100', '90', '30', '70', '40', '50', '10', '60', '20', '80'])
-attacker link: 100
-data: 28311552 total:315660000.0 ratio: 0.08969002090857252
-attacker link: 90
-data: 28311552 total:315630000.0 ratio: 0.08969854576561163
-attacker link: 30
-data: 28311552 total:130674000.0 ratio: 0.21665788144542908
-attacker link: 70
-data: 28311552 total:315630000.0 ratio: 0.08969854576561163
-attacker link: 40
-data: 28311552 total:301854000.0 ratio: 0.09379220417817885
-attacker link: 50
-data: 28311552 total:315670000.0 ratio: 0.08968717964963412
-attacker link: 10
-data: 28311552 total:62264000.0 ratio: 0.4547017859437235
-attacker link: 60
-data: 28311552 total:315640000.0 ratio: 0.08969570396654417
-attacker link: 20
-data: 28311552 total:96474000.0 ratio: 0.2934630263076062
-attacker link: 80
-data: 28311552 total:315620000.0 ratio: 0.08970138774475635
 recvlink: 5
 normal link bandwidth: 25
 dict_keys([])
@@ -116,31 +76,6 @@ attacker link: 900
 data: 600047616 total:713110000.0 ratio: 0.8414516918848425
 normal link bandwidth: 1
 dict_keys([])
-recvlink: 50
-normal link bandwidth: 25
-dict_keys([])
-normal link bandwidth: 1
-dict_keys(['100', '70', '80', '10', '90', '60', '40', '30', '20', '50'])
-attacker link: 100
-data: 28311552 total:315650000.0 ratio: 0.08969286234753683
-attacker link: 70
-data: 28311552 total:315650000.0 ratio: 0.08969286234753683
-attacker link: 80
-data: 28311552 total:315680000.0 ratio: 0.08968433857070451
-attacker link: 10
-data: 28311552 total:62265000.0 ratio: 0.4546944832570465
-attacker link: 90
-data: 28311552 total:315630000.0 ratio: 0.08969854576561163
-attacker link: 60
-data: 28311552 total:315630000.0 ratio: 0.08969854576561163
-attacker link: 40
-data: 28311552 total:301874000.0 ratio: 0.09378599018133393
-attacker link: 30
-data: 28311552 total:130664000.0 ratio: 0.21667446274413762
-attacker link: 20
-data: 28311552 total:96464000.0 ratio: 0.2934934483330569
-attacker link: 50
-data: 28311552 total:315670000.0 ratio: 0.08968717964963412
 recvlink: 5
 normal link bandwidth: 25
 dict_keys([])

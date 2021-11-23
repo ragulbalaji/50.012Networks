@@ -1,59 +1,3 @@
-udp
-recvlink: 100
-normal link bandwidth: 10
-dict_keys(['500', '900', '1000', '300', '600', '800', '100', '400', '700', '200'])
-attacker link: 500
-data: 63077180 total:0 ratio: 0
-attacker link: 900
-data: 63077180 total:0 ratio: 0
-attacker link: 1000
-data: 63106510 total:0 ratio: 0
-attacker link: 300
-data: 63071296 total:0 ratio: 0
-attacker link: 600
-data: 63066883 total:0 ratio: 0
-attacker link: 800
-data: 63096303 total:0 ratio: 0
-attacker link: 100
-data: 63093271 total:0 ratio: 0
-attacker link: 400
-data: 63090419 total:0 ratio: 0
-attacker link: 700
-data: 63078651 total:0 ratio: 0
-attacker link: 200
-data: 63087477 total:0 ratio: 0
-normal link bandwidth: 1
-dict_keys([])
-normal link bandwidth: 5
-dict_keys([])
-recvlink: 300
-normal link bandwidth: 10
-dict_keys([])
-normal link bandwidth: 1
-dict_keys(['300', '600', '100', '1000', '900', '400', '700', '200', '800', '500'])
-attacker link: 300
-data: 63080122 total:0 ratio: 0
-attacker link: 600
-data: 63103568 total:0 ratio: 0
-attacker link: 100
-data: 63074238 total:0 ratio: 0
-attacker link: 1000
-data: 63075709 total:0 ratio: 0
-attacker link: 900
-data: 63090419 total:0 ratio: 0
-attacker link: 400
-data: 63083064 total:0 ratio: 0
-attacker link: 700
-data: 63069825 total:0 ratio: 0
-attacker link: 200
-data: 63077180 total:0 ratio: 0
-attacker link: 800
-data: 63077180 total:0 ratio: 0
-attacker link: 500
-data: 63075709 total:0 ratio: 0
-normal link bandwidth: 5
-dict_keys([])
-
 reno
 recvlink: 100
 normal link bandwidth: 10
@@ -78,13 +22,7 @@ attacker link: 800
 data: 574619648 total:798240000.0 ratio: 0.719858248145921
 attacker link: 300
 data: 573440000 total:800350000.0 ratio: 0.7164865371400012
-normal link bandwidth: 1
-dict_keys([])
-normal link bandwidth: 5
-dict_keys([])
 recvlink: 300
-normal link bandwidth: 10
-dict_keys([])
 normal link bandwidth: 1
 dict_keys(['700', '800', '100', '600', '900', '300', '400', '1000', '500', '200'])
 attacker link: 700
@@ -107,8 +45,6 @@ attacker link: 500
 data: 56623104 total:1839312000.0 ratio: 0.030784936976434668
 attacker link: 200
 data: 56623104 total:1355112000.0 ratio: 0.04178481483449339
-normal link bandwidth: 5
-dict_keys([])
 
 cubic
 recvlink: 100
@@ -134,13 +70,7 @@ attacker link: 500
 data: 574619648 total:798940000.0 ratio: 0.7192275364858437
 attacker link: 1000
 data: 573440000 total:798760000.0 ratio: 0.7179127647854174
-normal link bandwidth: 1
-dict_keys([])
-normal link bandwidth: 5
-dict_keys([])
 recvlink: 300
-normal link bandwidth: 10
-dict_keys([])
 normal link bandwidth: 1
 dict_keys(['400', '1000', '500', '100', '600', '900', '200', '700', '800', '300'])
 attacker link: 400
@@ -163,5 +93,3 @@ attacker link: 800
 data: 56623104 total:1835012000.0 ratio: 0.03085707559405606
 attacker link: 300
 data: 56623104 total:1862696000.0 ratio: 0.030398467597503833
-normal link bandwidth: 5
-dict_keys([])

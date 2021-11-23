@@ -2,3 +2,4 @@
 mininet/
 /py2
 /.idea
+/venv

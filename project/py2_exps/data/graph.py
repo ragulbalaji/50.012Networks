@@ -21,8 +21,8 @@ def main(datafile: Path, topo_name: str):
     reno_data = parse_tcp_data(reno_data)
     cubic_data = parse_tcp_data(cubic_data)
 
-    plot_tcp_data(reno_data, save_name=f"reno_{topo_name}.png")
-    plot_tcp_data(cubic_data, save_name=f"cubic_{topo_name}.png")
+    plot_tcp_data(reno_data, save_name=f"v6_reno_{topo_name}_2.png")
+    plot_tcp_data(cubic_data, save_name=f"v6_cubic_{topo_name}_2.png")
 
 
 def parse_tcp_data(lines):
@@ -76,15 +76,12 @@ def plot_tcp_data(data: List[list], save_name: str = "gragh.png"):
     plt.savefig(save_name)
 
 
-
-
-
-
 if __name__ == "__main__":
-    datafile = Path("v5_star_infra1000_8hosts.txt")
+    # "v5_star_infra1000_8hosts.txt"
+    datafile = Path("v6_star_more.txt")
     assert datafile.is_file()
     main(datafile, "star")
     
-    datafile = Path("v5_tree_infra1000_8hosts.txt")
-    assert datafile.is_file()
-    main(datafile, "tree")
+    # datafile = Path("v5_tree_infra1000_8hosts.txt")
+    # assert datafile.is_file()
+    # main(datafile, "tree")

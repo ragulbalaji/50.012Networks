@@ -1,109 +1,3 @@
-udp
-recvlink: 1000
-normal link bandwidth: 10
-dict_keys(['500', '200', '300', '400', '900', '800', '600', '100', '1000', '700'])
-attacker link: 500
-data: 55156962 total:0 ratio: 0
-attacker link: 200
-data: 55143813 total:0 ratio: 0
-attacker link: 300
-data: 55140871 total:0 ratio: 0
-attacker link: 400
-data: 55139400 total:0 ratio: 0
-attacker link: 900
-data: 55165788 total:0 ratio: 0
-attacker link: 800
-data: 55154020 total:0 ratio: 0
-attacker link: 600
-data: 55161375 total:0 ratio: 0
-attacker link: 100
-data: 55145284 total:0 ratio: 0
-attacker link: 1000
-data: 55161375 total:0 ratio: 0
-attacker link: 700
-data: 55155491 total:0 ratio: 0
-normal link bandwidth: 1
-dict_keys(['900', '500', '600', '300', '400', '100', '800', '200', '700', '1000'])
-attacker link: 900
-data: 55154020 total:0 ratio: 0
-attacker link: 500
-data: 55161375 total:0 ratio: 0
-attacker link: 600
-data: 55154020 total:0 ratio: 0
-attacker link: 300
-data: 55155491 total:0 ratio: 0
-attacker link: 400
-data: 55173143 total:0 ratio: 0
-attacker link: 100
-data: 55167259 total:0 ratio: 0
-attacker link: 800
-data: 55161375 total:0 ratio: 0
-attacker link: 200
-data: 55161375 total:0 ratio: 0
-attacker link: 700
-data: 55159904 total:0 ratio: 0
-attacker link: 1000
-data: 55161375 total:0 ratio: 0
-normal link bandwidth: 5
-dict_keys(['900', '500', '600', '300', '400', '800', '100', '200', '1000', '700'])
-attacker link: 900
-data: 55161375 total:0 ratio: 0
-attacker link: 500
-data: 55154020 total:0 ratio: 0
-attacker link: 600
-data: 55161375 total:0 ratio: 0
-attacker link: 300
-data: 55154020 total:0 ratio: 0
-attacker link: 400
-data: 55158433 total:0 ratio: 0
-attacker link: 800
-data: 55154020 total:0 ratio: 0
-attacker link: 100
-data: 55154020 total:0 ratio: 0
-attacker link: 200
-data: 55159904 total:0 ratio: 0
-attacker link: 1000
-data: 55161375 total:0 ratio: 0
-attacker link: 700
-data: 55165788 total:0 ratio: 0
-recvlink: 500
-normal link bandwidth: 10
-dict_keys(['400', '800', '100', '200', '1000', '700', '900', '500', '600', '300'])
-attacker link: 400
-data: 55154020 total:0 ratio: 0
-attacker link: 800
-data: 55154020 total:0 ratio: 0
-attacker link: 100
-data: 55158433 total:0 ratio: 0
-attacker link: 200
-data: 55159904 total:0 ratio: 0
-attacker link: 1000
-data: 55158433 total:0 ratio: 0
-attacker link: 700
-data: 55161375 total:0 ratio: 0
-attacker link: 900
-data: 55161375 total:0 ratio: 0
-attacker link: 500
-data: 55158433 total:0 ratio: 0
-attacker link: 600
-data: 55155491 total:0 ratio: 0
-attacker link: 300
-data: 55149607 total:0 ratio: 0
-normal link bandwidth: 1
-dict_keys(['500', '200', '100', '400', '300'])
-attacker link: 500
-data: 37620240 total:0 ratio: 0
-attacker link: 200
-data: 55164317 total:0 ratio: 0
-attacker link: 100
-data: 55161375 total:0 ratio: 0
-attacker link: 400
-data: 55161375 total:0 ratio: 0
-attacker link: 300
-data: 55161375 total:0 ratio: 0
-normal link bandwidth: 5
-dict_keys([])
-
 reno
 recvlink: 1000
 normal link bandwidth: 10
@@ -207,8 +101,7 @@ attacker link: 200
 data: 49545216 total:1373800000.0 ratio: 0.03606435871305867
 attacker link: 500
 data: 49545216 total:2292203000.0 ratio: 0.021614671998945994
-normal link bandwidth: 5
-dict_keys([])
+
 
 cubic
 recvlink: 1000
@@ -313,5 +206,3 @@ attacker link: 300
 data: 49545216 total:1968403000.0 ratio: 0.025170260358270132
 attacker link: 200
 data: 49545216 total:1374803000.0 ratio: 0.03603804763300633
-normal link bandwidth: 5
-dict_keys([])

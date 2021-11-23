@@ -2,7 +2,7 @@ from os import listdir
 from os.path import isfile, join
 import csv
 
-respath = "./v6_star_more/"
+respath = "./v5_star/"
 d = {}
 # <algo, <recvlink, <net_bw, [atck_link]>>>
 d["udp"] = {
