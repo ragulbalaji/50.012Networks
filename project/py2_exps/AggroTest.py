@@ -231,7 +231,7 @@ class LineTopo2(Topo):
         self.addLink('recv', 's9', bw=bw_infra, delay=delay)
 
 
-def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_time=30, transport_alg='-Z reno',
+def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_time=10, transport_alg='-Z reno',
     bw_infra=1000, bw_atkr=800, bw_recv=500, bw_net=100):
     n = hosts
     topo = StarTopo(n=n, bw_infra=bw_infra, bw_atkr=bw_atkr, bw_recv=bw_recv, bw_net=bw_net)
@@ -241,7 +241,7 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_tim
 
     print("[Info] Starting Control Experiment")
     # start tests
-    savedir = './line1_results/{expname}_{h}'.format(expname=expname, h=transport_alg.replace(" ","_"))
+    savedir = './v7/{expname}_{h}'.format(expname=expname, h=transport_alg.replace(" ","_"))
 
     # setup recv
     recv = net.getNodeByName('recv')
@@ -253,7 +253,7 @@ def ControlExperiment(expname='EXP_{i}'.format(i=time.time()), hosts=8, test_tim
     for i in range(1, n+1):
         hi = net.getNodeByName('h{i}'.format(i=i))
         hi.cmd('iperf -c {j} -p 5001 -i 1 -w 64K -N {transport_alg} -t {a} -y C > {savedir}/iperf_h{i}.csv &'
-            .format(j=recv.IP(), transport_alg=transport_alg, a=test_time + 10,savedir = savedir, i=i))
+            .format(j=recv.IP(), transport_alg=transport_alg, a=test_time,savedir = savedir, i=i))
 
     atkr = net.getNodeByName('atkr')
     atkr.cmd('iperf -c {a} -p 5001 -i 1 -w 64K -N {transport_alg} -t {test_time} -y C > {savedir}/iperf_atkr.csv'
@@ -454,7 +454,7 @@ if __name__ == '__main__':
         [1000, 1000, 300, 1],
     ]
 
-    link_sizes = [
+    link_sizes_v6_ = [
         [1000, 100, 400, 25],
         [1000, 200, 400, 25],
         [1000, 300, 400, 25],
@@ -476,6 +476,96 @@ if __name__ == '__main__':
         [1000, 80, 50, 1],
         [1000, 90, 50, 1],
         [1000, 100, 50, 1],
+
+        [1000, 1, 5, 1],
+        [1000, 2, 5, 1],
+        [1000, 3, 5, 1],
+        [1000, 4, 5, 1],
+        [1000, 5, 5, 1],
+        [1000, 6, 5, 1],
+        [1000, 7, 5, 1],
+        [1000, 8, 5, 1],
+        [1000, 9, 5, 1],
+        [1000, 10, 5, 1],
+    ]
+
+    link_sizes = [
+        [1000, 100, 1000, 10],
+        [1000, 200, 1000, 10],
+        [1000, 300, 1000, 10],
+        [1000, 400, 1000, 10],
+        [1000, 500, 1000, 10],
+        [1000, 600, 1000, 10],
+        [1000, 700, 1000, 10],
+        [1000, 800, 1000, 10],
+        [1000, 900, 1000, 10],
+        [1000, 1000, 1000, 10],
+
+        [1000, 100, 1000, 1],
+        [1000, 200, 1000, 1],
+        [1000, 300, 1000, 1],
+        [1000, 400, 1000, 1],
+        [1000, 500, 1000, 1],
+        [1000, 600, 1000, 1],
+        [1000, 700, 1000, 1],
+        [1000, 800, 1000, 1],
+        [1000, 900, 1000, 1],
+        [1000, 1000, 1000, 1],
+
+        [1000, 100, 1000, 5],
+        [1000, 200, 1000, 5],
+        [1000, 300, 1000, 5],
+        [1000, 400, 1000, 5],
+        [1000, 500, 1000, 5],
+        [1000, 600, 1000, 5],
+        [1000, 700, 1000, 5],
+        [1000, 800, 1000, 5],
+        [1000, 900, 1000, 5],
+        [1000, 1000, 1000, 5],
+
+        [1000, 100, 500, 10],
+        [1000, 200, 500, 10],
+        [1000, 300, 500, 10],
+        [1000, 400, 500, 10],
+        [1000, 500, 500, 10],
+        [1000, 600, 500, 10],
+        [1000, 700, 500, 10],
+        [1000, 800, 500, 10],
+        [1000, 900, 500, 10],
+        [1000, 1000, 500, 10],
+
+        [1000, 100, 500, 1],
+        [1000, 200, 500, 1],
+        [1000, 300, 500, 1],
+        [1000, 400, 500, 1],
+        [1000, 500, 500, 1],
+        [1000, 600, 500, 1],
+        [1000, 700, 500, 1],
+        [1000, 800, 500, 1],
+        [1000, 900, 500, 1],
+        [1000, 1000, 500, 1],
+
+        [1000, 100, 500, 5],
+        [1000, 200, 500, 5],
+        [1000, 300, 500, 5],
+        [1000, 400, 500, 5],
+        [1000, 500, 500, 5],
+        [1000, 600, 500, 5],
+        [1000, 700, 500, 5],
+        [1000, 800, 500, 5],
+        [1000, 900, 500, 5],
+        [1000, 1000, 500, 5],
+
+        [1000, 100, 400, 25],
+        [1000, 200, 400, 25],
+        [1000, 300, 400, 25],
+        [1000, 400, 400, 25],
+        [1000, 500, 400, 25],
+        [1000, 600, 400, 25],
+        [1000, 700, 400, 25],
+        [1000, 800, 400, 25],
+        [1000, 900, 400, 25],
+        [1000, 1000, 400, 25],
 
         [1000, 1, 5, 1],
         [1000, 2, 5, 1],
