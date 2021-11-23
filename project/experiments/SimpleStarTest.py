@@ -58,12 +58,12 @@ if __name__ == '__main__':
   # window_sizes = ["64K", "128K", "256K"]
   # consumer_bandwidths = [2, 4, 6]
   # producer_bandwidths = [10, 16, 20]
-  window_sizes = ["256K"]
+  window_sizes = ["64K"]
   consumer_bandwidths = [6]
   producer_bandwidths = [24]
   NUM_START = 100
   NUM_END = 180
-  STEP = 2
+  STEP = 10
   NUM_EXPS = f"{NUM_START}-{NUM_END}"
   TEST_TIME = 10
 
