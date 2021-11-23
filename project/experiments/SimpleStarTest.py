@@ -29,9 +29,9 @@ def ControlExperiment(expname=f'EXP_{time.time()}', bw_consumer=2, bw_producer=2
   net.start()
   net.pingAll()
 
-  print(f'[Test] Running {expname} with {transport_alg[1]}, {attacker_parallel_connections} atkr_para_conn...')
+  print(f'[Test] Running {expname} with CBW-{bw_consumer}, PBW-{bw_producer}, CWND-{window_size}, {transport_alg[1]}, {attacker_parallel_connections} atkr_para_conn...')
   # start tests
-  savedir = f'./results/{expname}/{transport_alg[1]}/{attacker_parallel_connections}conn'
+  savedir = f'./results/{expname}/CBW-{bw_consumer}/PBW-{bw_producer}/CWND-{window_size}/{transport_alg[1]}/{attacker_parallel_connections}conn'
   atkr = net.getNodeByName('atkr')
   # setup recv
   recv = net.getNodeByName('recv')
@@ -52,24 +52,28 @@ if __name__ == '__main__':
   transport_algos = [
     ('-Z reno', 'TCPreno'),
     ('-Z cubic', 'TCPcubic'),
-    ('-u', 'UDP')
+    # ('-u', 'UDP')
   ]
 
   # window_sizes = ["64K", "128K", "256K"]
   # consumer_bandwidths = [2, 4, 6]
   # producer_bandwidths = [10, 16, 20]
-  window_sizes = ["64K", "128K", "256K"]
+  window_sizes = ["256K"]
   consumer_bandwidths = [6]
-  producer_bandwidths = [10, 16, 20]
-  NUM_EXPS = 20
+  producer_bandwidths = [24]
+  NUM_START = 100
+  NUM_END = 180
+  STEP = 2
+  NUM_EXPS = f"{NUM_START}-{NUM_END}"
   TEST_TIME = 10
+
+  ExperimentName = f"NUMEXP-{NUM_EXPS}_TTIME-{TEST_TIME}_STEP-{STEP}"
 
   for CONSUMER_BW in consumer_bandwidths:
     for PRODUCER_BW in producer_bandwidths:
-      for ALGO in transport_algos:
-        for WINDOW_SIZE in window_sizes:
-          for ATKR_PARA_CONN in range(1, NUM_EXPS + 2, 2):
-            ExperimentName = f"CBW-{CONSUMER_BW}_PBW-{PRODUCER_BW}_CWND-{WINDOW_SIZE}_NUMEXP-{NUM_EXPS}_TTIME-{TEST_TIME}"
+      for WINDOW_SIZE in window_sizes:
+        for ATKR_PARA_CONN in range(NUM_START, NUM_END + 2, STEP):
+          for ALGO in transport_algos:
             # reset
             time.sleep(1)
             os.system('sudo mn -c')
