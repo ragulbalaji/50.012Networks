@@ -10,7 +10,6 @@ from mininet.log import info, lg, setLogLevel
 from mininet.net import Mininet
 from mininet.topo import Topo
 from mininet.util import dumpNodeConnections, quietRun
-
 from topo_tree import TreeTopoTCP
 from utils import clean_tcpprobe_procs, start_tcpprobe
 
