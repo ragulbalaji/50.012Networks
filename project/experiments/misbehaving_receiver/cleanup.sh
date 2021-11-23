@@ -1,4 +1,3 @@
-#! /bin/bash
+#!/bin/bash
 
-sudo rm -rf graphs/
-sudo rm -rf captures/
+sudo rm -rf plots/
