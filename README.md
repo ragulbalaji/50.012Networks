@@ -1,6 +1,7 @@
 # 50.012Networks
 
 
-### aggresively send packets
+## aggresively send packets
 
-data in `50.012Networks/project/py2_exps/results/`.
+star topology: `./project/aggresive_sneder_py2_exps`
+
