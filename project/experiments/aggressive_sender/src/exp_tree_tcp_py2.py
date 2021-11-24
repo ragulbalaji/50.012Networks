@@ -180,10 +180,10 @@ def main():
     bw_infra = 500
     bw_servers = [100, 500]
     bw_user = 10
-    bw_attack = [10, 20, 50, 200, 800]
+    bw_attack = [10, 20, 800]
     mix_protocols = [False, True]
-    normal_window_size = "16K"
-    attacker_window_sizes = ["16K", "1M"]
+    normal_window_size = "128K"
+    attacker_window_sizes = ["128K", "1M"]
 
     for bw_server in bw_servers:
         for mix_protocol in mix_protocols:

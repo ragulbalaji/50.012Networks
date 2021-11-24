@@ -354,4 +354,4 @@ def main(target_dir: str, cumulative: bool = False):
 
 
 if __name__ == "__main__":
-    main("exp5", cumulative=True)
+    main("exp6", cumulative=True)
