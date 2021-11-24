@@ -99,9 +99,11 @@ def main():
     h8.sendCmd("python reno.py --role receiver --host h8")
     h9.sendCmd("python reno.py --role receiver --host h9")
     h10.sendCmd("python reno.py --role receiver --host h10")
-    h1.sendCmd(
-        "python reno.py --role sender --host h1 --rtt %d --limit %d" % (rtt, data_size)
-    )
+    for i in range(2, 11):
+        h1.sendCmd(
+            "python reno.py --role sender --host h1 --target h%s --rtt %d --limit %d"
+            % (i, rtt, data_size)
+        )
     h2.waitOutput()
     h3.waitOutput()
     h4.waitOutput()
@@ -129,9 +131,11 @@ def main():
     h8.sendCmd("python reno.py --role receiver --host h8")
     h9.sendCmd("python reno.py --role receiver --host h9")
     h10.sendCmd("python reno.py --role receiver --host h10")
-    h1.sendCmd(
-        "python reno.py --role sender --host h1 --rtt %d --limit %d" % (rtt, data_size)
-    )
+    for i in range(2, 11):
+        h1.sendCmd(
+            "python reno.py --role sender --host h1 --target h%s --rtt %d --limit %d"
+            % (i, rtt, data_size)
+        )
     h2.waitOutput()
     h3.waitOutput()
     h4.waitOutput()
@@ -160,9 +164,11 @@ def main():
     h8.sendCmd("python reno.py --role receiver --host h8")
     h9.sendCmd("python reno.py --role receiver --host h9")
     h10.sendCmd("python reno.py --role receiver --host h10")
-    h1.sendCmd(
-        "python reno.py --role sender --host h1 --rtt %d --limit %d" % (rtt, data_size)
-    )
+    for i in range(2, 11):
+        h1.sendCmd(
+            "python reno.py --role sender --host h1 --target h%s --rtt %d --limit %d"
+            % (i, rtt, data_size)
+        )
     h2.waitOutput()
     h3.waitOutput()
     h4.waitOutput()
@@ -194,9 +200,11 @@ def main():
     h8.sendCmd("python reno.py --role receiver --host h8")
     h9.sendCmd("python reno.py --role receiver --host h9")
     h10.sendCmd("python reno.py --role receiver --host h10")
-    h1.sendCmd(
-        "python reno.py --role sender --host h1 --rtt %d --limit %d" % (rtt, data_size)
-    )
+    for i in range(2, 11):
+        h1.sendCmd(
+            "python reno.py --role sender --host h1 --target h%s --rtt %d --limit %d"
+            % (i, rtt, data_size)
+        )
     h2.waitOutput()
     h3.waitOutput()
     h4.waitOutput()

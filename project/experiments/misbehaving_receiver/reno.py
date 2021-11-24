@@ -39,7 +39,7 @@ H10_PORT = 20010
 
 
 class TCP_Client:
-    def __init__(self, role, host, **kwargs):
+    def __init__(self, role, host, target, **kwargs):
         self.seq = 0
         self.next_seq = 1
         self.ack = 1
@@ -57,12 +57,39 @@ class TCP_Client:
         self.log_cache = None
 
         self.host = host
+        self.target = target
 
         if host == "h1":
             self.src_ip = H1_ADDR
-            self.dst_ip = H2_ADDR
             self.src_port = H1_PORT
-            self.dst_port = H2_PORT
+
+            if self.target == "h2":
+                self.dst_ip = H2_ADDR
+                self.dst_port = H2_PORT
+            elif self.target == "h3":
+                self.dst_ip = H3_ADDR
+                self.dst_port = H3_PORT
+            elif self.target == "h4":
+                self.dst_ip = H4_ADDR
+                self.dst_port = H4_PORT
+            elif self.target == "h5":
+                self.dst_ip = H5_ADDR
+                self.dst_port = H5_PORT
+            elif self.target == "h6":
+                self.dst_ip = H6_ADDR
+                self.dst_port = H6_PORT
+            elif self.target == "h7":
+                self.dst_ip = H7_ADDR
+                self.dst_port = H7_PORT
+            elif self.target == "h8":
+                self.dst_ip = H8_ADDR
+                self.dst_port = H8_PORT
+            elif self.target == "h9":
+                self.dst_ip = H9_ADDR
+                self.dst_port = H9_PORT
+            elif self.target == "h10":
+                self.dst_ip = H10_ADDR
+                self.dst_port = H10_PORT
 
         elif host == "h2":
             self.src_ip = H2_ADDR
@@ -398,6 +425,13 @@ if __name__ == "__main__":
         "--host", dest="host", required=True, help="Mininet host (`h1` or `h2`)"
     )
     parser.add_argument(
+        "--target",
+        dest="target",
+        type=str,
+        default="h2",
+        help="Mininet receiver host (used only for StarTopo).",
+    )
+    parser.add_argument(
         "--rtt",
         dest="rtt",
         type=int,
@@ -426,5 +460,5 @@ if __name__ == "__main__":
         # set retransmission timeout to 4 * RTT
         RETRANSMIT_TIMEOUT = max(1.0, args.rtt / 250.0)
 
-    tcp = TCP_Client(args.role, args.host, **kwargs)
+    tcp = TCP_Client(args.role, args.host, args.target, **kwargs)
     tcp.start()
