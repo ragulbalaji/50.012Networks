@@ -56,6 +56,8 @@ class TCP_Client:
         self.role = role  # sender or receiver
         self.log_cache = None
 
+        self.host = host
+
         if host == "h1":
             self.src_ip = H1_ADDR
             self.dst_ip = H2_ADDR
@@ -355,7 +357,7 @@ class TCP_Client:
         scp.sniff(lfilter=match_packet, prn=queue_packet, stop_filter=stop_packet)
 
     def write_logs_to_files(self):
-        filename = "attack_log.txt" if self.log_attacker else ("%s_log.txt" % host)
+        filename = "attack_log.txt" if self.log_attacker else ("%s_log.txt" % self.host)
         f = open(filename, "w")
         for time, seq in self.seq_log:
             f.write("%s,%.3f,%d\n" % ("seq", time, seq))
