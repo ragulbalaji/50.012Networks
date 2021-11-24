@@ -1,5 +1,6 @@
 #!/bin/bash
-for i in {1..50}
+
+for i in {1..100}
 do
     python run_attacks.py --delay 375 --num-attack $i
     echo "Generating plots..."
@@ -13,4 +14,5 @@ do
     zip "./plots/${i}/sequence_nums.zip" ./plots/div.png ./plots/dup.png ./plots/opt.png
     zip "./plots/${i}/throughputs.zip" ./plots/div_throughput.png ./plots/dup_throughput.png ./plots/opt_throughput.png
     rm ./plots/div.png ./plots/dup.png ./plots/opt.png ./plots/div_throughput.png ./plots/dup_throughput.png ./plots/opt_throughput.png
+    mn -c
 done

@@ -54,7 +54,7 @@ def main():
     args = parser.parse_args()
 
     # Build topology
-    topo = mn.StandardTopo(args.link_delay)
+    topo = mn.StarTopo()
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink)
     net.start()
     # Dumps network topology

@@ -40,9 +40,9 @@ class StarTopo(Topo):
         self.addLink(h1, s0, delay="%dms" % delay)
         self.addLink(h2, s0, delay="%dms" % delay)
         for i in range(3, n + 1):
-            self.addHost(f"h{i}", cpu=cpu)
+            self.addHost("h%s" % i, cpu=cpu)
         for i in range(3, n + 1):
-            self.addLink(f"h{i}", s0, bw=bw_net, delay=delay)
+            self.addLink("h%s" % i, s0, bw=bw_net, delay=delay)
 
 
 topos = {
