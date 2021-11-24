@@ -33,7 +33,7 @@ $ sudo ./run.sh
 
 The default network topology consists of two end hosts connected via one switch. Default link delay for each link is 375ms, which amounts to a total round-trip delay of 1.5s. The whole process takes about 1 minute to run per set parameter value.
 
-5. After the shell script finishes, check out the reproduced plots in the `./plot` directory. There are three plots generated, "div.png", "dup.png" and "opt.png", corresponding to ACK division, DupACK spoofing, and Optimistic ACKing attacks, respectively.
+5. After the shell script finishes, check out the reproduced plots in the `./plots` directory. There are three plots generated, "div.png", "dup.png" and "opt.png", corresponding to ACK division, DupACK spoofing, and Optimistic ACKing attacks, respectively.
 
 ## Customizations
 
