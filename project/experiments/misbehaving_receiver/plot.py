@@ -16,6 +16,8 @@ def read_lines(f, d):
         elif typ == "ack":
             d["ack"]["time"].append(float(time))
             d["ack"]["num"].append(float(num))
+        elif typ == "time_taken":
+            continue
         else:
             raise Exception("Unknown type read while parsing log file: %s" % typ)
 
@@ -50,10 +52,9 @@ def main():
         print("Attack name needed for saving plot figures.")
         return
 
-    h3_normal_log = {"seq": {"time": [], "num": []}, "ack": {"time": [], "num": []}}
-    h4_normal_log = {"seq": {"time": [], "num": []}, "ack": {"time": [], "num": []}}
+    normal_log = {"seq": {"time": [], "num": []}, "ack": {"time": [], "num": []}}
     attack_log = {"seq": {"time": [], "num": []}, "ack": {"time": [], "num": []}}
-    h3_normal_f = open("log.txt", "r")
+    normal_f = open("log.txt", "r")
     attack_f = open("%s_attack_log.txt" % attack_name, "r")
 
     read_lines(normal_f, normal_log)

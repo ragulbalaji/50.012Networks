@@ -9,6 +9,18 @@ import time
 OUTPUT_DIR = "./plots"
 
 
+def get_time_taken(filename):
+    with open(filename, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            typ, time, data_size = line.split(",")
+            if typ == "time_taken":
+                time_taken = time
+                break
+
+    return time_taken
+
+
 def build_parser():
     parser = argparse.ArgumentParser(description="Attack plot generator")
     parser.add_argument(
@@ -87,6 +99,13 @@ def main():
     # sleep 2s to clean up packets in the network
     time.sleep(2.0)
 
+    command = ""
+    for i in range(2, 11):
+        command += (
+            "python reno.py --role sender --host h1 --target h%d --rtt %d --limit %d & "
+            % (i, rtt, data_size)
+        )
+
     # First, record a normal TCP communication
     print("Starting normal TCP connection...")
     start_time = time.time()
@@ -99,12 +118,7 @@ def main():
     h8.sendCmd("python reno.py --role receiver --host h8")
     h9.sendCmd("python reno.py --role receiver --host h9")
     h10.sendCmd("python reno.py --role receiver --host h10")
-    for i in range(2, 11):
-        h1.sendCmd(
-            "python reno.py --role sender --host h1 --target h%s --rtt %d --limit %d"
-            % (i, rtt, data_size)
-        )
-    h2.waitOutput()
+    h1.sendCmd(command[:-3])
     h3.waitOutput()
     h4.waitOutput()
     h5.waitOutput()
@@ -113,9 +127,20 @@ def main():
     h8.waitOutput()
     h9.waitOutput()
     h10.waitOutput()
+    h2.waitOutput()
     h1.waitOutput()
     normal_time = time.time() - start_time
     print("Normal TCP connection done! (%.2f sec)" % (normal_time))
+
+    norm_attacker_time = get_time_taken("logs/h2_log.txt")
+    norm_h3_time = get_time_taken("logs/h3_log.txt")
+    norm_h4_time = get_time_taken("logs/h4_log.txt")
+    norm_h5_time = get_time_taken("logs/h5_log.txt")
+    norm_h6_time = get_time_taken("logs/h6_log.txt")
+    norm_h7_time = get_time_taken("logs/h7_log.txt")
+    norm_h8_time = get_time_taken("logs/h8_log.txt")
+    norm_h9_time = get_time_taken("logs/h9_log.txt")
+    norm_h10_time = get_time_taken("logs/h10_log.txt")
 
     time.sleep(2.0)
 
@@ -133,10 +158,9 @@ def main():
     h10.sendCmd("python reno.py --role receiver --host h10")
     for i in range(2, 11):
         h1.sendCmd(
-            "python reno.py --role sender --host h1 --target h%s --rtt %d --limit %d"
+            "python reno.py --role sender --host h1 --target h%d --rtt %d --limit %d"
             % (i, rtt, data_size)
         )
-    h2.waitOutput()
     h3.waitOutput()
     h4.waitOutput()
     h5.waitOutput()
@@ -145,10 +169,21 @@ def main():
     h8.waitOutput()
     h9.waitOutput()
     h10.waitOutput()
+    h2.waitOutput()
     h1.waitOutput()
-    h2.cmd("mv attack_log.txt div_attack_log.txt")
+    h2.cmd("mv attack_log.txt logs/div_attack_log.txt")
     division_time = time.time() - start_time
     print("ACK Division attack done! (%.2f sec)" % (division_time))
+
+    div_attacker_time = get_time_taken("logs/div_attack_log.txt")
+    div_h3_time = get_time_taken("logs/h3_log.txt")
+    div_h4_time = get_time_taken("logs/h4_log.txt")
+    div_h5_time = get_time_taken("logs/h5_log.txt")
+    div_h6_time = get_time_taken("logs/h6_log.txt")
+    div_h7_time = get_time_taken("logs/h7_log.txt")
+    div_h8_time = get_time_taken("logs/h8_log.txt")
+    div_h9_time = get_time_taken("logs/h9_log.txt")
+    div_h10_time = get_time_taken("logs/h10_log.txt")
 
     time.sleep(2.0)
 
@@ -166,10 +201,9 @@ def main():
     h10.sendCmd("python reno.py --role receiver --host h10")
     for i in range(2, 11):
         h1.sendCmd(
-            "python reno.py --role sender --host h1 --target h%s --rtt %d --limit %d"
+            "python reno.py --role sender --host h1 --target h%d --rtt %d --limit %d"
             % (i, rtt, data_size)
         )
-    h2.waitOutput()
     h3.waitOutput()
     h4.waitOutput()
     h5.waitOutput()
@@ -178,10 +212,21 @@ def main():
     h8.waitOutput()
     h9.waitOutput()
     h10.waitOutput()
+    h2.waitOutput()
     h1.waitOutput()
-    h2.cmd("mv attack_log.txt dup_attack_log.txt")
+    h2.cmd("mv attack_log.txt logs/dup_attack_log.txt")
     duplicate_time = time.time() - start_time
     print("DupACK Spoofing attack done! (%.2f sec)" % (duplicate_time))
+
+    dup_attacker_time = get_time_taken("logs/dup_attack_log.txt")
+    dup_h3_time = get_time_taken("logs/h3_log.txt")
+    dup_h4_time = get_time_taken("logs/h4_log.txt")
+    dup_h5_time = get_time_taken("logs/h5_log.txt")
+    dup_h6_time = get_time_taken("logs/h6_log.txt")
+    dup_h7_time = get_time_taken("logs/h7_log.txt")
+    dup_h8_time = get_time_taken("logs/h8_log.txt")
+    dup_h9_time = get_time_taken("logs/h9_log.txt")
+    dup_h10_time = get_time_taken("logs/h10_log.txt")
 
     time.sleep(2.0)
 
@@ -202,10 +247,9 @@ def main():
     h10.sendCmd("python reno.py --role receiver --host h10")
     for i in range(2, 11):
         h1.sendCmd(
-            "python reno.py --role sender --host h1 --target h%s --rtt %d --limit %d"
+            "python reno.py --role sender --host h1 --target h%d --rtt %d --limit %d"
             % (i, rtt, data_size)
         )
-    h2.waitOutput()
     h3.waitOutput()
     h4.waitOutput()
     h5.waitOutput()
@@ -214,10 +258,21 @@ def main():
     h8.waitOutput()
     h9.waitOutput()
     h10.waitOutput()
+    h2.waitOutput()
     h1.waitOutput()
-    h2.cmd("mv attack_log.txt opt_attack_log.txt")
+    h2.cmd("mv attack_log.txt logs/opt_attack_log.txt")
     optimistic_time = time.time() - start_time
     print("Optimistic ACKing attack done! (%.2f sec)" % (optimistic_time))
+
+    opt_attacker_time = get_time_taken("logs/opt_attack_log.txt")
+    opt_h3_time = get_time_taken("logs/h3_log.txt")
+    opt_h4_time = get_time_taken("logs/h4_log.txt")
+    opt_h5_time = get_time_taken("logs/h5_log.txt")
+    opt_h6_time = get_time_taken("logs/h6_log.txt")
+    opt_h7_time = get_time_taken("logs/h7_log.txt")
+    opt_h8_time = get_time_taken("logs/h8_log.txt")
+    opt_h9_time = get_time_taken("logs/h9_log.txt")
+    opt_h10_time = get_time_taken("logs/h10_log.txt")
 
     print(
         str(num_attack)
@@ -245,6 +300,78 @@ def main():
             + str(optimistic_time)
             + ","
             + str(data_size * 1000)
+            + ","
+            + str(norm_attacker_time)
+            + ","
+            + str(norm_h3_time)
+            + ","
+            + str(norm_h4_time)
+            + ","
+            + str(norm_h5_time)
+            + ","
+            + str(norm_h6_time)
+            + ","
+            + str(norm_h7_time)
+            + ","
+            + str(norm_h8_time)
+            + ","
+            + str(norm_h9_time)
+            + ","
+            + str(norm_h10_time)
+            + ","
+            + str(div_attacker_time)
+            + ","
+            + str(div_h3_time)
+            + ","
+            + str(div_h4_time)
+            + ","
+            + str(div_h5_time)
+            + ","
+            + str(div_h6_time)
+            + ","
+            + str(div_h7_time)
+            + ","
+            + str(div_h8_time)
+            + ","
+            + str(div_h9_time)
+            + ","
+            + str(div_h10_time)
+            + ","
+            + str(dup_attacker_time)
+            + ","
+            + str(dup_h3_time)
+            + ","
+            + str(dup_h4_time)
+            + ","
+            + str(dup_h5_time)
+            + ","
+            + str(dup_h6_time)
+            + ","
+            + str(dup_h7_time)
+            + ","
+            + str(dup_h8_time)
+            + ","
+            + str(dup_h9_time)
+            + ","
+            + str(dup_h10_time)
+            + ","
+            + str(opt_attacker_time)
+            + ","
+            + str(opt_h3_time)
+            + ","
+            + str(opt_h4_time)
+            + ","
+            + str(opt_h5_time)
+            + ","
+            + str(opt_h6_time)
+            + ","
+            + str(opt_h7_time)
+            + ","
+            + str(opt_h8_time)
+            + ","
+            + str(opt_h9_time)
+            + ","
+            + str(opt_h10_time)
             + "\n"
         )
 

@@ -15,6 +15,8 @@ def read_lines(f, d):
             d["seq"]["num"].append(float(num))
         elif typ == "ack":
             continue
+        elif typ == "time_taken":
+            continue
         else:
             raise Exception("Unknown type read while parsing log file: %s" % typ)
 

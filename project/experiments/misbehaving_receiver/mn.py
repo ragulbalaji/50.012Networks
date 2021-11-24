@@ -29,7 +29,7 @@ class StarTopo(Topo):
         bw_atkr=10,
         bw_recv=10,
         bw_net=10,
-        delay="100",
+        delay=100,
         maxq=None,
         diff=False,
     ):
@@ -42,7 +42,7 @@ class StarTopo(Topo):
         for i in range(3, n + 1):
             self.addHost("h%s" % i, ip="10.0.0.%s" % i, cpu=cpu)
         for i in range(3, n + 1):
-            self.addLink("h%s" % i, s0, bw=bw_net, delay=delay)
+            self.addLink("h%s" % i, s0, bw=bw_net, delay="%dms" % delay)
 
 
 topos = {

@@ -384,8 +384,15 @@ class TCP_Client:
         scp.sniff(lfilter=match_packet, prn=queue_packet, stop_filter=stop_packet)
 
     def write_logs_to_files(self):
-        filename = "attack_log.txt" if self.log_attacker else ("%s_log.txt" % self.host)
+        filename = (
+            "logs/attack_log.txt"
+            if self.log_attacker
+            else ("logs/%s_log.txt" % self.host)
+        )
         f = open(filename, "w")
+        f.write(
+            "%s,%.3f,%d\n" % ("time_taken", time.time() - self.base_time, self.limit)
+        )
         for time, seq in self.seq_log:
             f.write("%s,%.3f,%d\n" % ("seq", time, seq))
         for time, ack in self.ack_log:
@@ -427,7 +434,6 @@ if __name__ == "__main__":
     parser.add_argument(
         "--target",
         dest="target",
-        type=str,
         default="h2",
         help="Mininet receiver host (used only for StarTopo).",
     )
