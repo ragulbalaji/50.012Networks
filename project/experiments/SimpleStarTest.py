@@ -4,6 +4,7 @@ from mininet.link import TCLink
 from mininet.net import Mininet
 from mininet.cli import CLI
 from mininet.node import OVSController
+from TreeTopology import TreeTopoTCPv2
 
 # from subprocess import Popen, PIPE
 # from multiprocessing import Process
@@ -24,7 +25,8 @@ class TopoStar(Topo):
     for i in range(n): self.addLink(f'h{i}', 's0', bw=bw_consumer, delay=delay)
 
 def ControlExperiment(expname=f'EXP_{time.time()}', bw_consumer=2, bw_producer=20, window_size="64K", hosts=8, test_time=10, transport_alg=('-Z reno', 'TCPreno'), attacker_parallel_connections=2):
-  topo = TopoStar(n=hosts, bw_consumer=bw_consumer, bw_producer=bw_producer)
+  # topo = TopoStar(n=hosts, bw_consumer=bw_consumer, bw_producer=bw_producer)
+  topo = TreeTopoTCPv2(n=hosts, bw_consumer=bw_consumer, bw_producer=bw_producer)
   net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, autoPinCpus=True, controller=OVSController)
   net.start()
   net.pingAll()
@@ -59,7 +61,7 @@ if __name__ == '__main__':
   # consumer_bandwidths = [2, 4, 6]
   # producer_bandwidths = [10, 16, 20]
   window_sizes = ["16K", "64K", "256K", "512K", "1024K"]
-  consumer_bandwidths = [4, 6] #[2, 4, 6]
+  consumer_bandwidths = [2] #[2, 4, 6]
   producer_bandwidths = [10, 16, 24]
   NUM_START = 1
   NUM_END = 250
@@ -67,7 +69,7 @@ if __name__ == '__main__':
   NUM_EXPS = f"{NUM_START}-{NUM_END}"
   TEST_TIME = 5
 
-  ExperimentName = f"NUMEXP-{NUM_EXPS}_TTIME-{TEST_TIME}_STEP-{STEP}"
+  ExperimentName = f"NUMEXP-{NUM_EXPS}_TTIME-{TEST_TIME}_STEP-{STEP}_TREE"
 
   for CONSUMER_BW in consumer_bandwidths:
     for PRODUCER_BW in producer_bandwidths:
