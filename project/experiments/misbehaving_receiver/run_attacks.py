@@ -10,6 +10,7 @@ OUTPUT_DIR = "./plots"
 
 
 def get_time_taken(filename):
+    time_taken = 0
     with open(filename, "r") as f:
         lines = f.readlines()
         for line in lines:
@@ -156,11 +157,7 @@ def main():
     h8.sendCmd("python reno.py --role receiver --host h8")
     h9.sendCmd("python reno.py --role receiver --host h9")
     h10.sendCmd("python reno.py --role receiver --host h10")
-    for i in range(2, 11):
-        h1.sendCmd(
-            "python reno.py --role sender --host h1 --target h%d --rtt %d --limit %d"
-            % (i, rtt, data_size)
-        )
+    h1.sendCmd(command[:-3])
     h3.waitOutput()
     h4.waitOutput()
     h5.waitOutput()
@@ -199,11 +196,7 @@ def main():
     h8.sendCmd("python reno.py --role receiver --host h8")
     h9.sendCmd("python reno.py --role receiver --host h9")
     h10.sendCmd("python reno.py --role receiver --host h10")
-    for i in range(2, 11):
-        h1.sendCmd(
-            "python reno.py --role sender --host h1 --target h%d --rtt %d --limit %d"
-            % (i, rtt, data_size)
-        )
+    h1.sendCmd(command[:-3])
     h3.waitOutput()
     h4.waitOutput()
     h5.waitOutput()
@@ -245,11 +238,7 @@ def main():
     h8.sendCmd("python reno.py --role receiver --host h8")
     h9.sendCmd("python reno.py --role receiver --host h9")
     h10.sendCmd("python reno.py --role receiver --host h10")
-    for i in range(2, 11):
-        h1.sendCmd(
-            "python reno.py --role sender --host h1 --target h%d --rtt %d --limit %d"
-            % (i, rtt, data_size)
-        )
+    h1.sendCmd(command[:-3])
     h3.waitOutput()
     h4.waitOutput()
     h5.waitOutput()

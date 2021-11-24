@@ -77,11 +77,11 @@ You should be able to see the changes of the sender's congestion control state a
 
 Besides `--role` and `--host`, `reno.py` also provides other flags to customize its behaviour:
 
-- Use `--verbose` to log all sent and received packets in the terminal window. Regardless of this flag, the receiver's SEQ/ACK will be logged to "log.txt" or "log_attack.txt" if the receiver is an attacker.
+- Use `--verbose` to log all sent and received packets in the terminal window. Regardless of this flag, the receiver's SEQ/ACK will be logged to "log.txt" or "attack_log.txt" if the receiver is an attacker.
 
 - Use `--limit` to specify the amount of data the _sender_ would send (in kB). Both clients would tear down the connection when the limit is reached. So that data ping-pong would not go on forever.
 
-- Use `--rtt` to specify the round-trip delay (in ms). For simplicity, our TCP implementation does not dynamically estimate the retranmission timeout (RTO). It is set to 4 times RTT statically and is default to 2s. Setting `--rtt` will set RTO accordingly, but RTO will not be shorter than 1s.
+- Use `--rtt` to specify the round-trip delay (in ms). For simplicity, our TCP implementation does not dynamically estimate the retransmission timeout (RTO). It is set to 4 times RTT statically and is default to 2s. Setting `--rtt` will set RTO accordingly, but RTO will not be shorter than 1s.
 
 ## TCP Reno (with Defense)
 

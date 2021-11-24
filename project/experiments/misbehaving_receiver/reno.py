@@ -390,13 +390,11 @@ class TCP_Client:
             else ("logs/%s_log.txt" % self.host)
         )
         f = open(filename, "w")
-        f.write(
-            "%s,%.3f,%d\n" % ("time_taken", time.time() - self.base_time, self.limit)
-        )
-        for time, seq in self.seq_log:
-            f.write("%s,%.3f,%d\n" % ("seq", time, seq))
-        for time, ack in self.ack_log:
-            f.write("%s,%.3f,%d\n" % ("ack", time, ack))
+        f.write("%s,%.3f,%d\n" % ("time_taken", time.time() - self.base_time, 60000))
+        for time_s, seq in self.seq_log:
+            f.write("%s,%.3f,%d\n" % ("seq", time_s, seq))
+        for time_a, ack in self.ack_log:
+            f.write("%s,%.3f,%d\n" % ("ack", time_a, ack))
         f.close()
 
     def start(self):
