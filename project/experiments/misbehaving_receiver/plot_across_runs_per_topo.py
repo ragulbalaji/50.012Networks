@@ -2,9 +2,9 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 
-topology_name = "CongestionTopo"
-input_filename = f"results/{topology_name}/data.csv"
-output_filename = f"results/{topology_name}/output.png"
+topology_name = "StarTopo"
+input_filename = "results/%s/data.csv" % topology_name
+output_filename = "results/%s/output.png" % topology_name
 
 
 def main():
