@@ -1,5 +1,13 @@
 # Insights
 
+## Server-side Link 100 Mbps vs 500 Mbps
+
+| Attacker | Normal Server Link                                | Large Server Link                                 |
+| :------: | ------------------------------------------------- | ------------------------------------------------- |
+| control  | ![](exp5/result_500-100-10-10-NoMix-16K-16K.png)  | ![](exp5/result_500-500-10-10-NoMix-16K-16K.png)  |
+|    2x    | ![](exp5/result_500-100-10-20-NoMix-16K-16K.png)  | ![](exp5/result_500-500-10-20-NoMix-16K-16K.png)  |
+|   80x    | ![](exp5/result_500-100-10-800-NoMix-16K-16K.png) | ![](exp5/result_500-500-10-800-NoMix-16K-16K.png) |
+
 ## Large initial window size vs Same window sizes
 
 Attacker will use a much larger initial window size compared to all other normal users.
