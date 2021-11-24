@@ -178,39 +178,44 @@ def main():
     iperf_runtime = 30
 
     bw_infra = 500
-    bw_server = 200
+    bw_servers = [100, 500]
     bw_user = 10
-    bw_attack = [10, 50, 100, 200, 400, 800, 1000]
-    mix_protocol = False
-    normal_window_size = "32K"
-    attacker_window_size = "32K"
+    bw_attack = [10, 20, 50, 200, 800]
+    mix_protocols = [False, True]
+    normal_window_size = "16K"
+    attacker_window_sizes = ["16K", "1M"]
 
-    for bw_attack_i in bw_attack:
-        tcp_tests(
-            algs=algs,
-            delays=delays,
-            iperf_runtime=iperf_runtime,
-            bw_infra=bw_infra,
-            bw_server=bw_server,
-            bw_user=bw_user,
-            bw_attack=bw_attack_i,
-            mix_protocol=mix_protocol,
-            normal_window_size=normal_window_size,
-            attacker_window_size=attacker_window_size,
-        )
+    for bw_server in bw_servers:
+        for mix_protocol in mix_protocols:
+            for attacker_window_size in attacker_window_sizes:
+                for bw_attack_i in bw_attack:
+                    tcp_tests(
+                        algs=algs,
+                        delays=delays,
+                        iperf_runtime=iperf_runtime,
+                        bw_infra=bw_infra,
+                        bw_server=bw_server,
+                        bw_user=bw_user,
+                        bw_attack=bw_attack_i,
+                        mix_protocol=mix_protocol,
+                        normal_window_size=normal_window_size,
+                        attacker_window_size=attacker_window_size,
+                    )
 
-        export_name = "result_{}-{}-{}-{}-{}-{}-{}.zip".format(
-            bw_infra,
-            bw_server,
-            bw_user,
-            bw_attack_i,
-            "Mix" if mix_protocol else "NoMix",
-            normal_window_size,
-            attacker_window_size,
-        )
+                    export_name = "result_{}-{}-{}-{}-{}-{}-{}.zip".format(
+                        bw_infra,
+                        bw_server,
+                        bw_user,
+                        bw_attack_i,
+                        "Mix" if mix_protocol else "NoMix",
+                        normal_window_size,
+                        attacker_window_size,
+                    )
 
-        cmd = "zip -r {} {} && rm -rf {}".format(export_name, output_dir, output_dir)
-        subprocess.call(cmd, shell=True)
+                    cmd = "zip -r {} {} && rm -rf {}".format(
+                        export_name, output_dir, output_dir
+                    )
+                    subprocess.call(cmd, shell=True)
 
 
 if __name__ == "__main__":

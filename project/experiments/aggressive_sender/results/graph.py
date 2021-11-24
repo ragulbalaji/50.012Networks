@@ -4,9 +4,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from puts import get_logger
 
-# logger = get_logger(stream_only=True)
 basedir = "out"
 iperf_header = [
     "timestamp",
@@ -288,7 +286,7 @@ def graph3(zip_path: str):
                 axi.plot(t_axis, bytes_tx, label="attacker")
 
                 # plot normal user average data
-                bytes_tx = []
+                normal_avg = []
                 for interval in intervals:
                     interval_bytes = [
                         x[target_index]
@@ -296,8 +294,12 @@ def graph3(zip_path: str):
                         if x[interval_index] == interval
                     ]
                     interval_avg_bytes = int(sum(interval_bytes) / len(interval_bytes))
-                    bytes_tx.append(interval_avg_bytes)
-                axi.plot(t_axis, bytes_tx, label="normal user avg")
+                    normal_avg.append(interval_avg_bytes)
+                axi.plot(t_axis, normal_avg, label="normal user avg")
+
+                # plot total data
+                # total = [bytes_tx[i] + normal_avg[i] for i in range(len(bytes_tx))]
+                # axi.plot(t_axis, total, label="combined")
 
                 # set labels
                 axi.legend()
@@ -317,10 +319,21 @@ def main(target_dir: str):
     target_dir = Path(target_dir)
     assert target_dir.is_dir()
 
+    readme_txt = "# Graphs\n\n"
+
     for i in os.listdir(target_dir):
         if i.startswith("result") and i.endswith("zip"):
             graph3(target_dir / i)
+            graph_title = str(Path(i).stem).replace("result_", "")
+            readme_txt += f"### {graph_title}\n"
+            graph_name = Path(i).stem + ".png"
+            readme_txt += f"\n![{graph_name}]({graph_name})\n\n"
+
+    readme_path = target_dir / "README.md"
+    if not readme_path.exists():
+        with readme_path.open("w") as f:
+            f.write(readme_txt)
 
 
 if __name__ == "__main__":
-    main("exp4")
+    main("exp5")
