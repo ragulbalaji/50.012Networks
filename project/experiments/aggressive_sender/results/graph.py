@@ -176,7 +176,15 @@ def graph2():
         subprocess.run(f"rm -rf {basedir}", shell=True)
 
 
-def graph3(zip_path: str):
+def CDF(data):
+    """Accumulate a list of numbers"""
+    acc = []
+    for i in range(len(data)):
+        acc.append(sum(data[: i + 1]))
+    return acc
+
+
+def graph3(zip_path: str, cumulative: bool = False):
     assert not Path(basedir).is_dir(), "need to clear basedir first"
     zip_path = Path(zip_path)
     assert zip_path.exists()
@@ -283,6 +291,8 @@ def graph3(zip_path: str):
                         if x[interval_index] == interval
                     ][0]
                     bytes_tx.append(interval_bytes)
+                if cumulative:
+                    bytes_tx = CDF(bytes_tx)
                 axi.plot(t_axis, bytes_tx, label="attacker")
 
                 # plot normal user average data
@@ -295,6 +305,8 @@ def graph3(zip_path: str):
                     ]
                     interval_avg_bytes = int(sum(interval_bytes) / len(interval_bytes))
                     normal_avg.append(interval_avg_bytes)
+                if cumulative:
+                    normal_avg = CDF(normal_avg)
                 axi.plot(t_axis, normal_avg, label="normal user avg")
 
                 # plot total data
@@ -304,10 +316,16 @@ def graph3(zip_path: str):
                 # set labels
                 axi.legend()
                 axi.set_xlabel("time (seconds)")
-                axi.set_ylabel("transferred bytes")
+                if cumulative:
+                    axi.set_ylabel("cumulative transferred bytes")
+                else:
+                    axi.set_ylabel("transferred bytes")
 
-        plt.savefig(zip_parent / (str(zip_name) + ".png"))
-        # plt.show()
+        if cumulative:
+            plt.savefig(zip_parent / (str(zip_name) + "_CDF.png"))
+        else:
+            plt.savefig(zip_parent / (str(zip_name) + ".png"))
+
     except Exception as e:
         # logger.exception(e)
         print(e)
@@ -315,7 +333,7 @@ def graph3(zip_path: str):
         subprocess.run(f"rm -rf {basedir}", shell=True)
 
 
-def main(target_dir: str):
+def main(target_dir: str, cumulative: bool = False):
     target_dir = Path(target_dir)
     assert target_dir.is_dir()
 
@@ -323,7 +341,7 @@ def main(target_dir: str):
 
     for i in os.listdir(target_dir):
         if i.startswith("result") and i.endswith("zip"):
-            graph3(target_dir / i)
+            graph3(target_dir / i, cumulative=cumulative)
             graph_title = str(Path(i).stem).replace("result_", "")
             readme_txt += f"### {graph_title}\n"
             graph_name = Path(i).stem + ".png"
@@ -336,4 +354,4 @@ def main(target_dir: str):
 
 
 if __name__ == "__main__":
-    main("exp5")
+    main("exp5", cumulative=True)
