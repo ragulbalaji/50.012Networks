@@ -35,6 +35,8 @@ The default network topology consists of two end hosts connected via one switch.
 
 5. After the shell script finishes, check out the reproduced plots in the `./plots` directory. There are three plots generated, "div.png", "dup.png" and "opt.png", corresponding to ACK division, DupACK spoofing, and Optimistic ACKing attacks, respectively.
 
+You might want to explore around the various plotting scripts to get a sense on how to use them, as each of them are "slightly different" and were used to generate different plots.
+
 ## Customizations
 
 Several parameters related to the attack are customizable. Add flags in `run.sh` after `python run_attacks.py` to explore.
@@ -77,7 +79,7 @@ You should be able to see the changes of the sender's congestion control state a
 
 Besides `--role` and `--host`, `reno.py` also provides other flags to customize its behaviour:
 
-- Use `--verbose` to log all sent and received packets in the terminal window. Regardless of this flag, the receiver's SEQ/ACK will be logged to "log.txt" or "attack_log.txt" if the receiver is an attacker.
+- Use `--verbose` to log all sent and received packets in the terminal window. Regardless of this flag, the receiver's SEQ/ACK will be logged to "log.txt" or "attack_log.txt" if the receiver is an attacker. This flag is useful for manual debugging.
 
 - Use `--limit` to specify the amount of data the _sender_ would send (in kB). Both clients would tear down the connection when the limit is reached. So that data ping-pong would not go on forever.
 
@@ -120,7 +122,7 @@ $ python attacker.py --attack opt --num 50 --interval 10 --host h2 --verbose
 
 The parameter `--num` specifies how many divided, spoofed, or optimistic ACKs to send on the first received data segment. The parameter `--interval` specifies the time between two optimistic ACKs in the Optimistic ACKing attack.
 
-## Plot the Sequence / Acknowledge Numbers
+## Plot the Sequence / Acknowledgement Numbers
 
 After running a regular TCP ping-pong **and** one of the attacks (div, dup, opt), you can generate the comparison plot for the attack you just ran by executing:
 
@@ -144,6 +146,8 @@ The parameter `--save` saves the plot instead of displaying it, and the paramete
 - [attacker.py](./attacker.py) - This file contains three classes, each of which implements one of the attacks mentioned in the original paper.
 - [run_attacks.py](./run_attacks.py) - This script creates the Mininet topology and runs the client and server, logging packets.
 - [plot.py](./plot.py) - This script creates the ACK and data segment graphs based off of the packet captures.
+
+Datasets are included under the [results](./results) subdirectory.
 
 ## Acknowledgements
 
