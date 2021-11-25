@@ -37,7 +37,7 @@ The default network topology consists of two end hosts connected via one switch.
 
 ## Customizations
 
-Several parameters related to the attack are customizable. Add flags in `run.sh` after `python run_attack.py` to explore.
+Several parameters related to the attack are customizable. Add flags in `run.sh` after `python run_attacks.py` to explore.
 
 Use `--delay` to specify per link delay in ms. The value we use in our reproduction is 375ms. Remember that an estimated round-trip delay is 4 times this per link delay. Because Scapy (a _Python_ package) is slow (it takes around 40ms to send one packet), use a higher link delay to see more evident attack outcomes.
 
