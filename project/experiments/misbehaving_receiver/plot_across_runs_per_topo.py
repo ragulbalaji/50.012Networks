@@ -2,7 +2,7 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 
-topology_name = "StarTopo"
+topology_name = "StandardTopo"
 input_filename = "results/%s/data.csv" % topology_name
 output_filename = "results/%s/output.png" % topology_name
 

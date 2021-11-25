@@ -4,7 +4,7 @@ import time
 
 class ACK_Division_Attacker(TCP_Client):
     def __init__(self, num, host, **kwargs):
-        TCP_Client.__init__(self, "receiver", host, **kwargs)
+        TCP_Client.__init__(self, "receiver", host, "h1", **kwargs)
         self.num_division = num
         self.log_attacker = True
 
@@ -30,7 +30,7 @@ class ACK_Division_Attacker(TCP_Client):
 
 class DupACK_Spoofing_Attacker(TCP_Client):
     def __init__(self, num, host, **kwargs):
-        TCP_Client.__init__(self, "receiver", host, **kwargs)
+        TCP_Client.__init__(self, "receiver", host, "h1", **kwargs)
         self.num_dupacks = num
         self.log_attacker = True
 
@@ -44,7 +44,7 @@ class DupACK_Spoofing_Attacker(TCP_Client):
 
 class Optimistic_ACKing_Attacker(TCP_Client):
     def __init__(self, num, interval, host, **kwargs):
-        TCP_Client.__init__(self, "receiver", host, **kwargs)
+        TCP_Client.__init__(self, "receiver", host, "h1", **kwargs)
         self.num_optacks = num
         self.ack_interval = interval
         self.log_attacker = True
