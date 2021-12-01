@@ -2,3 +2,6 @@
 mininet/
 .vscode/
 .dccache
+*.csv
+!/project/experiments/misbehaving_receiver/**/*.csv
+.ipynb_checkpoints/
