@@ -1,0 +1,27 @@
+# YAML 1.2
+---
+cff-version: 1.2.0
+message: "If you use this repository, please cite it as below."
+authors:
+  - affiliation: "Singapore University of Technology and Design"
+    family-names: "Balaji"
+    given-names: "Velusamy Sathiakumar Ragul"
+  - affiliation: "Singapore University of Technology and Design"
+    family-names: "Han"
+    given-names: "Xing Yi"
+  - affiliation: "Singapore University of Technology and Design"
+    family-names: "Huang"
+    given-names: "He"
+  - affiliation: "Singapore University of Technology and Design"
+    family-names: "Qiao"
+    given-names: "Yingjie"
+  - affiliation: "Singapore University of Technology and Design"
+    family-names: "Tiovalen"
+    given-names: "James Raphael"
+  - affiliation: "Singapore University of Technology and Design"
+    family-names: "Zhang"
+    given-names: "Peiyuan"
+title: "Netiquette - Does It Pay To Be Selfish? A Study of Congestion Control Abuse and Countermeasures"
+version: 0.0.1
+date-released: 2021-11-25
+url: "https://github.com/ragulbalaji/50.012Networks"

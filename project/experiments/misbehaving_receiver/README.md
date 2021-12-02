@@ -20,9 +20,7 @@ The results here can either be replicated on an EC2 instance or in VirtualBox. I
 
 ```bash
 $ git clone https://github.com/ragulbalaji/50.012Networks.git
-$ cd 50.012Networks
-$ git checkout jamestiotio
-$ cd project/experiments/misbehaving_receiver/
+$ cd 50.012Networks/project/experiments/misbehaving_receiver/
 ```
 
 2. Run the one-line shell (with **sudo**).
