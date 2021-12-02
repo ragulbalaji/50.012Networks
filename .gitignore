@@ -1,4 +1,7 @@
 .DS_Store
 mininet/
+/py2
+/.idea
+/venv
 *.csv
 .ipynb_checkpoints/
