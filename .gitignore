@@ -4,4 +4,7 @@ mininet/
 .dccache
 *.csv
 !/project/experiments/misbehaving_receiver/**/*.csv
+/py2
+/.idea
+/venv
 .ipynb_checkpoints/

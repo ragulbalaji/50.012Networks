@@ -1,0 +1,48 @@
+reno
+recvlink: 5
+normal link bandwidth: 1
+dict_keys(['3', '6', '5', '9', '10', '7', '2', '8', '1', '4'])
+attacker link: 3
+data: 13631488 total:7611000.0 ratio: 1.7910245697017475
+attacker link: 6
+data: 13631488 total:7599200.0 ratio: 1.7938056637540793
+attacker link: 5
+data: 13631488 total:7590500.0 ratio: 1.7958616691917528
+attacker link: 9
+data: 13631488 total:7608600.0 ratio: 1.7915895171253582
+attacker link: 10
+data: 13631488 total:7601100.0 ratio: 1.7933572772361894
+attacker link: 7
+data: 13631488 total:7587900.0 ratio: 1.7964770226281317
+attacker link: 2
+data: 13631488 total:14769500.0 ratio: 0.9229485087511425
+attacker link: 8
+data: 13631488 total:7587300.0 ratio: 1.7966190871588048
+attacker link: 1
+data: 13631488 total:7005500.0 ratio: 1.94582656484191
+attacker link: 4
+data: 13631488 total:7596300.0 ratio: 1.7944904756262918
+cubic
+recvlink: 5
+normal link bandwidth: 1
+dict_keys(['7', '1', '6', '4', '3', '2', '5', '8', '10', '9'])
+attacker link: 7
+data: 13631488 total:7591700.0 ratio: 1.7955778020733169
+attacker link: 1
+data: 7340032 total:7012100.0 ratio: 1.0467665891815576
+attacker link: 6
+data: 13631488 total:7599800.0 ratio: 1.7936640437906262
+attacker link: 4
+data: 13631488 total:7600100.0 ratio: 1.7935932421941816
+attacker link: 3
+data: 13631488 total:7591600.0 ratio: 1.7956014542388956
+attacker link: 2
+data: 13631488 total:14774700.0 ratio: 0.9226236742539612
+attacker link: 5
+data: 13631488 total:7594400.0 ratio: 1.7949394290529863
+attacker link: 8
+data: 13631488 total:7597800.0 ratio: 1.794136197320277
+attacker link: 10
+data: 13631488 total:7603300.0 ratio: 1.7928383728118054
+attacker link: 9
+data: 13631488 total:7603100.0 ratio: 1.792885533532375
