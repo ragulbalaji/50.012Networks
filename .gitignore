@@ -1,10 +1,10 @@
 .DS_Store
+.vscode
+.idea
+**/venv
 mininet/
-.vscode/
 .dccache
 *.csv
 !/project/experiments/misbehaving_receiver/**/*.csv
 /py2
-/.idea
-/venv
 .ipynb_checkpoints/

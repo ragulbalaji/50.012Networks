@@ -1,5 +1,7 @@
-from mininet.topo import Topo
-from mininet.node import CPULimitedHost
+import os
+import time
+
+from mininet.cli import CLI
 from mininet.link import TCLink
 from mininet.net import Mininet
 from mininet.cli import CLI
@@ -10,8 +12,6 @@ from TreeTopology import TreeTopoTCPv2
 # from multiprocessing import Process
 # from argparse import ArgumentParser
 
-import time
-import os
 
 class TopoStar(Topo):
   def __init__(self, n=2, cpu=None, bw_consumer=2, bw_producer=10, delay='50', maxq=None, diff=False):
