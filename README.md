@@ -6,12 +6,12 @@ Netiquette - Does It Pay To Be Selfish? A Study of Congestion Control Abuse and 
 
 ## Table of Contents <a name="toc"></a>
 
-- [Networks Netiquette Project](#top)
-  - [Table of Contents](#toc)
-  - [Introduction](#introduction)
-  - [Repository Details](#description)
-  - [Acknowledgements](#acknowledgements)
-  - [Additional Relevant Resources](#resources)
+-   [Networks Netiquette Project](#top)
+    -   [Table of Contents](#toc)
+    -   [Introduction](#introduction)
+    -   [Repository Details](#description)
+    -   [Acknowledgements](#acknowledgements)
+    -   [Additional Relevant Resources](#resources)
 
 ## Introduction <a name="introduction"></a>
 
@@ -33,7 +33,7 @@ To cite our results, you can include the following citation in your work:
 
 ```bibtex
 @misc{NetiquetteProject,
-    author = {Velusamy Sathiakumar Ragul Balaji, Han Xing Yi, Huang He, Qiao Yingjie, James Raphael Tiovalen, and Zhang Peiyuan},
+    author = {Balaji, Velusamy Sathiakumar Ragul and Han, Xing Yi and Huang, He and Qiao, Yingjie and Tiovalen, James Raphael and Zhang, Peiyuan},
     title = {Netiquette - Does It Pay To Be Selfish? A Study of Congestion Control Abuse and Countermeasures},
     year = {2021},
     publisher = {GitHub},
@@ -44,7 +44,7 @@ To cite our results, you can include the following citation in your work:
 
 ## Additional Relevant Resources <a name="resources"></a>
 
-- [Final Presentation Video Recording](https://youtu.be/62V0TDXmmlM)
-- [Project Proposal Presentation Slides](./assets/proposal_presentation.pdf)
-- [Final Project Presentation Slides](./assets/final_presentation.pdf)
-- [Final Project Report]()
+-   [Final Presentation Video Recording](https://youtu.be/62V0TDXmmlM)
+-   [Project Proposal Presentation Slides](./assets/proposal_presentation.pdf)
+-   [Final Project Presentation Slides](./assets/final_presentation.pdf)
+-   [Final Project Report]()

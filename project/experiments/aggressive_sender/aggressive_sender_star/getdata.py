@@ -1,66 +1,30 @@
+import csv
 from os import listdir
 from os.path import isfile, join
-import csv
 
 respath = "./v7/"
 d = {}
 # <algo, <recvlink, <net_bw, [atck_link]>>>
 d["udp"] = {
-    1000: 
-        {
-            25: {}, 1: {}, 10: {}, 5: {}
-        }, 
-    500: 
-        {
-            25: {}, 1: {}, 10: {}, 5: {}
-        },
-    400: 
-        {
-            25: {}, 1: {}, 10: {}, 5: {}
-        },
-    5: 
-        {
-            25: {}, 1: {}, 10: {}, 5: {}
-        }
-    }
+    1000: {25: {}, 1: {}, 10: {}, 5: {}},
+    500: {25: {}, 1: {}, 10: {}, 5: {}},
+    400: {25: {}, 1: {}, 10: {}, 5: {}},
+    5: {25: {}, 1: {}, 10: {}, 5: {}},
+}
 
 d["reno"] = {
-    1000: 
-        {
-            25: {}, 1: {}, 10: {}, 5: {}
-        }, 
-    500: 
-        {
-            25: {}, 1: {}, 10: {}, 5: {}
-        },
-    400: 
-        {
-            25: {}, 1: {}, 10: {}, 5: {}
-        },
-    5: 
-        {
-            25: {}, 1: {}, 10: {}, 5: {}
-        }
-    }
+    1000: {25: {}, 1: {}, 10: {}, 5: {}},
+    500: {25: {}, 1: {}, 10: {}, 5: {}},
+    400: {25: {}, 1: {}, 10: {}, 5: {}},
+    5: {25: {}, 1: {}, 10: {}, 5: {}},
+}
 
 d["cubic"] = {
-    1000: 
-        {
-            25: {}, 1: {}, 10: {}, 5: {}
-        }, 
-    500: 
-        {
-            25: {}, 1: {}, 10: {}, 5: {}
-        },
-    400: 
-        {
-            25: {}, 1: {}, 10: {}, 5: {}
-        },
-    5: 
-        {
-            25: {}, 1: {}, 10: {}, 5: {}
-        }
-    }
+    1000: {25: {}, 1: {}, 10: {}, 5: {}},
+    500: {25: {}, 1: {}, 10: {}, 5: {}},
+    400: {25: {}, 1: {}, 10: {}, 5: {}},
+    5: {25: {}, 1: {}, 10: {}, 5: {}},
+}
 
 targets = set()
 for i in range(1, 9):
@@ -92,14 +56,14 @@ for pathname in listdir(respath):
         filepath = join(respath, pathname, filename)
 
         csvparts = filename.split(".")
-        if csvparts[0][-2:] == 'cv':
-            with open(filepath, newline='') as file:
-                reader = csv.reader(file, delimiter = ',')
+        if csvparts[0][-2:] == "cv":
+            with open(filepath, newline="") as file:
+                reader = csv.reader(file, delimiter=",")
                 for row in reader:
                     row_content = row[0].split(" ")
                     if len(row_content) < 2:
                         continue
-                    
+
                     if row_content[-1] == "Bandwidth":
                         found = True
                         continue
@@ -107,7 +71,7 @@ for pathname in listdir(respath):
                         for i in range(len(row_content)):
                             if row_content[i] == "MBytes" or row_content[i] == "KBytes":
                                 unit = row_content[i]
-                                val = row_content[i-1]
+                                val = row_content[i - 1]
                         # val = row_content[-5]
                         # unit = row_content[-4]
                         if unit == "MBytes":
@@ -119,9 +83,9 @@ for pathname in listdir(respath):
 
         if csvparts[0][-2:] not in targets:
             continue
-        
-        with open(filepath, newline='') as file:
-            reader = csv.reader(file, delimiter = ',')
+
+        with open(filepath, newline="") as file:
+            reader = csv.reader(file, delimiter=",")
             for row in reader:
                 data = int(row[-2])
                 # if bps != 0:
@@ -147,5 +111,6 @@ for algo in d.keys():
 
                 if total != 0:
                     res = sum / total
-                print("data: " + str(sum) + " total:" + str(total) + " ratio: " + str(res))
-    
+                print(
+                    "data: " + str(sum) + " total:" + str(total) + " ratio: " + str(res)
+                )
