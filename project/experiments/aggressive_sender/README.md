@@ -13,7 +13,13 @@ Aggressive Sender experiments are built using Mininet. We simulate two networks 
 
 ### Experiment on Star Topology:
 
--   Main Experiment Code: [star/AggroTest.py](star/AggroTest.py)
+-   Star Topology Defenition & Main Experiment Code: [star/AggroTest.py](star/AggroTest.py)
+
+```bash
+sudo python2 star/AggroTest.py
+```
+
+use `star/getdata.py` to generate the result in `.txt` format and then use `/star/data/graph.py` to generate graph. Some of the example graphs are avaialbe in `/star/data` as well.
 
 ### Experiment on Tree Topology:
 
