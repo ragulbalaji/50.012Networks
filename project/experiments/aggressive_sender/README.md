@@ -13,15 +13,12 @@ Aggressive Sender experiments are built using Mininet. We simulate two networks 
 
 ### Experiment on Star Topology:
 
--   [aggressive_sender_star/AggroTest.py](aggressive_sender_star/AggroTest.py)
-
-Some of the results can be found in:
-
--   [aggressive_sender_star/data/README.md](aggressive_sender_star/data/README.md)
+-   Main Experiment Code: [star/AggroTest.py](star/AggroTest.py)
 
 ### Experiment on Tree Topology:
 
--   [src/exp_tree_tcp_py2.py](src/exp_tree_tcp_py2.py)
+-   Tree Topology Defenition: [src/topo_tree_py2.py](src/topo_tree_py2.py)
+-   Main Experiment Code: [src/exp_tree_tcp_py2.py](src/exp_tree_tcp_py2.py)
 
 ```bash
 sudo python2 src/exp_tree_tcp_py2.py
