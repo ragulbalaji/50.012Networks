@@ -6,12 +6,12 @@ Netiquette - Does It Pay To Be Selfish? A Study of Congestion Control Abuse and 
 
 ## Table of Contents <a name="toc"></a>
 
--   [Networks Netiquette Project](#top)
-    -   [Table of Contents](#toc)
-    -   [Introduction](#introduction)
-    -   [Repository Details](#description)
-    -   [Acknowledgements](#acknowledgements)
-    -   [Additional Relevant Resources](#resources)
+- [Networks Netiquette Project](#top)
+  - [Table of Contents](#toc)
+  - [Introduction](#introduction)
+  - [Repository Details](#description)
+  - [Acknowledgements](#acknowledgements)
+  - [Additional Relevant Resources](#resources)
 
 ## Introduction <a name="introduction"></a>
 
@@ -44,7 +44,8 @@ To cite our results, you can include the following citation in your work:
 
 ## Additional Relevant Resources <a name="resources"></a>
 
--   [Final Presentation Video Recording](https://youtu.be/62V0TDXmmlM)
--   [Project Proposal Presentation Slides](./assets/proposal_presentation.pdf)
--   [Final Project Presentation Slides](./assets/final_presentation.pdf)
--   [Final Project Report]()
+- [Final Presentation Video Recording](https://youtu.be/62V0TDXmmlM)
+- [Project Proposal Presentation Slides](./assets/proposal_presentation.pdf)
+- [Final Project Presentation Slides](./assets/final_presentation.pdf)
+- [Final Project Report](./assets/final_report.pdf)
+- [Proposed Final Exam Questions](./assets/final_exam_questions.pdf)
