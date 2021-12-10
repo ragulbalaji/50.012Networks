@@ -2,7 +2,7 @@
 
 Netiquette - Does It Pay To Be Selfish? A Study of Congestion Control Abuse and Countermeasures
 
-![Powered By: Look Mom, It Works!](https://img.shields.io/badge/Powered%20By-Look%20Mom%2C%20It%20Works!-brightgreen?style=for-the-badge)
+![Powered By: Look Mom, It Works!](https://img.shields.io/badge/Powered%20By-Look%20Mom%2C%20It%20Works!-brightgreen?style=for-the-badge) ![Best Course Project Runner-Up](https://img.shields.io/badge/-Best%20Course%20Project%20Runner--Up-blueviolet?style=for-the-badge)
 
 ## Table of Contents <a name="toc"></a>
 
